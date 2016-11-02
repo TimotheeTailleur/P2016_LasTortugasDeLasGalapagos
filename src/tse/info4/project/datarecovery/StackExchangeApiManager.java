@@ -1,6 +1,9 @@
+package tse.info4.project.datarecovery;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.TreeMap;
 
 import org.json.JSONArray;
@@ -8,20 +11,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
+/**
+ * This class will handle every interaction with the StackExchange API. 
+ * Building the right URLs, extracting data and converting it into easily iterable data structures to allow for easy insertion into the database
+ *
+ */
 public class StackExchangeApiManager {
 	
+	/**
+	 * Domain name for the API
+	 */
+	private static final String DOMAIN_NAME = "https://api.stackexchange.com";
+	/**
+	 * Current version of the API
+	 */
+	private static final String VERSION = "2.2";
+	/**
+	 * Parameter dictating number of results displayed by the API
+	 */
+	private static final String PAGE_SIZE="100";
 	
-	private static final String domainName = "https://api.stackexchange.com";
-	private static final String version = "2.2";
 	
-	
-	/*
+	/**
 	 * Extract a JSONObject from a given StackExchange API URL
-	 * Handles proxy problems
-	 * @author Timothee
-	 * @return JSONObject
-	 * @version 1.0
+	 * @param str_url API URL
+	 * @return JSONObject to manipulate API data
+	 * @throws IOException 
+	 * @throws JSONException 
 	 */
 	
 	public static JSONObject toJSONObject(String str_url) throws IOException, JSONException {
@@ -29,33 +45,43 @@ public class StackExchangeApiManager {
 		return new JSONObject(jsonString);
 	}
 	
-	
-	/*
-	 * 
-	 * @return String The built url used to get Tag list
-	 * @version 1.0	 
+	/**
+	 * Build URL to get page (pageNumber) of Tag list (overloaded to give pageNumber default value of 1)
+	 * @param pageNumber Number of the page you wish to get access to
+	 * @return API URL for page (pageNumber) of Tag list
 	 */
-	private static String buildTagUrl(){		
-		return domainName + '/' + version + '/' + "tags?order=desc&sort=popular&site=stackoverflow";
+	private static String buildTagUrl(Integer pageNumber){		
+		return DOMAIN_NAME + '/' + VERSION + '/' + "tags?"+"page="+pageNumber+"&pagesize="+PAGE_SIZE+"&order=desc&sort=popular&site=stackoverflow";
 	}
 	
-	private static String buildTopAnswerersUrl(String tagName){
-		return domainName + '/' + version + "/tags/" + tagName + "/top-answerers/all_time?site=stackoverflow";
-		
+	private static String buildTagUrl () {
+		return DOMAIN_NAME + '/' + VERSION + '/' + "tags?"+"page=1&pagesize="+PAGE_SIZE+"&order=desc&sort=popular&site=stackoverflow"; 
 	}
 	
-	/*
-	 * Returns  ArrayList<String> of StackOverflow tag names using stackExchangeAPI
-	 * @author Timothee
-	 * @return ArrayList<String>
-	 * @version 1.0
+	
+	/**
+	 * Build URL to get page one of TopAnswerers list in given (tagName)
+	 * @param tagName Tag in which the search is executed
+	 * @return API URL for Top Answerers in tagName
+	 * @throws UnsupportedEncodingException 
+	 * @throws URISyntaxException 
+	 */
+	private static String buildTopAnswerersUrl(String tagName) throws UnsupportedEncodingException, URISyntaxException{
+		return DOMAIN_NAME + '/' + VERSION + "/tags/"+URLEncoder.encode(tagName,"UTF-8") + "/top-answerers/all_time?site=stackoverflow";
+	}
+	
+	/** 
+	 * Get list of Tag names from StackOverflow
+	 * @return List of StackOverflow tag names
+	 * @throws JSONException 
+	 * @throws IOException 
 	 * 
 	 */
 	
 	public static ArrayList<String> getTags () throws JSONException, IOException {
 		
 
-		String str_url= buildTagUrl(); //API URL
+		String str_url= buildTagUrl(1); //API URL
 		JSONObject tagsJSON = toJSONObject(str_url); // Extract JSONObject from API URL
 		
 		JSONArray tagsJSONArray = tagsJSON.getJSONArray("items"); // Extract JSONArray from  JSONObject
@@ -71,19 +97,20 @@ public class StackExchangeApiManager {
 		return tagNamesArray;
 	}
 	
-	/*
-	 * Returns a map of all users who have contributed to tagName. 
-	 * Keys are users'ID and values are 2-Lists of a user's score and postcount in given tag
+	/**
 	 * 
-	 * @author Timothee
-	 * @return TreeMap<Integer,ArrayList<Integer>>
-	 * @version 1.0
+	 * Get Map of topAnswerers and some of their statistics in given tag
+	 * @param tagName given tag for which you want the list of topAnswerers
+	 * @return Map of all users who have contributed to tagName. Keys are users'ID and values are couples of a user's score and postcount in given tag
+	 * @throws IOException 
+	 * @throws JSONException 
+	 * @throws URISyntaxException 
 	 * 
 	 */
 	
-	public static  TreeMap<Integer,ArrayList<Integer>> getTopAnswerers(String tagName) throws IOException, JSONException {
-		
+	public static  TreeMap<Integer,ArrayList<Integer>> getTopAnswerers(String tagName) throws IOException, JSONException, URISyntaxException {
 		String str_url = buildTopAnswerersUrl(tagName); // API URL
+		
 		JSONObject topAnswerersJSON = toJSONObject(str_url); // Extract JSONObject from API URL
 		
 		JSONArray topAnswerersJSONArray = topAnswerersJSON.getJSONArray("items"); // Extract JSONArray from JSON file using JSONObject
@@ -124,7 +151,8 @@ public class StackExchangeApiManager {
 	
 
 	
-	public static void main(String[] args) throws JSONException, IOException {
+	 //Methode main pour test classe
+	   public static void main(String[] args) throws JSONException, IOException, URISyntaxException {
 		
 		ArrayList<String> Tags = StackExchangeApiManager.getTags();
 		TreeMap<Integer,ArrayList<Integer>> AnswerersMap= StackExchangeApiManager.getTopAnswerers("javascript");
@@ -138,5 +166,5 @@ public class StackExchangeApiManager {
 		System.out.println("Liste des score & post Count");
 		System.out.println(AnswerersMap.values().toString());
 		
-	}
+	} 
 }
