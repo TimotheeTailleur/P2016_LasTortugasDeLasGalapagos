@@ -2,24 +2,25 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>tse.info4.project</groupId>
   <artifactId>Projet_info</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <dependencies>
-  <!-- https://mvnrepository.com/artifact/org.json/json -->
-	<!-- https://mvnrepository.com/artifact/org.json/json -->
+
 	<dependency>
 	    <groupId>org.json</groupId>
 	    <artifactId>json</artifactId>
 	    <version>20090211</version>
 	</dependency>
 
-	<!-- https://mvnrepository.com/artifact/org.apache.derby/derby -->
 	<dependency>
 	    <groupId>org.apache.derby</groupId>
 	    <artifactId>derby</artifactId>
 	    <version>10.12.1.1</version>
 	</dependency>
+	<dependency>
+	  <groupId>commons-lang</groupId>
+	  <artifactId>commons-lang</artifactId>
+	  <version>2.6</version>
+	</dependency>
 
-	
   
   </dependencies>
   <build>
@@ -29,10 +30,17 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
         <configuration>
+                <executable>"‪C:\Program Files\Java\jdk1.8.0_111\bin\javac.exe"</executable>
+                <compilerVersion>1.8</compilerVersion>
+                <compilerArguments>
+	 	 			<source>1.8</source>
+	  				<target>1.8</target>
+				</compilerArguments>
           <source/>
           <target/>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  <version>1</version>
 </project>
