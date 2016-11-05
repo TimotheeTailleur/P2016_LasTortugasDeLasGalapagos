@@ -29,12 +29,12 @@ public class DatabaseManager {
 	/**
 	 * Package name of derby embedded driver 
 	 */	
-	private static final String EMBEDDED_DRIVER_PACKAGE = "org.apache.derby.jdbc.EmbeddedDriver";
+	protected static final String EMBEDDED_DRIVER_PACKAGE = "org.apache.derby.jdbc.EmbeddedDriver";
 	
 	/**
 	 * Relative path to the derby database repository
 	 */
-	private static final String DATABASE_PATH = "ProjectDatabase";
+	protected static final String DATABASE_PATH = "ProjectDatabase";
 	
 	/**
 	 * Name of the table in which all post counts for each user are contained 
@@ -48,15 +48,6 @@ public class DatabaseManager {
 
 	
 	//Other members
-	/**
-	 * List of tags from Stack Overflow
-	 */
-	private static ArrayList<String> tagNames = new ArrayList<String>();
-	
-	/**
-	 * List of tags for which special treatment is required
-	 */
-	private static ArrayList<String> listOfTagExceptions = new ArrayList<String>();
 	
 	/**
 	 * Connection item to manipulate the database
