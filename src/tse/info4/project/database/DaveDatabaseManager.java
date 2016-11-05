@@ -3,6 +3,7 @@ package tse.info4.project.database;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -12,12 +13,17 @@ import org.json.JSONException;
 
 import tse.info4.project.datarecovery.StackExchangeApiManager;
 
-public class DaveDatabaseManager {
+/**
+ * This class will manage the database tables used in functions implemented for the Dave User Story
+ *
+ */
+public class DaveDatabaseManager extends DatabaseManager {
 
-	
 	/**
-	 * Updates tables TagPostCount and TagScore.
-	 * If a user's id isn't found in the database, creates new entries in both tables
+	 * Updates tables tag_post_count and tag_score. If a user's id isn't found in
+	 * the database, creates new entries in both tables
+	 * @param idTag Tag id
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLException
@@ -26,65 +32,75 @@ public class DaveDatabaseManager {
 	 * @throws ClassNotFoundException
 	 * @throws URISyntaxException
 	 */
-	public static void fillTableTagPostCount(int idTag) throws JSONException, IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, URISyntaxException
-	{
-		
-		createListExceptionTag();
-		// Tag list creation
-		tagNames=StackExchangeApiManager.getTags();
-		
-		// Data Insertion or updtating
-		TreeMap<Integer,ArrayList<Integer>> resAns = new TreeMap<>();
-		String name = "";
-		
-		for (int i=0;i<NB_TAG;i++)
+	public static void fillTablesTagPostCountScore(int idTag) throws JSONException, IOException, SQLException,
+			InstantiationException, IllegalAccessException, ClassNotFoundException, URISyntaxException {
+
+		//Get tag name with tag id
+		String tagName="";
+		String sql="SELECT tag FROM" + addQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
+		PreparedStatement tagNameStmt=databaseConnection.prepareStatement(sql);
+		ResultSet rs = tagNameStmt.executeQuery();
+		if (rs.next())
 		{
-			//Get name of tag, score and post count
-			name=tagNames.get(i);	//get tagName
-			resAns=StackExchangeApiManager.getTopAnswerers(name);	// get userID and post_count and score corresponding for this tag
-			
-			if(listOfTagExceptions.contains(name)){
-				name='"'+name+'"'; 	//need for sql to add "" to the word
-			}
-			
-			// Construct the preparedStatement for Update
-			PreparedStatement stmtUpdatePost = databaseConnection.prepareStatement("UPDATE "+TITLE_TAG_POST_TABLE+" SET "+name+" = ? WHERE Users_idUsers = ?");
-			PreparedStatement stmtUpdateScore = databaseConnection.prepareStatement("UPDATE "+TITLE_TAG_SCORE_TABLE+" SET "+name+" = ? WHERE Users_idUsers = ?");
-			
-			/*
-			 * Set variables of the prepared statements 
-			 * Update the two tables 
-			 * If the user's ID doesn't exist in either table insert data  		
-			 */
-			for (Entry<Integer, ArrayList<Integer>> userEntry : resAns.entrySet()){
-				stmtUpdatePost.setInt(1,userEntry.getValue().get(1));		//PostCount for userId and tag concerned
-				stmtUpdatePost.setInt(2,userEntry.getKey());				//userId
-				stmtUpdateScore.setInt(1,userEntry.getValue().get(0));		//Score for userId and tag concerned
-				stmtUpdateScore.setInt(2,userEntry.getKey());				//userId
-				
+			 tagName= rs.getString("tag");
+		}
 		
-				if(stmtUpdatePost.executeUpdate()==0)
-				{
-					PreparedStatement stmtUpdatePost2 = databaseConnection.prepareStatement("INSERT INTO "+TITLE_TAG_POST_TABLE+" (Users_idUsers,"+name+") VALUES (?,?)");
-					
-					stmtUpdatePost2.setInt(1,userEntry.getKey());
-					stmtUpdatePost2.setInt(2,userEntry.getValue().get(1));
-					stmtUpdatePost2.executeUpdate();
-				}
-				if(stmtUpdateScore.executeUpdate()==0)
-				{
-					PreparedStatement stmtUpdateScore2 = databaseConnection.prepareStatement("INSERT INTO "+TITLE_TAG_SCORE_TABLE+" (Users_idUsers,"+name+") VALUES (?,?)");		
-					stmtUpdateScore2.setInt(1,userEntry.getKey());
-					stmtUpdateScore2.setInt(2,userEntry.getValue().get(0));
-					stmtUpdateScore2.executeUpdate();
-				}
+		//Get Top Answerers stats in given tag
+		TreeMap<Integer, ArrayList<Integer>> resAns = StackExchangeApiManager.getTopAnswerers(tagName);
+		
+		//Prepare Statements for updates and insertions
+		PreparedStatement stmtUpdatePost = databaseConnection
+				.prepareStatement("UPDATE " +  addQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ?");
+		PreparedStatement stmtUpdateScore = databaseConnection
+				.prepareStatement("UPDATE " + addQuotes(TITLE_TAG_SCORE_TABLE)  + " SET score = ? WHERE id_user = ?");
+		
+		PreparedStatement stmtInsertPost = databaseConnection.prepareStatement(
+				"INSERT INTO " + addQuotes(TITLE_TAG_POST_TABLE) + " (id_User,id_tag,post_count) VALUES (?,?,?)");
+		
+		PreparedStatement stmtInsertScore = databaseConnection.prepareStatement(
+				"INSERT INTO " +  addQuotes(TITLE_TAG_SCORE_TABLE) + " (id_User,id_tag,score) VALUES (?,?,?)");
+
+		Integer userID, score,post_count;
+
+		/*
+		 * For each entry in the top Answerers ResultSet, get userID, user score and user Post_Count in given tag
+		 * and set preparedStatements' variables accordingly
+		 */
+		for (Entry<Integer, ArrayList<Integer>> userEntry : resAns.entrySet()) {
+
+			userID=userEntry.getKey(); post_count=userEntry.getValue().get(1); score=userEntry.getValue().get(0);
+			
+			stmtUpdatePost.setInt(1, post_count); 
+			stmtUpdatePost.setInt(2, userID); 
+			stmtUpdateScore.setInt(1, score);
+			stmtUpdateScore.setInt(2, userID); 
+
+			// If a user's id isn't found in either table : execute Insertion prepared Statements 
+			if (stmtUpdatePost.executeUpdate() == 0) {
+
+				stmtInsertPost.setInt(1, userID);
+				stmtInsertPost.setInt(2, idTag);
+				stmtInsertPost.setInt(3, post_count);
+				stmtInsertPost.executeUpdate();
 			}
-		}	
+			
+			if (stmtUpdateScore.executeUpdate() == 0) {
+
+				stmtInsertScore.setInt(1, userID);
+				stmtInsertScore.setInt(2, idTag);
+				stmtInsertScore.setInt(3, score);
+				stmtInsertScore.executeUpdate();
+			}
+		}
 	}
 	
-	public static void fillTableTagScore(int idTag)
-	{
-		
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException {
+		setup();
+		truncateTable(TITLE_TAG_POST_TABLE);
+		truncateTable(TITLE_TAG_SCORE_TABLE);
+		fillTablesTagPostCountScore(1);
 	}
 
 }
+
+

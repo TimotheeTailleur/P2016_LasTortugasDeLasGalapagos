@@ -9,7 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import org.json.JSONException;
+import org.apache.commons.lang.StringUtils;
 import tse.info4.project.datarecovery.StackExchangeApiManager;
 
 /**
@@ -42,13 +45,11 @@ public class DatabaseManager {
 	 * Name of the table in which all scores for each user are contained 
 	 */
 	public static final String TITLE_TAG_SCORE_TABLE = "tag_score";
+	
+	public static final String TITLE_TAG_TABLE = "tag";
 
 	
 	//Other members
-	/**
-	 * List of tags from Stack Overflow
-	 */
-	protected static ArrayList<String> tagNames = new ArrayList<String>();
 	
 	/**
 	 * Connection item to manipulate the database
@@ -59,18 +60,18 @@ public class DatabaseManager {
 	//Methods
 
 
-	public static void fillTableTags(int start, int end) throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
+	public static void getTags(int start, int end) throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
 		// Remplir la table tag à partir de l'api.
 		// L'api limite à 30 appels par secondes et à 10 000 appels par jour (remplissage en plusieurs fois) !
-		tagNames = StackExchangeApiManager.getTags(1);
+		ArrayList<String> tagNames = StackExchangeApiManager.getTags(1);
 		setup();
-		//PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+'"'+"tag "+'"'+"WHERE TAG_NAME =  ?");
-		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+'"'+"tag"+'"'+"(TAG_NAME) VALUES ( ?)");
+		//PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+'"'+TITLE_TAG_TABLE+'"'+"WHERE TAG_NAME =  ?");
+		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+'"'+TITLE_TAG_TABLE+'"'+"(TAG_NAME) VALUES ( ?)");
 		
 		for(String name : tagNames){
 			//stmtSelect.setString(1,name);
 			name="'"+name+"'";
-			String stmtString="SELECT ID_TAG FROM "+'"'+"tag"+'"'+" WHERE TAG_NAME = "+name;
+			String stmtString="SELECT ID_TAG FROM "+'"'+TITLE_TAG_TABLE+'"'+" WHERE TAG_NAME = "+name;
 			Statement stmtSelect = DatabaseManager.databaseConnection.createStatement();
 			ResultSet res = stmtSelect.executeQuery(stmtString);
 			//if(stmtSelect.execute()==0){
@@ -80,6 +81,10 @@ public class DatabaseManager {
 			}			
 		}
 		close();
+	}
+	
+	public static String addQuotes(String str){
+		return '"' + str + '"';
 	}
 	
 	
@@ -122,7 +127,7 @@ public class DatabaseManager {
 	public static int truncateTable(String tableName) throws SQLException
 	{
 		Statement statement = databaseConnection.createStatement();
-		int result = statement.executeUpdate("TRUNCATE TABLE " + tableName);
+		int result = statement.executeUpdate("TRUNCATE TABLE " + addQuotes(tableName));
 		databaseConnection.commit();
 		return result;
 	}
@@ -144,6 +149,6 @@ public class DatabaseManager {
 	//Méthode main pour test
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException 
 	{
-		fillTableTags(0, 100);
+		getTags(0, 100);
 	}
 }
