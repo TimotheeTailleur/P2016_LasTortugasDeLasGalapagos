@@ -45,6 +45,8 @@ public class DatabaseManager {
 	 * Name of the table in which all scores for each user are contained 
 	 */
 	public static final String TITLE_TAG_SCORE_TABLE = "tag_score";
+	
+	public static final String TITLE_TAG_TABLE = "tag";
 
 	
 	//Other members
@@ -61,6 +63,10 @@ public class DatabaseManager {
 	public static void getTags(int start, int end){
 		// Remplir la table tag à partir de l'api.
 		// L'api limite à 30 appels par secondes et à 10 000 appels par jour (remplissage en plusieurs fois) !
+	}
+	
+	public static String addQuotes(String str){
+		return '"' + str + '"';
 	}
 	
 	
@@ -103,7 +109,7 @@ public class DatabaseManager {
 	public static int truncateTable(String tableName) throws SQLException
 	{
 		Statement statement = databaseConnection.createStatement();
-		int result = statement.executeUpdate("TRUNCATE TABLE " + tableName);
+		int result = statement.executeUpdate("TRUNCATE TABLE " + addQuotes(tableName));
 		databaseConnection.commit();
 		return result;
 	}

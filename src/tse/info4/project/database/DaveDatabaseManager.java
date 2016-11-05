@@ -3,6 +3,7 @@ package tse.info4.project.database;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -35,24 +36,29 @@ public class DaveDatabaseManager extends DatabaseManager {
 			InstantiationException, IllegalAccessException, ClassNotFoundException, URISyntaxException {
 
 		//Get tag name with tag id
-		String sql="SELECT tag FROM tag WHERE id_tag="+idTag;
+		String tagName="";
+		String sql="SELECT tag FROM" + addQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
 		PreparedStatement tagNameStmt=databaseConnection.prepareStatement(sql);
-		String tagName= tagNameStmt.executeQuery().getString("tag");
+		ResultSet rs = tagNameStmt.executeQuery();
+		if (rs.next())
+		{
+			 tagName= rs.getString("tag");
+		}
 		
 		//Get Top Answerers stats in given tag
 		TreeMap<Integer, ArrayList<Integer>> resAns = StackExchangeApiManager.getTopAnswerers(tagName);
 		
 		//Prepare Statements for updates and insertions
 		PreparedStatement stmtUpdatePost = databaseConnection
-				.prepareStatement("UPDATE " + TITLE_TAG_POST_TABLE + " SET post_count = ? WHERE id_user = ?");
+				.prepareStatement("UPDATE " +  addQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ?");
 		PreparedStatement stmtUpdateScore = databaseConnection
-				.prepareStatement("UPDATE " + TITLE_TAG_SCORE_TABLE + " SET score = ? WHERE id_user = ?");
+				.prepareStatement("UPDATE " + addQuotes(TITLE_TAG_SCORE_TABLE)  + " SET score = ? WHERE id_user = ?");
 		
 		PreparedStatement stmtInsertPost = databaseConnection.prepareStatement(
-				"INSERT INTO " + TITLE_TAG_POST_TABLE + " (id_User,id_tag,post_count) VALUES (?,?,?)");
+				"INSERT INTO " + addQuotes(TITLE_TAG_POST_TABLE) + " (id_User,id_tag,post_count) VALUES (?,?,?)");
 		
 		PreparedStatement stmtInsertScore = databaseConnection.prepareStatement(
-				"INSERT INTO " + TITLE_TAG_SCORE_TABLE + " (id_User,id_tag,post_count) VALUES (?,?,?)");
+				"INSERT INTO " +  addQuotes(TITLE_TAG_SCORE_TABLE) + " (id_User,id_tag,score) VALUES (?,?,?)");
 
 		Integer userID, score,post_count;
 
@@ -87,5 +93,14 @@ public class DaveDatabaseManager extends DatabaseManager {
 			}
 		}
 	}
+	
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException {
+		setup();
+		truncateTable(TITLE_TAG_POST_TABLE);
+		truncateTable(TITLE_TAG_SCORE_TABLE);
+		fillTablesTagPostCountScore(1);
+	}
 
 }
+
+
