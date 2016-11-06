@@ -68,11 +68,11 @@ public class DatabaseManager {
 		
 		ArrayList<String> tagNames = StackExchangeApiManager.getTags(page);
 		setup();
-		PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+addQuotes(TITLE_TAG_TABLE)+"WHERE TAG_NAME =  ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+addQuotes(TITLE_TAG_TABLE)+"(TAG_NAME) VALUES (?)");
+		PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+addDoubleQuotes(TITLE_TAG_TABLE)+"WHERE TAG_NAME =  ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+addDoubleQuotes(TITLE_TAG_TABLE)+"(TAG_NAME) VALUES (?)");
 		
 		for(String name : tagNames){			
-			name="'"+name+"'";
+			name= addSimpleQuotes(name);
 			stmtSelect.setString(1,name);
 			ResultSet res = stmtSelect.executeQuery();
 			if(res.isBeforeFirst()==false){
