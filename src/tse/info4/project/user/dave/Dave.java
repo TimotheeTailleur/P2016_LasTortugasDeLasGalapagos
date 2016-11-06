@@ -26,12 +26,12 @@ import tse.info4.project.datarecovery.StackExchangeApiManager;
 public class Dave {
 
 	/**
-	 * Return the top answerer in given tag
+	 * Return the top (nbUsers) answerers in given tag while 
+	 * updating data if no update has been performed for more than nbDays
 	 * 
 	 * @param tag
-	 * @param nbDays
-	 *            maximum number of days between 2 updates
-	 * @param forceUpdate
+	 * @param nbDays maximum number of days between 2 updates
+	 * @param forceUpdate 
 	 * @return ResultSet to manipulate data
 	 * @throws SQLException
 	 * @throws InstantiationException
@@ -45,63 +45,32 @@ public class Dave {
 			boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException, JSONException, IOException, URISyntaxException {
 
-		DatabaseManager.setup();
-
-		// Sql query for select id_tag and last_update_dave depending on tag
-		// passed as a parameter
-		String sqlSelectTag = "SELECT ID_TAG, LAST_UPDATE_DAVE FROM "
-				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
-		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
-		stmtSelectTag.setString(1, tag);
-		ResultSet resSelectTag = stmtSelectTag.executeQuery();
-
-		int idTag = 0;
-		Date lastUpdateDave = null;
-
-		if (resSelectTag.next()) {
-			idTag = resSelectTag.getInt("ID_TAG");
-			lastUpdateDave = resSelectTag.getDate("LAST_UPDATE_DAVE");
-		} else {
-			System.out.println("Veuillez entrer un nom de Tag valide");
-			return null;
-		}
-
-		// Get the current date and convert it to the same format that sql
-		// dates.
-		java.util.Date currentDate = new java.util.Date();
-		Date currentDateSql = new Date(currentDate.getTime());
-
-		double nbSecondes = nbDays * 86_400; // 86 400 000 = 24*3600 = 1 day (s)
-
-		// The default value of diff is bigger than nbSecondes to force the
-		// insert if
-		// there is no data available concerning the tag.
-		double diff = nbSecondes + 1;
-
-		if (lastUpdateDave != null) {
-			diff = currentDateSql.getTime() / 1000 - lastUpdateDave.getTime() / 1000;
-		}
-
-		// If the data are too old or if the user wants to force update,
-		// the post count and the score are inserting (or updating if they
-		// already exist)
-		// and the date of the last update is updating to the current date.
-		if (diff > nbSecondes || forceUpdate) {
-			DaveDatabaseManager.fillTablesTagPostCountScore(idTag);
+		TreeMap<String,Long> map= getTagIdAndLastUpdateData(tag,nbDays);
+		Integer idTag=map.get("idTag").intValue();
+		Long nbSeconds=map.get("nbSeconds");
+		Long diff=map.get("diff");
+		/*
+		 * If the data is too old or the user has chosen to force the update :
+		 * Insert or update tag score and tag post count data
+		 * Update or insert last update date
+		 */
+		if (diff > nbSeconds || forceUpdate) {
+			DaveDatabaseManager.fillTablesTagPostCountScore(idTag); //Update of score & postcount
 			String sqlUpdateDate = "UPDATE " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE)
 					+ " SET LAST_UPDATE_DAVE = CURRENT_DATE WHERE ID_TAG = ?";
-			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate);
+			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate); //Change last Update date to current time
 			updateDatestmt.setInt(1, idTag);
 			updateDatestmt.executeUpdate();
-			System.out.println("données mises à jour");
-
 		}
 
+		/*
+		 * Once the tables have been updated : Get top Answerers in given tag and return an ArrayList of 
+		 */
 		String sqlSelectTopAnswerers = "SELECT * FROM "
 				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE)
 				+ "WHERE id_tag = ? ORDER BY POST_COUNT desc";
 
-		PreparedStatement stmtTopAnswerers = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTopAnswerers);
+		PreparedStatement stmtTopAnswerers = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTopAnswerers); //Get Top Answerers from database
 		stmtTopAnswerers.setInt(1, idTag);
 		ResultSet resQuery = stmtTopAnswerers.executeQuery();
 
@@ -123,7 +92,8 @@ public class Dave {
 	}
 
 	/**
-	 * Get top tag user id in given tag
+	 * Get top tag user id in given tag while 
+	 * updating data if no update has been performed for more than nbDays
 	 * 
 	 * @param tag
 	 * @param nbDays
@@ -138,48 +108,17 @@ public class Dave {
 	 * @throws URISyntaxException
 	 */
 	public static int getTopTag(String tag, int nbDays, boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, URISyntaxException {
-		DatabaseManager.setup();
-
-		// Sql query for select id_tag and last_update_dave depending on tag
-		// passed as a parameter
-		String sqlSelectTag = "SELECT ID_TAG, LAST_UPDATE_DAVE FROM "
-				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
-		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
-		stmtSelectTag.setString(1, tag);
-		ResultSet resSelectTag = stmtSelectTag.executeQuery();
-
-		int idTag = 0;
-		Date lastUpdateDave = null;
-
-		if (resSelectTag.next()) {
-			idTag = resSelectTag.getInt("ID_TAG");
-			lastUpdateDave = resSelectTag.getDate("LAST_UPDATE_DAVE");
-		} else {
-			System.out.println("Veuillez entrer un nom de Tag valide");
-			return 0;
-		}
-
-		// Get the current date and convert it to the same format that sql
-		// dates.
-		java.util.Date currentDate = new java.util.Date();
-		Date currentDateSql = new Date(currentDate.getTime());
-
-		double nbSecondes = nbDays * 86_400; // 86 400 000 = 24*3600 = 1 day (s)
-
-		// The default value of diff is bigger than nbSecondes to force the
-		// insert if
-		// there is no data available concerning the tag.
-		double diff = nbSecondes + 1;
-
-		if (lastUpdateDave != null) {
-			diff = currentDateSql.getTime() / 1000 - lastUpdateDave.getTime() / 1000;
-		}
+		
+		TreeMap<String,Long> map= getTagIdAndLastUpdateData(tag,nbDays);
+		Integer idTag=map.get("idTag").intValue();
+		Long nbSeconds=map.get("nbSeconds");
+		Long diff=map.get("diff");
 
 		// If the data are too old or if the user wants to force update,
 		// the post count and the score are inserting (or updating if they
 		// already exist)
 		// and the date of the last update is updating to the current date.
-		if (diff > nbSecondes || forceUpdate) {
+		if (diff > nbSeconds || forceUpdate) {
 			DaveDatabaseManager.fillTablesTagPostCountScore(idTag);
 			String sqlUpdateDate = "UPDATE " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE)
 					+ " SET LAST_UPDATE_DAVE = CURRENT_DATE WHERE ID_TAG = ?";
@@ -207,6 +146,57 @@ public class Dave {
 		
 		return -1;
 
+	}
+
+	/**
+	 * Gets tag id and last update data from database
+	 * @param tag
+	 * @param nbDays
+	 * @return Map : keys :{"idtag","nbSeconds","diff"} values : {tag id, number of seconds in nbDays, number of seconds since last update}
+	 * @throws SQLException
+	 */
+	public static TreeMap<String,Long> getTagIdAndLastUpdateData(String tag, int nbDays) throws SQLException {
+		
+		DatabaseManager.setup();
+		// Sql query for select id_tag and last_update_dave depending on tag
+		// passed as a parameter
+		String sqlSelectTag = "SELECT ID_TAG, LAST_UPDATE_DAVE FROM "
+				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
+		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
+		stmtSelectTag.setString(1, tag);
+		ResultSet resSelectTag = stmtSelectTag.executeQuery();
+
+		long idTag = 0L;
+		Date lastUpdateDave = null;
+
+		if (resSelectTag.next()) {
+			idTag = resSelectTag.getInt("ID_TAG");
+			lastUpdateDave = resSelectTag.getDate("LAST_UPDATE_DAVE");
+		} else {
+			System.out.println("Veuillez entrer un nom de Tag valide");
+			return null;
+		}
+
+		// Get current time and date and convert it into a sql formatted date
+		Date currentDateSql = new Date(new java.util.Date().getTime());
+
+		//Number of seconds elapsed in nbDays days
+		long nbSeconds = nbDays * 86_400; 
+
+		/*
+		 *  The default value of diff is bigger than nbSeconds 
+		 *  to force the insert if there is no data available for the considered tag.
+		 */
+
+		long diff = nbSeconds + 1;
+
+		//If the tables were updated, get time difference between now and last update time (in seconds)
+		if (lastUpdateDave != null) {
+			diff = (currentDateSql.getTime() / 1000) - (lastUpdateDave.getTime() / 1000);
+		}
+		TreeMap<String,Long> resultMap = new TreeMap<String,Long> ();
+		resultMap.put("idTag",idTag); resultMap.put("nbSeconds",nbSeconds); resultMap.put("diff",diff);
+		return resultMap;
 	}
 
 	/**

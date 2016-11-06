@@ -127,7 +127,7 @@ public class DatabaseManager {
 		return tagName;
 	}
 	
-	public static int getIdTag(String tagName)
+	public static int getTagId(String tagName)
 	{
 		int idTag = 0;
 		String sql="SELECT id_tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE tag_name = " + addSimpleQuotes(tagName);
