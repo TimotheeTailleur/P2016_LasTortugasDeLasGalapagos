@@ -64,6 +64,18 @@ public class Dave {
 			return null;
 		}
 	}
+	
+	public static ResultSet getTopAnswerers2(String tag, int numberOfUsers)  {
+			DatabaseManager.setup();
+			String sql = "SELECT LAST_UPDATE_DAVE FROM " + 
+					DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) +
+					" WHERE tag_name = ? ";
+			Statement stmt = DatabaseManager.databaseConnection.createStatement();
+			
+			
+			return null;
+			
+	}
 
 	/**
  	* Get top tag user id in given tag

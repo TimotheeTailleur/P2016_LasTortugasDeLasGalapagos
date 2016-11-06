@@ -65,21 +65,114 @@ public class DatabaseManager {
 		// L'api limite à 30 appels par secondes et à 10 000 appels par jour (remplissage en plusieurs fois) !
 	}
 	
-	public static String addQuotes(String str){
+	public static String addDoubleQuotes(String str){
 		return '"' + str + '"';
 	}
 	
+	public static String addSimpleQuotes(String str){
+		return '\'' + str + '\'';
+	}
+	
+	/**
+	 * Return the name of the tag corresponding to the id passed at the parameter
+	 * @param idTag the if of the tag (in table tag)
+	 * @return tagName
+	 */
+	public static String getTagName(int idTag)
+	{
+		String tagName = "";
+		String sql="SELECT tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
+		PreparedStatement tagNameStmt = null;
+		try {
+			tagNameStmt = databaseConnection.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		ResultSet rs = null;
+		try {
+			rs = tagNameStmt.executeQuery();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			if (rs.next())
+			{
+				tagName = rs.getString("tag");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return tagName;
+	}
+	
+	public static int getIdTag(String tagName)
+	{
+		int idTag = 0;
+		String sql="SELECT id_tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE tag_name = " + addSimpleQuotes(tagName);
+		PreparedStatement tagNameStmt = null;
+		try {
+			tagNameStmt = databaseConnection.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		ResultSet rs = null;
+		try {
+			rs = tagNameStmt.executeQuery();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			if (rs.next())
+			{
+				idTag = rs.getInt("id_tag");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return idTag;
+		
+		
+	}
 	
 	
 	/**
 	 * Loads the apache derby embedded driver and sets up database connection
 	 */
-	public static void setup() throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-		// Loading of embedded driver for the database				
-		Class driverClass = Class.forName(EMBEDDED_DRIVER_PACKAGE);
-		DriverManager.registerDriver((Driver)driverClass.newInstance());
+	public static void setup() {		
+		
+		Class driverClass = null;
+		try {
+			// Loading of embedded driver for the database	
+			driverClass = Class.forName(EMBEDDED_DRIVER_PACKAGE);			
+		} 
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		try {
+			DriverManager.registerDriver((Driver)driverClass.newInstance());
+		}
+		catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		// Database connection	
-		databaseConnection = DriverManager.getConnection("jdbc:derby:" + DATABASE_PATH);
+		try {
+			databaseConnection = DriverManager.getConnection("jdbc:derby:" + DATABASE_PATH);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Closes database connection
@@ -95,9 +188,7 @@ public class DatabaseManager {
 			
 		}
 		
-	}
-	
-
+	}	
 	
 	
 	/**	
@@ -109,7 +200,7 @@ public class DatabaseManager {
 	public static int truncateTable(String tableName) throws SQLException
 	{
 		Statement statement = databaseConnection.createStatement();
-		int result = statement.executeUpdate("TRUNCATE TABLE " + addQuotes(tableName));
+		int result = statement.executeUpdate("TRUNCATE TABLE " + addDoubleQuotes(tableName));
 		databaseConnection.commit();
 		return result;
 	}
@@ -131,7 +222,8 @@ public class DatabaseManager {
 	//Méthode main pour test
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException 
 	{		
-					
-	
+		DatabaseManager.setup();
+		System.out.println(getIdTag("c++"));
+		DatabaseManager.close();
 	}
 }

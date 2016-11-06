@@ -36,29 +36,22 @@ public class DaveDatabaseManager extends DatabaseManager {
 			InstantiationException, IllegalAccessException, ClassNotFoundException, URISyntaxException {
 
 		//Get tag name with tag id
-		String tagName="";
-		String sql="SELECT tag FROM" + addQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
-		PreparedStatement tagNameStmt=databaseConnection.prepareStatement(sql);
-		ResultSet rs = tagNameStmt.executeQuery();
-		if (rs.next())
-		{
-			 tagName= rs.getString("tag");
-		}
+		String tagName= getTagName(idTag);
 		
 		//Get Top Answerers stats in given tag
 		TreeMap<Integer, ArrayList<Integer>> resAns = StackExchangeApiManager.getTopAnswerers(tagName);
 		
 		//Prepare Statements for updates and insertions
 		PreparedStatement stmtUpdatePost = databaseConnection
-				.prepareStatement("UPDATE " +  addQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ?");
+				.prepareStatement("UPDATE " +  addDoubleQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ?");
 		PreparedStatement stmtUpdateScore = databaseConnection
-				.prepareStatement("UPDATE " + addQuotes(TITLE_TAG_SCORE_TABLE)  + " SET score = ? WHERE id_user = ?");
+				.prepareStatement("UPDATE " + addDoubleQuotes(TITLE_TAG_SCORE_TABLE)  + " SET score = ? WHERE id_user = ?");
 		
 		PreparedStatement stmtInsertPost = databaseConnection.prepareStatement(
-				"INSERT INTO " + addQuotes(TITLE_TAG_POST_TABLE) + " (id_User,id_tag,post_count) VALUES (?,?,?)");
+				"INSERT INTO " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " (id_User,id_tag,post_count) VALUES (?,?,?)");
 		
 		PreparedStatement stmtInsertScore = databaseConnection.prepareStatement(
-				"INSERT INTO " +  addQuotes(TITLE_TAG_SCORE_TABLE) + " (id_User,id_tag,score) VALUES (?,?,?)");
+				"INSERT INTO " +  addDoubleQuotes(TITLE_TAG_SCORE_TABLE) + " (id_User,id_tag,score) VALUES (?,?,?)");
 
 		Integer userID, score,post_count;
 
