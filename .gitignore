@@ -38,6 +38,5 @@
 ######
 
 bin/
-/ProjectDatabase
-target/ProjectDatabase
-/target/
+target/
+ProjectDatabase/
