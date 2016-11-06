@@ -100,7 +100,7 @@ public class DatabaseManager {
 	public static String getTagName(int idTag)
 	{
 		String tagName = "";
-		String sql="SELECT tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
+		String sql="SELECT tag_name FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
 		PreparedStatement tagNameStmt = null;
 		try {
 			tagNameStmt = databaseConnection.prepareStatement(sql);
@@ -118,7 +118,7 @@ public class DatabaseManager {
 		try {
 			if (rs.next())
 			{
-				tagName = rs.getString("tag");
+				tagName = rs.getString("tag_name");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -243,14 +243,8 @@ public class DatabaseManager {
 
 	{		
 		DatabaseManager.setup();
-		System.out.println(getIdTag("c++"));
+		System.out.println(getTagName(1));
 		DatabaseManager.close();
-		//setup();
-		//truncateTable(TITLE_TAG_TABLE);
-		//close();
-		for (int i=226;i<=470;i++){
-			getTags(i);
-		}
-		System.out.println("Termine");
+	
 	}
 }

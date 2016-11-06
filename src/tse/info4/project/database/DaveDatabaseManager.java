@@ -36,7 +36,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 			InstantiationException, IllegalAccessException, ClassNotFoundException, URISyntaxException {
 
 		//Get tag name with tag id
-		String tagName= getTagName(idTag);
+		String tagName= addSimpleQuotes(getTagName(idTag));
 		
 		//Get Top Answerers stats in given tag
 		TreeMap<Integer, ArrayList<Integer>> resAns = StackExchangeApiManager.getTopAnswerers(tagName);
