@@ -154,7 +154,7 @@ public class StackExchangeApiManager {
 	 //Methode main pour test classe
 	   public static void main(String[] args) throws JSONException, IOException, URISyntaxException {
 		
-		ArrayList<String> Tags = StackExchangeApiManager.getTags();
+		ArrayList<String> Tags = StackExchangeApiManager.getTags(1);
 		TreeMap<Integer,ArrayList<Integer>> AnswerersMap= StackExchangeApiManager.getTopAnswerers("javascript");
 		
 		System.out.println("Liste de tags ");

@@ -6,6 +6,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -60,27 +61,27 @@ public class DatabaseManager {
 	//Methods
 
 
-	public static void getTags(int start, int end) throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
+	public static void getTags(int page) throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
 		// Remplir la table tag à partir de l'api.
 		// L'api limite à 30 appels par secondes et à 10 000 appels par jour (remplissage en plusieurs fois) !
-		ArrayList<String> tagNames = StackExchangeApiManager.getTags(1);
-		setup();
-		//PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+'"'+TITLE_TAG_TABLE+'"'+"WHERE TAG_NAME =  ?");
-		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+'"'+TITLE_TAG_TABLE+'"'+"(TAG_NAME) VALUES ( ?)");
 		
-		for(String name : tagNames){
-			//stmtSelect.setString(1,name);
+		
+		ArrayList<String> tagNames = StackExchangeApiManager.getTags(page);
+		setup();
+		PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+addQuotes(TITLE_TAG_TABLE)+"WHERE TAG_NAME =  ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+addQuotes(TITLE_TAG_TABLE)+"(TAG_NAME) VALUES (?)");
+		
+		for(String name : tagNames){			
 			name="'"+name+"'";
-			String stmtString="SELECT ID_TAG FROM "+'"'+TITLE_TAG_TABLE+'"'+" WHERE TAG_NAME = "+name;
-			Statement stmtSelect = DatabaseManager.databaseConnection.createStatement();
-			ResultSet res = stmtSelect.executeQuery(stmtString);
-			//if(stmtSelect.execute()==0){
-			if(res==null){
+			stmtSelect.setString(1,name);
+			ResultSet res = stmtSelect.executeQuery();
+			if(res.isBeforeFirst()==false){
 				stmtInsert.setString(1,name);
 				stmtInsert.executeUpdate();
 			}			
 		}
 		close();
+		
 	}
 	
 	public static String addQuotes(String str){
@@ -149,6 +150,12 @@ public class DatabaseManager {
 	//Méthode main pour test
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException 
 	{
-		getTags(0, 100);
+		//setup();
+		//truncateTable(TITLE_TAG_TABLE);
+		//close();
+		for (int i=226;i<=470;i++){
+			getTags(i);
+		}
+		System.out.println("Termine");
 	}
 }
