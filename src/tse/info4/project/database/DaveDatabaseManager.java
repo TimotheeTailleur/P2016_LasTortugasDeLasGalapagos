@@ -43,9 +43,9 @@ public class DaveDatabaseManager extends DatabaseManager {
 		
 		//Prepare Statements for updates and insertions
 		PreparedStatement stmtUpdatePost = databaseConnection
-				.prepareStatement("UPDATE " +  addDoubleQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ?");
+				.prepareStatement("UPDATE " +  addDoubleQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ? AND id_tag = ?");
 		PreparedStatement stmtUpdateScore = databaseConnection
-				.prepareStatement("UPDATE " + addDoubleQuotes(TITLE_TAG_SCORE_TABLE)  + " SET score = ? WHERE id_user = ?");
+				.prepareStatement("UPDATE " + addDoubleQuotes(TITLE_TAG_SCORE_TABLE)  + " SET score = ? WHERE id_user = ? AND id_tag = ?");
 		
 		PreparedStatement stmtInsertPost = databaseConnection.prepareStatement(
 				"INSERT INTO " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " (id_User,id_tag,post_count) VALUES (?,?,?)");
@@ -65,8 +65,10 @@ public class DaveDatabaseManager extends DatabaseManager {
 			
 			stmtUpdatePost.setInt(1, post_count); 
 			stmtUpdatePost.setInt(2, userID); 
+			stmtUpdatePost.setInt(3, idTag);
 			stmtUpdateScore.setInt(1, score);
-			stmtUpdateScore.setInt(2, userID); 
+			stmtUpdateScore.setInt(2, userID);
+			stmtUpdateScore.setInt(3, idTag);
 
 			// If a user's id isn't found in either table : execute Insertion prepared Statements 
 			if (stmtUpdatePost.executeUpdate() == 0) {
@@ -92,6 +94,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 		truncateTable(TITLE_TAG_POST_TABLE);
 		truncateTable(TITLE_TAG_SCORE_TABLE);
 		fillTablesTagPostCountScore(1);
+		fillTablesTagPostCountScore(44);
 	}
 
 }
