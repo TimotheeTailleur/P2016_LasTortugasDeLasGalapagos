@@ -2,6 +2,7 @@ package tse.info4.project.database;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -48,6 +49,7 @@ public class DatabaseManager {
 	public static final String TITLE_TAG_SCORE_TABLE = "tag_score";
 	
 	public static final String TITLE_TAG_TABLE = "tag";
+	
 
 	
 	//Other members
@@ -127,30 +129,21 @@ public class DatabaseManager {
 		return tagName;
 	}
 	
-	public static int getTagId(String tagName)
+	public static int getTagId(String tagName) throws SQLException
 	{
+		String sqlSelectTag = "SELECT ID_TAG FROM "
+				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
+		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
+		stmtSelectTag.setString(1, tagName);
+		ResultSet resSelectTag = stmtSelectTag.executeQuery();
+
 		int idTag = 0;
-		String sql="SELECT id_tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE tag_name = " + addSimpleQuotes(tagName);
-		PreparedStatement tagNameStmt = null;
-		try {
-			tagNameStmt = databaseConnection.prepareStatement(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}		
-		ResultSet rs = null;
-		try {
-			rs = tagNameStmt.executeQuery();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		try {
-			if (rs.next())
-			{
-				idTag = rs.getInt("id_tag");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+
+		if (resSelectTag.next()) {
+			idTag = resSelectTag.getInt("ID_TAG");
+		} else {
+			System.out.println("Veuillez entrer un nom de Tag valide");
+			return 0;
 		}
 		
 		return idTag;
@@ -243,7 +236,7 @@ public class DatabaseManager {
 
 	{		
 		DatabaseManager.setup();
-		System.out.println(getTagName(1));
+		System.out.println(getTagId(addSimpleQuotes("c++")));
 		DatabaseManager.close();
 	
 	}

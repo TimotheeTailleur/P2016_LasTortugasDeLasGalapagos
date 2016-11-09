@@ -41,6 +41,8 @@ public class Dave {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
+	
+	
 	public static ArrayList<ArrayList<Integer>> getTopAnswerers(String tag, int nbUsers, int nbDays,
 			boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException, JSONException, IOException, URISyntaxException {
@@ -210,18 +212,76 @@ public class Dave {
 	public static String getLink(int id) {
 		return ("stackoverflow.com/u/" + id);
 	}
+	
+	
+	public static int getTopTag(ArrayList<String> tagList) throws SQLException{
+		if (tagList.size() <=1){
+			System.out.println("Too small list");
+			return -1;
+		}
+		
+		DatabaseManager.setup();
+		int tagId = DatabaseManager.getTagId(DatabaseManager.addSimpleQuotes(tagList.get(0)));
+		String sql = "SELECT ID_USER FROM " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE)
+				+ " WHERE ID_TAG = ?";
+		PreparedStatement stmt = DatabaseManager.databaseConnection.prepareStatement(sql);
+		stmt.setInt(1, tagId);
+		ResultSet res = stmt.executeQuery();
+		
+		ArrayList<Integer> potentialUsers = new ArrayList<Integer>();
+		
+		while (res.next()){
+			potentialUsers.add(res.getInt("ID_USER"));
+		}
+		
+		for (int i =1 ; i<tagList.size(); i++){
+			tagId = DatabaseManager.getTagId(DatabaseManager.addSimpleQuotes(tagList.get(i)));
+			sql = "SELECT ID_USER FROM " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE)
+			+ " WHERE ID_TAG = ?";
+			stmt = DatabaseManager.databaseConnection.prepareStatement(sql);
+			stmt.setInt(1, tagId);
+			res = stmt.executeQuery();
+			
+			ArrayList<Integer> potentialUsersTemp = new ArrayList<Integer>();
+			while (res.next()){
+				int idUser = res.getInt("ID_USER");
+				
+				if (potentialUsers.contains(idUser)){
+					potentialUsersTemp.add(idUser);
+				}
+			}
+			potentialUsers = potentialUsersTemp;
+		}
+		
+		System.out.println(potentialUsers.toString());
+		
+		
+		
+		
+		
+		return 0;
+		
+	}
 
 	
 
 	// Méthode main pour démo
 	public static void main(String[] args) throws SQLException, IOException, JSONException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException, URISyntaxException {
+		
+		/*
 		System.out.println("Top post count");
 		System.out.println("[id_user, post_count]");
-		System.out.println(getTopAnswerers("javascript", 10, 2, true).toString());
+		String tag = DatabaseManager.addSimpleQuotes("c++");
+		System.out.println(getTopAnswerers(tag, 10, 2, true).toString());
 		System.out.println("\nTop score");
-		System.out.println(getTopTag("javascript", 2, false));
-
+		System.out.println(getTopTag(tag, 2, false));*/
+		
+		ArrayList<String> tagList  = new ArrayList<>();
+		tagList.add("c++");
+		tagList.add("java");
+		System.out.println(getTopTag(tagList));
+		
 	}
 
 }
