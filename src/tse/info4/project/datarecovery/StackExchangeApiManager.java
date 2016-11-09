@@ -78,10 +78,10 @@ public class StackExchangeApiManager {
 	 * 
 	 */
 	
-	public static ArrayList<String> getTags () throws JSONException, IOException {
+	public static ArrayList<String> getTags (int pageNumber) throws JSONException, IOException {
 		
 
-		String str_url= buildTagUrl(1); //API URL
+		String str_url= buildTagUrl(pageNumber); //API URL
 		JSONObject tagsJSON = toJSONObject(str_url); // Extract JSONObject from API URL
 		
 		JSONArray tagsJSONArray = tagsJSON.getJSONArray("items"); // Extract JSONArray from  JSONObject
@@ -154,7 +154,7 @@ public class StackExchangeApiManager {
 	 //Methode main pour test classe
 	   public static void main(String[] args) throws JSONException, IOException, URISyntaxException {
 		
-		ArrayList<String> Tags = StackExchangeApiManager.getTags();
+		ArrayList<String> Tags = StackExchangeApiManager.getTags(1);
 		TreeMap<Integer,ArrayList<Integer>> AnswerersMap= StackExchangeApiManager.getTopAnswerers("javascript");
 		
 		System.out.println("Liste de tags ");
