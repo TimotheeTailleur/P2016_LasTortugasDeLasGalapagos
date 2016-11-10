@@ -20,7 +20,7 @@ import tse.info4.project.datarecovery.StackExchangeApiManager;
 
 /**
  * 
- * Fonctions and demo main method for user story Dave
+ * Function and demo main method for user story Dave
  *
  */
 public class Dave {
@@ -207,6 +207,7 @@ public class Dave {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
+	
 	public static String getLink(int id) {
 		return ("stackoverflow.com/u/" + id);
 	}
@@ -216,11 +217,15 @@ public class Dave {
 	// Méthode main pour démo
 	public static void main(String[] args) throws SQLException, IOException, JSONException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException, URISyntaxException {
+		
+		String tag="javascript";
+		tag=DatabaseManager.addSimpleQuotes(tag);
+		
 		System.out.println("Top post count");
 		System.out.println("[id_user, post_count]");
-		System.out.println(getTopAnswerers("javascript", 10, 2, true).toString());
+		System.out.println(getTopAnswerers(tag, 10, 2, true).toString());
 		System.out.println("\nTop score");
-		System.out.println(getTopTag("javascript", 2, false));
+		System.out.println(getTopTag(tag, 2, false));
 
 	}
 
