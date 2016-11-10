@@ -134,16 +134,13 @@ public class DatabaseManager {
 		String sqlSelectTag = "SELECT ID_TAG FROM "
 				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
 		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
-		stmtSelectTag.setString(1, tagName);
+		stmtSelectTag.setString(1, addSimpleQuotes(tagName));
 		ResultSet resSelectTag = stmtSelectTag.executeQuery();
 
 		int idTag = 0;
 
 		if (resSelectTag.next()) {
 			idTag = resSelectTag.getInt("ID_TAG");
-		} else {
-			System.out.println("Veuillez entrer un nom de Tag valide");
-			return 0;
 		}
 		
 		return idTag;
