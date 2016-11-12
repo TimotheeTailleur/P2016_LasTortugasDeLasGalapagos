@@ -106,20 +106,58 @@ public class StackExchangeApiManager {
 	 * @param pageNumber
 	 * @return
 	 */
-	public static String buildQuestionsScoreUrl (ArrayList<Integer> questionsList,Integer pageNumber) {
+	public static ArrayList<String> buildQuestionsScoreUrl (ArrayList<Integer> questionsList) {
 		String questionIDs = "";
 		int n = questionsList.size();
-		if (n<100)
+		ArrayList<String> listURL = new ArrayList<String> ();
+		if (n<=100)
 		{
+			for (int i =0;i< n-1;i++)
+			{
+				questionIDs=questionIDs + questionsList.get(i)+";";
+			}
+			questionIDs=questionIDs+questionsList.get(n-1);
+			listURL.add(DOMAIN_NAME + '/' + VERSION+"/questions/"+questionIDs
+					+"?pagesize=100&order=desc&sort=votes&site=stackoverflow&filter=!GeEeiQUx0cS46");
+			return listURL;
 			
-		}
-		for (int i =0;i< n-1;i++)
+		}else
 		{
-			questionIDs=questionIDs + questionsList.get(i)+";";
+			int begin=0;
+			int temp=100;
+			boolean has_more=true;
+			int var = 0;
+			for (temp=100;temp<n+1;temp=temp+var)
+			{
+				questionIDs="";
+				for (int i=begin;i<temp-1;i++)
+				{
+					questionIDs=questionIDs + questionsList.get(i)+";";
+				}
+				questionIDs=questionIDs+questionsList.get(temp-1);
+				listURL.add(DOMAIN_NAME + '/' + VERSION+"/questions/"+questionIDs+
+						"?pagesize=100&order=desc&sort=votes&site=stackoverflow&filter=!GeEeiQUx0cS46");
+				if (java.lang.Math.floorDiv(n-temp,100) != 0)
+				{
+					begin=temp;
+					var=100;
+				}else
+				{
+					if (n-temp ==0 )
+					{
+						temp++;
+					}else
+					{
+						begin = temp;
+						var=(n-temp);
+					}
+
+				}
+			}
 		}
-		questionIDs=questionIDs+questionsList.get(n-1);
-		return DOMAIN_NAME + '/' + VERSION+"/questions/"+questionIDs+"?page="+pageNumber+
-				"&order=desc&sort=activity&site=stackoverflow&filter=!BHMIbze0C9NfiHtUvALEtojKpNwRxk";
+		return listURL;
+
+	
 	}
 	
 	/**
@@ -296,7 +334,6 @@ public class StackExchangeApiManager {
 	 */
 	public static TreeMap<Integer,String> getNewPosts(String tagName) throws JSONException, IOException {
 		TreeMap<Integer,String> map = new TreeMap<>(); //returned variable
-		Integer pageNumber=1; 
 		/*
 		 * Variables used to extract the data
 		 */
@@ -352,27 +389,29 @@ public class StackExchangeApiManager {
 			has_more=JSON.getBoolean("has_more");
 			pageNumber++;
 		}
-		
-		pageNumber=1;
 		boolean has_more2 = true;
 		ArrayList<Integer> questionScores = new ArrayList<Integer> ();
-		
-		while (has_more2)
-		{
-			 str_url=buildQuestionsScoreUrl(questionIds,userId);
-			 JSON = toJSONObject(str_url);
-			 JSONArray = JSON.getJSONArray("items");
-			 arrayLength=JSONArray.length();
-			 for (int i =0; i<arrayLength;i++)
-			 {
-				JSONObject currentObject= JSONArray.getJSONObject(i);
-				questionScores.add(currentObject.getInt("score"));
-
-			 }
-			has_more2=JSON.getBoolean("has_more");
-			pageNumber++;
+		ArrayList<String> listOfApiURL = new ArrayList<String> ();
+		listOfApiURL=buildQuestionsScoreUrl(questionIds);
+		System.out.println(listOfApiURL.toString());
+			for (String s : listOfApiURL)
+			{
+				has_more2=true;
+				while (has_more2)
+				{
+				JSON = toJSONObject(s);
+				JSONArray = JSON.getJSONArray("items");
+				arrayLength=JSONArray.length();
+				for (int i =0; i<arrayLength;i++)
+				{
+					JSONObject currentObject= JSONArray.getJSONObject(i);
+					questionScores.add(currentObject.getInt("score"));
+				 }
+				has_more2=JSON.getBoolean("has_more");
+				}
 		}
-		
+		System.out.println(questionIds.toString());
+		System.out.println(questionScores.toString());
 		for (int i = 0; i < questionIds.size(); i++) {
 			   map.put(questionIds.get(i), questionScores.get(i));
 			}
@@ -411,12 +450,9 @@ public class StackExchangeApiManager {
 		   TreeMap<Integer,Integer> badgeAwardCounts = getUserBadgeAwardCounts(userId);
 		   System.out.println("Award Counts pour les badges de  l user 1200");
 		   System.out.println(badgeAwardCounts.toString());
-		   /*
-		    * Ne marche pas :
-
 		   TreeMap<Integer,Integer> posts = getQuestionsIds_And_Scores(userId);
 		   System.out.println("Questions auxquelles l user 1200 a répondu ");
 		   System.out.println(posts.toString());
-		    */
+
 	} 
 }
