@@ -151,7 +151,6 @@ public class StackExchangeApiManager {
 						begin = temp;
 						var=(n-temp);
 					}
-
 				}
 			}
 		}
@@ -362,9 +361,7 @@ public class StackExchangeApiManager {
 	 * @throws IOException 
 	 */
 	
-	//Ne marche pas :(
-	
-	private static  TreeMap<Integer,Integer> getQuestionsIds_And_Scores (Integer userId) throws JSONException, IOException {
+	public static  TreeMap<Integer,Integer> getQuestionsIds_And_Scores (Integer userId) throws JSONException, IOException {
 		String str_url;
 		JSONObject JSON;
 		JSONArray JSONArray;
@@ -418,6 +415,32 @@ public class StackExchangeApiManager {
 		return map;
 
 	}
+
+
+	/**
+	 * Get the top 100 tags to which a user has contributed (ranked by answer score)
+	 * @param userId
+	 * @return
+	 * @throws JSONException 
+	 * @throws IOException 
+	 */
+	public static ArrayList<String> getTopTags (Integer userId) throws IOException, JSONException {
+		ArrayList<String> tagList = new ArrayList<String> ();
+		String str_url= DOMAIN_NAME + '/' + VERSION+
+				"/users/"+userId+"/top-tags?pagesize=100&site=stackoverflow&filter=!SuLWjw(qAdrLpexM8F";
+		JSONObject JSON=toJSONObject(str_url);
+		JSONArray JSONArray=JSON.getJSONArray("items");
+		String tagName;
+		JSONObject currentObject;
+		for (int i =0;i<JSONArray.length();i++)
+		{
+			currentObject=JSONArray.getJSONObject(i);
+			tagName=currentObject.getString("tag_name");
+			tagList.add(tagName);
+		}
+		return tagList;	
+	}
+	
 	
 // Bob user story methods
 	
