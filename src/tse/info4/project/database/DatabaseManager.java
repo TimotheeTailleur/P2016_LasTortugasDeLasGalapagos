@@ -47,7 +47,20 @@ public class DatabaseManager {
 	 */
 	public static final String TITLE_TAG_SCORE_TABLE = "tag_score";
 	
+	/**
+	 * Name of the table in which all tag are contained.
+	 */
 	public static final String TITLE_TAG_TABLE = "tag";
+	
+	/**
+	 * Name of the table in which all questions are contained
+	 */
+	public static final String TITLE_QUESTIONS_TABLE = "questions";	
+	
+	/**
+	 * Name of the table in which all data users who have used the application are contained.
+	 */
+	public static final String TITLE_USERS_TABLE = "users";
 
 	
 	//Other members

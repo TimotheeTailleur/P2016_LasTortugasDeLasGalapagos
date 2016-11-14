@@ -2,12 +2,14 @@ package tse.info4.project.datarecovery;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,17 +87,10 @@ public class StackExchangeApiManager {
 	 * @return
 	 */
 	public static String buildAnswersUrl (Integer userId,Integer pageNumber) {
-		
-		if (pageNumber==1)
-		{
-			return DOMAIN_NAME + '/' + VERSION+"/users/"+userId
-					+"/answers?order=desc&sort=activity&site=stackoverflow&filter=!)Q2B_A19OPkd2j.3elVGjGq(";
+		String filter = "!)Q2B_A19OPkd2j.3elVGjGq(";
+		return DOMAIN_NAME + '/' + VERSION+"/users/"+userId
+					+"/answers?page="+pageNumber+"&pagesize=100&order=desc&sort=activity&site=stackoverflow&filter=" + filter;
 
-		} else
-		{
-			return DOMAIN_NAME + '/' + VERSION+"/users/"+userId
-					+"/answers?page="+pageNumber+"&order=desc&sort=activity&site=stackoverflow&filter=!)Q2B_A19OPkd2j.3elVGjGq(";
-		}
 		
 	}
 	
@@ -109,6 +104,7 @@ public class StackExchangeApiManager {
 	public static ArrayList<String> buildQuestionsScoreUrl (ArrayList<Integer> questionsList) {
 		String questionIDs = "";
 		int n = questionsList.size();
+		String filter = "!GeEeiQUx0cS46";
 		ArrayList<String> listURL = new ArrayList<String> ();
 		if (n<=100)
 		{
@@ -118,7 +114,7 @@ public class StackExchangeApiManager {
 			}
 			questionIDs=questionIDs+questionsList.get(n-1);
 			listURL.add(DOMAIN_NAME + '/' + VERSION+"/questions/"+questionIDs
-					+"?pagesize=100&order=desc&sort=votes&site=stackoverflow&filter=!GeEeiQUx0cS46");
+					+"?pagesize=100&order=desc&sort=votes&site=stackoverflow&filter=" + filter);
 			return listURL;
 			
 		}else
@@ -136,7 +132,7 @@ public class StackExchangeApiManager {
 				}
 				questionIDs=questionIDs+questionsList.get(temp-1);
 				listURL.add(DOMAIN_NAME + '/' + VERSION+"/questions/"+questionIDs+
-						"?pagesize=100&order=desc&sort=votes&site=stackoverflow&filter=!GeEeiQUx0cS46");
+						"?pagesize=100&order=desc&sort=votes&site=stackoverflow&filter=" + filter);
 				if (java.lang.Math.floorDiv(n-temp,100) != 0)
 				{
 					begin=temp;
@@ -167,7 +163,8 @@ public class StackExchangeApiManager {
 	 * @return
 	 */
 	public static String buildBadgeAwardCountsUrl (Integer userId,Integer pageNumber) {
-		return DOMAIN_NAME + '/' + VERSION+"/users/"+userId+"/badges?page="+pageNumber+"&pagesize=100&order=desc&sort=awarded&site=stackoverflow&filter=!6JEiSzPSYKGo3";
+		String filter = "!mSGiqtI*CF";
+		return DOMAIN_NAME + '/' + VERSION+"/users/"+userId+"/badges?page="+pageNumber+"&pagesize=100&order=desc&sort=awarded&site=stackoverflow&filter=" + filter;
 	}
 	
 	/**
@@ -178,11 +175,12 @@ public class StackExchangeApiManager {
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
-	public static String buildNewPostsUrl (String tagName) throws UnsupportedEncodingException {
+	public static String buildNewPostsUrl (String tagName, int nbPosts) throws UnsupportedEncodingException {
 		int unixTime = (int) ((System.currentTimeMillis() / 1000L) - 84600) ; //  a day ago
-		return DOMAIN_NAME + '/' + VERSION+"/questions?pagesize=3&fromdate="
+		String filter = "!C(o*VY)(1IkzZXIFv";
+		return DOMAIN_NAME + '/' + VERSION+"/questions?pagesize=" + nbPosts + "&fromdate="
 				+(unixTime)+"&order=desc&sort=activity&tagged="+URLEncoder.encode(tagName,"UTF-8")
-				+"&site=stackoverflow&filter=!C(o*VY)(1IkzZXIFv";
+				+"&site=stackoverflow&filter=" + filter;
 	}
 	
 // Dave user story methods
@@ -324,6 +322,8 @@ public class StackExchangeApiManager {
 	}
 	
 
+	
+	
 	/**
 	 * Returns a treeMap <keys : Queston id , values : title>
 	 * @param tagName
@@ -331,17 +331,17 @@ public class StackExchangeApiManager {
 	 * @throws JSONException 
 	 * @throws IOException 
 	 */
-	public static TreeMap<Integer,String> getNewPosts(String tagName) throws JSONException, IOException {
+	public static TreeMap<Integer,String> getNewPosts(String tagName, int nbPosts) throws JSONException, IOException {
 		TreeMap<Integer,String> map = new TreeMap<>(); //returned variable
 		/*
 		 * Variables used to extract the data
 		 */
-		String str_url=buildNewPostsUrl(tagName); //API URL
+		String str_url=buildNewPostsUrl(tagName, nbPosts); //API URL
 		JSONObject newPostsJSON=toJSONObject(str_url); // Extract JSONObject from API URL
 		JSONArray newPostsJSONArray=newPostsJSON.getJSONArray("items"); // Extract array of JSONObjects 
 		JSONObject currentObject;
 
-		for (int i=0;i<3;i++)
+		for (int i=0;i<nbPosts;i++)
 		{
 			currentObject = newPostsJSONArray.getJSONObject(i);
 			Integer questionId=currentObject.getInt("question_id");
@@ -356,12 +356,12 @@ public class StackExchangeApiManager {
 	/**
 	 * Get all answers IDs for user (userId)
 	 * @param userId
-	 * @return
+	 * @return treeMap <key : Question id, value : score>
 	 * @throws JSONException 
 	 * @throws IOException 
 	 */
 	
-	public static  TreeMap<Integer,Integer> getQuestionsIds_And_Scores (Integer userId) throws JSONException, IOException {
+	public static  TreeMap<Integer,Integer> getQuestionsIdsAndScores (Integer userId) throws JSONException, IOException {
 		String str_url;
 		JSONObject JSON;
 		JSONArray JSONArray;
@@ -390,7 +390,6 @@ public class StackExchangeApiManager {
 		ArrayList<Integer> questionScores = new ArrayList<Integer> ();
 		ArrayList<String> listOfApiURL = new ArrayList<String> ();
 		listOfApiURL=buildQuestionsScoreUrl(questionIds);
-		System.out.println(listOfApiURL.toString());
 			for (String s : listOfApiURL)
 			{
 				has_more2=true;
@@ -407,8 +406,6 @@ public class StackExchangeApiManager {
 				has_more2=JSON.getBoolean("has_more");
 				}
 		}
-		System.out.println(questionIds.toString());
-		System.out.println(questionScores.toString());
 		for (int i = 0; i < questionIds.size(); i++) {
 			   map.put(questionIds.get(i), questionScores.get(i));
 			}
@@ -418,24 +415,33 @@ public class StackExchangeApiManager {
 
 
 	/**
-	 * Get the top 100 tags to which a user has contributed (ranked by answer score)
+	 * Get the toptags to which a user has contributed (ranked by answer score)
 	 * @param userId
+	 * @param nbTags (<100)
 	 * @return
 	 * @throws JSONException 
 	 * @throws IOException 
 	 */
-	public static ArrayList<String> getTopTags (Integer userId) throws IOException, JSONException {
+	public static ArrayList<String> getTopTags (Integer userId, int nbTags) throws IOException, JSONException{
+		String filter = "!SuLWjw(qAdrLpexM8F";
 		ArrayList<String> tagList = new ArrayList<String> ();
 		String str_url= DOMAIN_NAME + '/' + VERSION+
-				"/users/"+userId+"/top-tags?pagesize=100&site=stackoverflow&filter=!SuLWjw(qAdrLpexM8F";
-		JSONObject JSON=toJSONObject(str_url);
-		JSONArray JSONArray=JSON.getJSONArray("items");
-		String tagName;
-		JSONObject currentObject;
+				"/users/"+userId+"/top-tags?pagesize="+nbTags+"&site=stackoverflow&filter=" + filter;
+		JSONObject JSON = null;
+		
+			JSON = toJSONObject(str_url);
+
+		JSONArray JSONArray = null;
+
+			JSONArray = JSON.getJSONArray("items");
+
+		String tagName = null;
+		JSONObject currentObject = null;
 		for (int i =0;i<JSONArray.length();i++)
 		{
 			currentObject=JSONArray.getJSONObject(i);
 			tagName=currentObject.getString("tag_name");
+
 			tagList.add(tagName);
 		}
 		return tagList;	
@@ -465,17 +471,25 @@ public class StackExchangeApiManager {
 		System.out.println("Liste des score & post Count");
 		System.out.println(AnswerersMap.values().toString());
 		*/
-		   /*TEST ALICE */
+		   
 		   Integer userId=1200;
-		   TreeMap<Integer,String> newPosts = getNewPosts("javascript");
+		   /*
+		   TreeMap<Integer,String> newPosts = getNewPosts("javascript", 20);
 		   System.out.println("Nouveaux posts en javascript");
 		   System.out.println(newPosts.toString());
+		   
 		   TreeMap<Integer,Integer> badgeAwardCounts = getUserBadgeAwardCounts(userId);
 		   System.out.println("Award Counts pour les badges de  l user 1200");
 		   System.out.println(badgeAwardCounts.toString());
-		   TreeMap<Integer,Integer> posts = getQuestionsIds_And_Scores(userId);
+		   */
+		   //TreeMap<Integer,Integer> posts = getQuestionsIds_And_Scores(userId);
+		   TreeMap<Integer,Integer> posts = new TreeMap<>();
+		   posts.put(12576,3);
+		   System.out.println(posts.get(12576));
+		   /*
 		   System.out.println("Questions auxquelles l user 1200 a répondu ");
-		   System.out.println(posts.toString());
+		   System.out.println(posts.toString()); */
+		   
 
 	} 
 }
