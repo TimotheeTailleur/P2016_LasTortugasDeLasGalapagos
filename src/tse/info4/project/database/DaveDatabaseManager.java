@@ -3,7 +3,6 @@ package tse.info4.project.database;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeMap;

@@ -19,7 +19,7 @@ import tse.info4.project.datarecovery.StackExchangeApiManager;
  */
 public class Alice {
 	
-	protected int userId;
+	protected static int userId;
 	protected static ArrayList<String> tagList;;
 	
 

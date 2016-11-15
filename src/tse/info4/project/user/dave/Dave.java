@@ -110,7 +110,7 @@ public class Dave {
 	public static int getTopTag(String tag, int nbDays, boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, URISyntaxException {
 		
 		TreeMap<String,Long> map= getTagIdAndLastUpdateData(tag,nbDays);
-		Integer idTag=map.get("idTag").intValue();
+		int idTag=map.get("idTag").intValue();
 		Long nbSeconds=map.get("nbSeconds");
 		Long diff=map.get("diff");
 
