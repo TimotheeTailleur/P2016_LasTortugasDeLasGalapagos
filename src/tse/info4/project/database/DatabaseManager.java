@@ -50,6 +50,11 @@ public class DatabaseManager {
 	
 	public static final String TITLE_TAG_TABLE = "tag";
 	
+	/**
+	 * Name of the table in which all data users who have used the application are contained.
+	 */
+	public static final String TITLE_USERS_TABLE = "users";
+	
 
 	
 	//Other members
@@ -129,19 +134,28 @@ public class DatabaseManager {
 		return tagName;
 	}
 	
-	public static int getTagId(String tagName) throws SQLException
+	
+	public static int getTagId(String tagName)
 	{
 		String sqlSelectTag = "SELECT ID_TAG FROM "
 				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
-		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
-		stmtSelectTag.setString(1, addSimpleQuotes(tagName));
-		ResultSet resSelectTag = stmtSelectTag.executeQuery();
+		int idTag = -1;
 
-		int idTag = 0;
+		try {
+			PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
+			stmtSelectTag.setString(1, addSimpleQuotes(tagName));
+			ResultSet resSelectTag = stmtSelectTag.executeQuery();
+			if (resSelectTag.next()) {
 
-		if (resSelectTag.next()) {
-			idTag = resSelectTag.getInt("ID_TAG");
+				idTag = resSelectTag.getInt("ID_TAG");
+			}
+		} catch (SQLException e) {
+			System.out.println("getTagId (DatabaseManager) - Problème lors de l'exécution de la requête sql");
+			e.printStackTrace();
 		}
+
+
+	
 		
 		return idTag;
 		
@@ -233,7 +247,7 @@ public class DatabaseManager {
 
 	{		
 		DatabaseManager.setup();
-		System.out.println(getTagId(addSimpleQuotes("c++")));
+		System.out.println(getTagId("java"));
 		DatabaseManager.close();
 	
 	}

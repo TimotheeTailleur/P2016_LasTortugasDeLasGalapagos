@@ -58,6 +58,16 @@ public class StackExchangeApiManager {
 		return DOMAIN_NAME + '/' + VERSION + '/' + "tags?"+"page=1&pagesize="+PAGE_SIZE+"&order=desc&sort=popular&site=stackoverflow"; 
 	}
 	
+	/**
+	 * BuildUrl to get tag list and score of a user.
+	 * @param idUSer
+	 * @return Api Url
+	 */
+	private static String buildTagUrl(int idUser, int page)
+	{
+		String filter = "!-.G.68phH_FJ";
+		return DOMAIN_NAME + '/' + VERSION + "/users/" + idUser + "/tags?page=" + page + "&pagesize=100&order=desc&sort=popular&site=stackoverflow&filter="+filter;
+	}
 	
 	/**
 	 * Build URL to get page one of TopAnswerers list in given (tagName)
@@ -151,20 +161,55 @@ public class StackExchangeApiManager {
 	
 
 	
+	/**
+	 * 
+	 *  Return a list of tag concerning a user where the count is bigger than minScore for each tag.
+	 * 
+	 * @param idUser
+	 * @param minScore
+	 * @return A list of map which contain the count and the name for each tag [{cout, name}, {count, name}, ...]
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	public static ArrayList<TreeMap<String, String>> getTagUserScore(int idUser, int minScore) throws JSONException, IOException{
+		int pageNumber = 1;
+		String url = buildTagUrl(idUser, pageNumber);
+		JSONObject tagsJson = toJSONObject(url);
+		JSONArray tagsJsonArray = tagsJson.getJSONArray("items");
+		
+		ArrayList<TreeMap<String, String>> tagNames = new ArrayList<TreeMap<String, String>>();
+		
+		boolean has_more = true;
+		
+		while (has_more){
+			int i =0;
+			while (i < tagsJsonArray.length()){
+				String name = tagsJsonArray.getJSONObject(i).getString("name");
+				String count = tagsJsonArray.getJSONObject(i).getString("count");
+
+				if ((Integer.parseInt(count) < minScore)){
+					return tagNames;
+				}
+				
+				TreeMap<String, String> tagData = new TreeMap<String, String>();
+				tagData.put("name", name);
+				tagData.put("count", count);
+				tagNames.add(tagData);
+				i++;
+			}
+			has_more = tagsJson.getBoolean("has_more");
+			
+		}
+		
+		return tagNames;
+		
+		
+	}
+	
 	 //Methode main pour test classe
 	   public static void main(String[] args) throws JSONException, IOException, URISyntaxException {
 		
-		ArrayList<String> Tags = StackExchangeApiManager.getTags(1);
-		TreeMap<Integer,ArrayList<Integer>> AnswerersMap= StackExchangeApiManager.getTopAnswerers("javascript");
-		
-		System.out.println("Liste de tags ");
-		System.out.println(Tags.toString());
-		
-		System.out.println("Liste des userIDs");
-		System.out.println(AnswerersMap.keySet().toString());
-		
-		System.out.println("Liste des score & post Count");
-		System.out.println(AnswerersMap.values().toString());
+		System.out.println(getTagUserScore(1200, 10));
 		
 	} 
 }

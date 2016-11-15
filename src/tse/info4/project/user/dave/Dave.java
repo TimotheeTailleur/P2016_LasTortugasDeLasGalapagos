@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+import org.apache.derby.tools.sysinfo;
 import org.json.JSONException;
+import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import tse.info4.project.database.DatabaseManager;
@@ -23,7 +25,8 @@ import tse.info4.project.datarecovery.StackExchangeApiManager;
  * Fonctions and demo main method for user story Dave
  *
  */
-public class Dave {
+public class Dave{
+	
 
 	/**
 	 * Return the top (nbUsers) answerers in given tag while 
@@ -57,7 +60,7 @@ public class Dave {
 		 * Update or insert last update date
 		 */
 		if (diff > nbSeconds || forceUpdate) {
-			DaveDatabaseManager.fillTablesTagPostCountScore(idTag); //Update of score & postcount
+			DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag); //Update of score & postcount
 			String sqlUpdateDate = "UPDATE " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE)
 					+ " SET LAST_UPDATE_DAVE = CURRENT_DATE WHERE ID_TAG = ?";
 			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate); //Change last Update date to current time
@@ -121,7 +124,7 @@ public class Dave {
 		// already exist)
 		// and the date of the last update is updating to the current date.
 		if (diff > nbSeconds || forceUpdate) {
-			DaveDatabaseManager.fillTablesTagPostCountScore(idTag);
+			DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag);
 			String sqlUpdateDate = "UPDATE " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE)
 					+ " SET LAST_UPDATE_DAVE = CURRENT_DATE WHERE ID_TAG = ?";
 			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate);
@@ -215,125 +218,99 @@ public class Dave {
 	}
 	
 	
-	/**
-	 * Sort (desc) and ArrayList of ArrayList<Integer> depending on the indice 1
-	 * @param list
-	 */
-	private static void sort(ArrayList<ArrayList<Integer>> list){
-		for (int i =0 ; i<=list.size()-2 ; i++){
-			for (int j = (list.size() -1) ; i<j;j--){
-				if (list.get(j).get(1) > list.get(j-1).get(1)){
-					ArrayList<Integer> temp = list.get(j-1);
-					list.set(j-1, list.get(j));
-					list.set(j, temp);
-				}
-			}
-		}
-	}
 	
-	/**
-	 * Get top tag user id in the list of given tag (sum of post count for each tag)
-	 * updating data if no update has been performed for more than nbDays
-	 * 
-	 * @param tagList
-	 * @param nbDays
-	 * @param forceUpdate The date update is forced if this parameter is true
-	 * @return ArrayList<ArrayList<Integer>> in this form [[idUser1, post_count1], [idUsers2, post_count2], ...]. <br>
-	 * 										 The arrayList is sorting in descending order depending on post_count.
-	 * @throws SQLException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
-	 * @throws JSONException
-	 * @throws IOException
-	 * @throws URISyntaxException
-	 */
-	public static ArrayList<ArrayList<Integer>> getTopTag(ArrayList<String> tagList, int nbDays, boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, URISyntaxException{
-		if (tagList.size() <=1){
-			System.out.println("Too small list");
-			return null;
-		}
-		DatabaseManager.setup();		
-		ArrayList<Integer> potentialUsers = DaveDatabaseManager.userSharingTags(tagList, nbDays, forceUpdate);
-		
-		ArrayList<ArrayList<Integer>> topTagUsers = new ArrayList<ArrayList<Integer>>();
-		 
-		int listLength = potentialUsers.size();
-		if (listLength == 0){
-			System.out.println("Aucun utilisateur ne correspond aux critères choisis");
-			return null;
-		}
-		else{
+	
+/**
+ * 
+ * Return a list of top user int the tags passed as a parameter. The list is sorted by the total post count for each user.
+ * 
+ * @param tagList : list of tag identified by their name (c++, java, c ...)
+ * @param nbDays : number of days between 2 updates of the database
+ * @param forceUpdate true if the user wants to force the update, false otherwise
+ * @return [{userId : , totalPostCount : , tag1 :, tag2 : ...}, {userId : , totalPostCount : , tag3 :, tag 4 :, ...}, ...] <br>
+ * 			For each map in the array list, there are : - the user id is indexed by the key userId <br>
+ * 														- the total post count is indexed by totalPostCount <br>
+ * 														- for each tag, the post count of this tag is identified by the id of the tag. <br>
+ * @throws InstantiationException
+ * @throws IllegalAccessException
+ * @throws ClassNotFoundException
+ * @throws JSONException
+ * @throws IOException
+ * @throws SQLException
+ * @throws URISyntaxException
+ */
+	public static ArrayList<TreeMap<String, Integer>> getTopTag(ArrayList<String> tagList, int nbDays, boolean forceUpdate) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException{
+		DatabaseManager.setup();
+		ArrayList<Integer> tagListId = new ArrayList<Integer>(); // the same list that the one which is passed as a parameter except this is a list of id (the first one was a list of name)
+		for (int i = 0; i<tagList.size(); i++){
+
+			int idTag = DaveDatabaseManager.getTagId(tagList.get(i));
+			tagListId.add(idTag);
 			
+			long timeSpentSinceLastTagUpdate = DaveDatabaseManager.getTimeUpdateTopTag(idTag);
 			
+			// If the data in the database are too old or if the user wants to force the update
 			
-			
-			for (int j =0 ; j<potentialUsers.size();j++){
-				int idUser = potentialUsers.get(j);
-				int totalPostCount = 0;
-				ArrayList<Integer> user = new ArrayList<Integer>();
-				user.add(idUser);			
+			if (timeSpentSinceLastTagUpdate == -1 || timeSpentSinceLastTagUpdate <nbDays || forceUpdate){
 				
-				for (int i =0; i<tagList.size(); i++){
-					
-					int idTag = DatabaseManager.getTagId(tagList.get(i));
-					String sql = "SELECT POST_COUNT FROM " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE) +
-							" WHERE ID_USER = ? AND ID_TAG = ?";
-					PreparedStatement stmt = DatabaseManager.databaseConnection.prepareStatement(sql);
-					stmt.setInt(1, idUser);
-					stmt.setInt(2, idTag);
-					ResultSet res = stmt.executeQuery();
-					
-					if (res.next()){
-						totalPostCount += res.getInt("POST_COUNT");
-					}
-				}
-				
-				user.add(totalPostCount);
-				topTagUsers.add(user);			
+				// Filling of the table
+				DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag);
+				// Update the date in the database (table tag)
+				DaveDatabaseManager.updateDateTag(idTag);
 			}
 			
 			
-			DatabaseManager.close();	
-		}
+			// userList = [{id = , postCount = }, {id = , postCount = }, ...]
+			ArrayList<TreeMap<String, Integer>> userList = DaveDatabaseManager.getTopAnswerers(20, idTag);
+			
+			
+			
 		
-		sort(topTagUsers);
-		return topTagUsers;
+			
+			
+			for (int j =0 ; j<userList.size(); j++){
+				
+				int idUser = userList.get(j).get("id");
+				long timeSpentSinceLastUserUpdate = DaveDatabaseManager.getTimeUpdateUserTag(idUser);
+				
+				if (timeSpentSinceLastUserUpdate == -1 || timeSpentSinceLastUserUpdate < nbDays * 86_400 || forceUpdate){
+					int scoreMin = userList.get(j).get("postCount") / 10;
+					// Filling of the tag_post_count table : adding of all tag for the user (idUser) where postCount > 0.1*maxPostCount
+					DaveDatabaseManager.fillTablePostCount(userList.get(j).get("id"), scoreMin);
+					DaveDatabaseManager.updateDateUser(idUser);
+				}
+				
+				
+			}
+		}
+		DatabaseManager.close();
+		return DaveDatabaseManager.getTopAnswerers(tagListId);
+		
+		
+		
+		
+		
 		
 	}
 
 	
 
+	
 	// Méthode main pour démo
 	public static void main(String[] args) throws SQLException, IOException, JSONException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException, URISyntaxException {
 		
+		//DatabaseManager.setup();
+		//DatabaseManager.truncateTable("tag_post_count");
+		
+		ArrayList<String> tagList = new ArrayList<String>();
+		tagList.add("c++");
+		tagList.add("java");
+		//DaveDatabaseManager.updateDateUser(13);
+		
+		System.out.println(getTopTag(tagList, 5, false)); 
 
-		ArrayList<String> tagList  = new ArrayList<>();
-		tagList.add("sql");
-		tagList.add("mysql");
-		tagList.add("sql-server");
-		tagList.add("oracle");
-		ArrayList<ArrayList<Integer>> list = getTopTag(tagList,2,false); 
-		for (int i = 0 ; i<list.size() ; i++)
-		{
-			System.out.print("Users " + list.get(i).get(0) + " : Total : " + list.get(i).get(1) + " ; ");
-			for (int j = 0; j<tagList.size(); j++){
-				DatabaseManager.setup();
-				int tagId = DatabaseManager.getTagId(tagList.get(j));
-				Statement stmt = DatabaseManager.databaseConnection.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT POST_COUNT FROM " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE) + " WHERE ID_TAG = " + tagId + " AND ID_USER = " + list.get(i).get(0));
-				int postInTag = 0;
-				if (rs.next()){
-					postInTag = rs.getInt("POST_COUNT");
-				}
-				float percentage = ((float)postInTag / (float)list.get(i).get(1)) * 100;
-				System.out.print(tagList.get(j) + " : " + percentage +  " % ; ");
-				
-			}
-			System.out.println("");
 			
 		}
-	}
 
 }
