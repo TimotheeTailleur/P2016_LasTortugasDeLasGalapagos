@@ -71,8 +71,8 @@ public class StackExchangeApiManager {
 	 */
 	private static String buildTagUrl(int idUser, int page)
 	{
-		String filter = "!-.G.68phH_FJ";
-		return DOMAIN_NAME + '/' + VERSION + "/users/" + idUser + "/tags?page=" + page + "&pagesize=100&order=desc&sort=popular&site=stackoverflow&filter="+filter;
+		//§String filter = "!-.G.68phH_FJ";
+		return DOMAIN_NAME + '/' + VERSION + "/users/" + idUser + "/tags?page=" + page + "&pagesize=100&order=desc&sort=popular&site=stackoverflow";
 	}
 	
 	/**

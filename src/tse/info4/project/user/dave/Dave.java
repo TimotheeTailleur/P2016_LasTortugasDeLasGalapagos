@@ -303,9 +303,11 @@ public class Dave{
 		//DatabaseManager.truncateTable("tag_post_count");
 		
 		ArrayList<String> tagList = new ArrayList<String>();
+		
 		tagList.add("c++");
 		tagList.add("java");
 		//DaveDatabaseManager.updateDateUser(13);
+		
 		
 		System.out.println(getTopTag(tagList, 5, false)); 
 

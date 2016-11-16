@@ -112,8 +112,6 @@ public class DaveDatabaseManager extends DatabaseManager {
 		
 		// topTag = [{count = , name = }, {count = , name =} ...]
 		ArrayList<TreeMap<String, String>> topTag = StackExchangeApiManager.getTagUserScore(idUser, minScore);
-		System.out.println(topTag);
-		
 		String sqlInsert = "INSERT INTO " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + "(ID_USER, ID_TAG, POST_COUNT) VALUES (?, ?, ?)";
 		String sqlUpdate = "UPDATE " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " SET POST_COUNT = ? WHERE ID_USER = ? AND ID_TAG = ?";
 		
@@ -138,24 +136,34 @@ public class DaveDatabaseManager extends DatabaseManager {
 				
 				// If no user was found, insert the new user and his data.
 				if (stmtUpdate.executeUpdate() == 0){
-					stmtUpdate.close();
+					
 					
 					stmtInsert.setInt(1, idUser);
 					stmtInsert.setInt(2, idTag);
 					stmtInsert.setInt(3, postCount);
 					stmtInsert.executeUpdate();
 					
-					stmtInsert.close();
+					
 					
 				}
+				
 			} catch (SQLException e) {
 				
 				e.printStackTrace();
 			}
 			
+			
+			
 
 		}
 		
+		try {
+				stmtInsert.close();
+				stmtUpdate.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	
