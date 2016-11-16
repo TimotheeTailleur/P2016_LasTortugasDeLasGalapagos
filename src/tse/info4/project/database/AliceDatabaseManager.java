@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -102,8 +103,11 @@ public class AliceDatabaseManager extends DatabaseManager {
 			
 			stmtUpdateUser.setInt(1, idUser);
 			
+			String sql= "UPDATE \"users\" SET LAST_UPDATE_QUESTIONS = CURRENT_DATE WHERE ID_USER = 1200";
+			Statement stmt = DatabaseManager.databaseConnection.createStatement();
 			// if a user's id isnt'found in user table : 
-			if (stmtUpdateUser.executeUpdate() == 0){
+			//if (stmtUpdateUser.executeUpdate() == 0){
+			if (stmt.executeUpdate(sql)==0) {
 				stmtInsertUser.setInt(1, idUser);
 				stmtInsertUser.executeUpdate();
 			}

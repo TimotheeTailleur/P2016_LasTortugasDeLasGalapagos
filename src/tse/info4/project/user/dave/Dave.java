@@ -42,6 +42,7 @@ public class Dave{
 			boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException, JSONException, IOException, URISyntaxException {
 
+		tag=DatabaseManager.addSimpleQuotes(tag);
 		TreeMap<String,Long> map= getTagIdAndLastUpdateData(tag,nbDays);
 		Integer idTag=map.get("idTag").intValue();
 		Long nbSeconds=map.get("nbSeconds");

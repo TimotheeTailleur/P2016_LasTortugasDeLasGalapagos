@@ -88,7 +88,6 @@ public class Main {
 							System.out.println("De combien de jours au maximum autorisez-vous les données à dater ?");
 							nbDays = Integer.parseInt(mainScanner.nextLine());
 						}
-						choixDave = menuDave();
 						break;
 					case 2:
 						System.out.println("Rentrez le nom du Tag à chercher :");
@@ -100,7 +99,6 @@ public class Main {
 						}
 						System.out.print("Top Tag : ");
 						System.out.println(Dave.getLink(Dave.getTopTag(DatabaseManager.addSimpleQuotes(tagNameTopTag), nbDays, dataMAJ)));
-						choixDave = menuDave();
 						break;
 					case 3:
 						System.out.println("Rentrez le nom du Tag à chercher :");
@@ -117,11 +115,9 @@ public class Main {
 						for (ArrayList<Integer> intList : resTopContributor) {
 							System.out.println(Dave.getLink(intList.get(i)));
 						}
-						choixDave = menuDave();
 						break;
 					}
 				}
-				choix = menu();
 				break;
 			case 2:
 				Alice alice=new Alice(1200);
@@ -143,7 +139,6 @@ public class Main {
 								System.out.println("stackoverflow.com/q/" + idQuestion + " , " + questionTitle);
 							}
 						}
-						choixAlice = menuAlice();
 						break;
 					case 2:
 						System.out.println("Voulez-vous forcer la mise à jour des données ? (o/n)");
@@ -166,11 +161,9 @@ public class Main {
 								System.out.println("\n " + idQuestion + " avec un score de " + score.toString());
 							}
 						}
-						choixAlice = menuAlice();
 						break;
 					}
 				}
-				choix = menu();
 				break;
 			}
 		}
