@@ -142,30 +142,24 @@ public class DatabaseManager {
 	}
 
 	public static int getTagId(String tagName) {
-		int idTag = 0;
-		String sql = "SELECT id_tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE tag_name = "
-				+ addSimpleQuotes(tagName);
-		PreparedStatement tagNameStmt = null;
-		try {
-			tagNameStmt = databaseConnection.prepareStatement(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		ResultSet rs = null;
-		try {
-			rs = tagNameStmt.executeQuery();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		setup();
+		String sqlSelectTag = "SELECT ID_TAG FROM "
+				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
+		int idTag = -1;
 
 		try {
-			if (rs.next()) {
-				idTag = rs.getInt("id_tag");
+			PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
+			stmtSelectTag.setString(1, addSimpleQuotes(tagName));
+			ResultSet resSelectTag = stmtSelectTag.executeQuery();
+			if (resSelectTag.next()) {
+
+				idTag = resSelectTag.getInt("ID_TAG");
 			}
 		} catch (SQLException e) {
+			System.out.println("getTagId (DatabaseManager) - Problème lors de l'exécution de la requête sql");
 			e.printStackTrace();
 		}
-
+		
 		return idTag;
 
 	}
@@ -253,12 +247,7 @@ public class DatabaseManager {
 	 * @throws SQLException
 	 */
 	public static boolean tagExist(String tagName) throws SQLException {
-		String sql = "SELECT id_tag FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE tag_name = "
-				+ addSimpleQuotes(tagName);
-		PreparedStatement statement = databaseConnection.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-		ResultSet res = statement.executeQuery();
-		return res.isBeforeFirst();
+		return getTagId(tagName)>=0;
 	}
 
 	// Méthode main pour test
@@ -268,6 +257,7 @@ public class DatabaseManager {
 	{
 		DatabaseManager.setup();
 		System.out.println(getTagName(1));
+		System.out.println(getTagId("java"));
 		String tagName="java";
 		System.out.println(tagExist(tagName));
 		DatabaseManager.close();

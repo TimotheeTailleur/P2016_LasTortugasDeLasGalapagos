@@ -43,7 +43,7 @@ public class Main {
 		System.out.println("");
 		System.out.println("Iteration n2 -- Menu -- Alice");
 		System.out.println(
-				"0 - retour \n1 - Nouvelles questions dans compétences \n2 - Questions que vous avez répondues triées");
+				"0 - retour \n1 - Nouvelles questions dans compétences \n2 - Questions auxquelles vous avez répondues triées");
 		System.out.print("Votre choix : ");
 		int res = sc.nextInt();
 		return res;
@@ -54,9 +54,10 @@ public class Main {
 		DatabaseManager.close();
 		boolean quit = false;
 		boolean quit2 = false;
+		boolean quit3 = false;
 		int choix;
 		int choixDave;
-		int choixAlice;
+		int choixAlice=0;
 		Scanner mainScanner = new Scanner(System.in);
 		DatabaseManager.setup();
 		boolean dataMAJ = false;
@@ -69,22 +70,25 @@ public class Main {
 				mainScanner.close();
 				DatabaseManager.close();
 				quit = true;
+				break;
 			case 1:
 				while (!quit2) {
 					choixDave = menuDave();
 					switch (choixDave) {
 					case 0:
 						quit2 = true;
+						break;
 					case 1:
-						System.out.println("Voulez-vous forcer la mise à jour des données ? (oui/non)");
+						System.out.println("Voulez-vous forcer la mise à jour des données ? (o/n)");
 						String resMAJ = mainScanner.nextLine();
-						if (resMAJ == "oui") {
+						if (resMAJ.equals("o")) {
 							dataMAJ = true;
 						} else {
 							System.out.println("De combien de jours au maximum autorisez-vous les données à dater ?");
 							nbDays = Integer.parseInt(mainScanner.nextLine());
 						}
 						choixDave = menuDave();
+						break;
 					case 2:
 						System.out.println("Rentrez le nom du Tag à chercher :");
 						String tagNameTopTag = mainScanner.nextLine();
@@ -94,8 +98,9 @@ public class Main {
 							tagNameTopTag = mainScanner.nextLine();
 						}
 						System.out.print("Top Tag : ");
-						System.out.println(Dave.getLink(Dave.getTopTag(tagNameTopTag, nbDays, dataMAJ)));
+						System.out.println(Dave.getLink(Dave.getTopTag(DatabaseManager.addSimpleQuotes(tagNameTopTag), nbDays, dataMAJ)));
 						choixDave = menuDave();
+						break;
 					case 3:
 						System.out.println("Rentrez le nom du Tag à chercher :");
 						String tagNameContributeurs = mainScanner.nextLine();
@@ -112,16 +117,19 @@ public class Main {
 							System.out.println(Dave.getLink(intList.get(i)));
 						}
 						choixDave = menuDave();
+						break;
 					}
 				}
 				choix = menu();
+				break;
 			case 2:
 				Alice alice=new Alice(1200);
-				while (!quit2) {
+				while (!quit3) {
 					choixAlice = menuAlice();
 					switch (choixAlice) {
 					case 0:
-						quit2 = true;
+						quit3 = true;
+						break;
 					case 1:
 						TreeMap<String, TreeMap<Integer, String>> res = alice.getNewQuestions();
 						for (Entry<String, TreeMap<Integer, String>> tagEntry : res.entrySet()) {
@@ -135,10 +143,11 @@ public class Main {
 							}
 						}
 						choixAlice = menuAlice();
+						break;
 					case 2:
-						System.out.println("Voulez-vous forcer la mise à jour des données ? (oui/non)");
+						System.out.println("Voulez-vous forcer la mise à jour des données ? (o/n)");
 						String questionMAJ = mainScanner.nextLine();
-						if (questionMAJ == "oui") {
+						if (questionMAJ.equals("o")) {
 							dataMAJ = true;
 						} else {
 							System.out.println("De combien d'heures au maximum autorisez-vous les questions à dater ?");
@@ -157,9 +166,11 @@ public class Main {
 							}
 						}
 						choixAlice = menuAlice();
+						break;
 					}
 				}
 				choix = menu();
+				break;
 			}
 			
 		}

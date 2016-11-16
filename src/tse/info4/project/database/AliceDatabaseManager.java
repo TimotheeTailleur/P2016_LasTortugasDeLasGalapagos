@@ -160,5 +160,7 @@ public class AliceDatabaseManager extends DatabaseManager {
 		Alice user = new Alice(1);
 		System.out.println(getTime(user));
 		
+		fillTableQuestion(user);
+		
 	}
 }

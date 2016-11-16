@@ -226,6 +226,7 @@ public class Dave {
 		System.out.println(getTopAnswerers(tag, 10, 2, true).toString());
 		System.out.println("\nTop score");
 		System.out.println(getTopTag(tag, 2, false));
+		System.out.println(getTagIdAndLastUpdateData(DatabaseManager.addSimpleQuotes("java"), 0));
 
 	}
 
