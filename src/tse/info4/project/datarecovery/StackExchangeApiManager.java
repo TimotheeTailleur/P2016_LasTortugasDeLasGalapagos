@@ -2,14 +2,10 @@ package tse.info4.project.datarecovery;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,8 +63,7 @@ public class StackExchangeApiManager {
 	private static String buildTagUrl () {
 		return DOMAIN_NAME + '/' + VERSION + '/' + "tags?"+"page=1&pagesize="+PAGE_SIZE+"&order=desc&sort=popular&site=stackoverflow"; 
 	}
-<<<<<<< HEAD
-	
+
 	/**
 	 * BuildUrl to get tag list and score of a user.
 	 * @param idUSer
@@ -79,8 +74,6 @@ public class StackExchangeApiManager {
 		String filter = "!-.G.68phH_FJ";
 		return DOMAIN_NAME + '/' + VERSION + "/users/" + idUser + "/tags?page=" + page + "&pagesize=100&order=desc&sort=popular&site=stackoverflow&filter="+filter;
 	}
-=======
->>>>>>> refs/heads/Alice
 	
 	/**
 	 * Build URL to get page one of TopAnswerers list in given (tagName)
@@ -206,10 +199,7 @@ public class StackExchangeApiManager {
 	 * @throws IOException 
 	 * 
 	 */
-<<<<<<< HEAD
-	
-=======
->>>>>>> refs/heads/Alice
+
 	public static ArrayList<String> getTags (int pageNumber) throws JSONException, IOException {
 		
 
@@ -331,8 +321,8 @@ public class StackExchangeApiManager {
 		
 	}
 	
-=======
-	 * Get User badges' award counts (keys are badges IDs while values are user (userId)'s award count in each badge
+
+	 /** Get User badges' award counts (keys are badges IDs while values are user (userId)'s award count in each badge
 	 * @param userId
 	 * @return
 	 * @throws JSONException 
@@ -517,15 +507,14 @@ public class StackExchangeApiManager {
 	
 // Charlie user story methods
 
-	 
->>>>>>> refs/heads/Alice
+
 	 //Methode main pour test classe
 	   public static void main(String[] args) throws JSONException, IOException, URISyntaxException {
 		
-<<<<<<< HEAD
+
 		System.out.println(getTagUserScore(1200, 10));
 		
-=======
+
 		   /*
 		    * TEST DAVE
 		ArrayList<String> Tags = StackExchangeApiManager.getTags(1);
@@ -558,8 +547,6 @@ public class StackExchangeApiManager {
 		   /*
 		   System.out.println("Questions auxquelles l user 1200 a répondu ");
 		   System.out.println(posts.toString()); */
-		   
 
->>>>>>> refs/heads/Alice
 	} 
 }

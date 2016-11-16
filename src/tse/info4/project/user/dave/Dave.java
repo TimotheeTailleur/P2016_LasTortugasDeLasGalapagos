@@ -6,22 +6,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.TreeMap;
 
-import org.apache.derby.tools.sysinfo;
 import org.json.JSONException;
-<<<<<<< HEAD
-import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
-=======
->>>>>>> refs/heads/Alice
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import tse.info4.project.database.DatabaseManager;
 import tse.info4.project.database.DaveDatabaseManager;
-import tse.info4.project.datarecovery.StackExchangeApiManager;
 
 /**
  * 
@@ -47,11 +38,6 @@ public class Dave{
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-<<<<<<< HEAD
-	
-	
-=======
->>>>>>> refs/heads/Alice
 	public static ArrayList<ArrayList<Integer>> getTopAnswerers(String tag, int nbUsers, int nbDays,
 			boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException, JSONException, IOException, URISyntaxException {
@@ -66,11 +52,9 @@ public class Dave{
 		 * Update or insert last update date
 		 */
 		if (diff > nbSeconds || forceUpdate) {
-<<<<<<< HEAD
+
 			DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag); //Update of score & postcount
-=======
-			DaveDatabaseManager.fillTablesTagPostCountScore(idTag); //Update of score & postcount
->>>>>>> refs/heads/Alice
+
 			String sqlUpdateDate = "UPDATE " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE)
 					+ " SET LAST_UPDATE_DAVE = CURRENT_DATE WHERE ID_TAG = ?";
 			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate); //Change last Update date to current time
@@ -125,7 +109,7 @@ public class Dave{
 	public static int getTopTag(String tag, int nbDays, boolean forceUpdate) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, URISyntaxException {
 		
 		TreeMap<String,Long> map= getTagIdAndLastUpdateData(tag,nbDays);
-<<<<<<< HEAD
+
 		Integer idTag=map.get("idTag").intValue();
 		Long nbSeconds=map.get("nbSeconds");
 		Long diff=map.get("diff");
@@ -136,18 +120,7 @@ public class Dave{
 		// and the date of the last update is updating to the current date.
 		if (diff > nbSeconds || forceUpdate) {
 			DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag);
-=======
-		int idTag=map.get("idTag").intValue();
-		Long nbSeconds=map.get("nbSeconds");
-		Long diff=map.get("diff");
 
-		// If the data are too old or if the user wants to force update,
-		// the post count and the score are inserting (or updating if they
-		// already exist)
-		// and the date of the last update is updating to the current date.
-		if (diff > nbSeconds || forceUpdate) {
-			DaveDatabaseManager.fillTablesTagPostCountScore(idTag);
->>>>>>> refs/heads/Alice
 			String sqlUpdateDate = "UPDATE " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE)
 					+ " SET LAST_UPDATE_DAVE = CURRENT_DATE WHERE ID_TAG = ?";
 			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate);
@@ -175,7 +148,7 @@ public class Dave{
 		return -1;
 
 	}
-<<<<<<< HEAD
+
 	
 
 	/**
@@ -220,53 +193,6 @@ public class Dave{
 
 		long diff = nbSeconds + 1;
 
-		
-=======
-
-	/**
-	 * Gets tag id and last update data from database
-	 * @param tag
-	 * @param nbDays
-	 * @return Map : keys :{"idtag","nbSeconds","diff"} values : {tag id, number of seconds in nbDays, number of seconds since last update}
-	 * @throws SQLException
-	 */
-	public static TreeMap<String,Long> getTagIdAndLastUpdateData(String tag, int nbDays) throws SQLException {
-		
-		DatabaseManager.setup();
-		// Sql query for select id_tag and last_update_dave depending on tag
-		// passed as a parameter
-		String sqlSelectTag = "SELECT ID_TAG, LAST_UPDATE_DAVE FROM "
-				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
-		PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
-		stmtSelectTag.setString(1, tag);
-		ResultSet resSelectTag = stmtSelectTag.executeQuery();
-
-		long idTag = 0L;
-		Date lastUpdateDave = null;
-
-		if (resSelectTag.next()) {
-			idTag = resSelectTag.getInt("ID_TAG");
-			lastUpdateDave = resSelectTag.getDate("LAST_UPDATE_DAVE");
-		} else {
-			System.out.println("Veuillez entrer un nom de Tag valide");
-			return null;
-		}
-
-		// Get current time and date and convert it into a sql formatted date
-		Date currentDateSql = new Date(new java.util.Date().getTime());
-
-		//Number of seconds elapsed in nbDays days
-		long nbSeconds = nbDays * 86_400; 
-
-		/*
-		 *  The default value of diff is bigger than nbSeconds 
-		 *  to force the insert if there is no data available for the considered tag.
-		 */
-
-		long diff = nbSeconds + 1;
-
-		//If the tables were updated, get time difference between now and last update time (in seconds)
->>>>>>> refs/heads/Alice
 		if (lastUpdateDave != null) {
 			diff = (currentDateSql.getTime() / 1000) - (lastUpdateDave.getTime() / 1000);
 		}
@@ -283,16 +209,11 @@ public class Dave{
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-<<<<<<< HEAD
+
 	public static String getLink(int id) {
 		return ("stackoverflow.com/u/" + id);
 	}
-=======
->>>>>>> refs/heads/Alice
-	
-<<<<<<< HEAD
-	
-	
+
 	
 /**
  * 
@@ -359,37 +280,9 @@ public class Dave{
 		}
 		DatabaseManager.close();
 		return DaveDatabaseManager.getTopAnswerers(tagListId);
-		
-		
-		
-		
-		
-		
-=======
-	public static String getLink(int id) {
-		return ("stackoverflow.com/u/" + id);
 	}
-
-	
-
-	// Méthode main pour démo
-	public static void main(String[] args) throws SQLException, IOException, JSONException, InstantiationException,
-			IllegalAccessException, ClassNotFoundException, URISyntaxException {
 		
-		String tag="javascript";
-		tag=DatabaseManager.addSimpleQuotes(tag);
-		
-		System.out.println("Top post count");
-		System.out.println("[id_user, post_count]");
-		System.out.println(getTopAnswerers(tag, 10, 2, true).toString());
-		System.out.println("\nTop score");
-		System.out.println(getTopTag(tag, 2, false));
-		System.out.println(getTagIdAndLastUpdateData(DatabaseManager.addSimpleQuotes("java"), 0));
-
->>>>>>> refs/heads/Alice
-	}
-
-	
+			
 
 	
 	// Méthode main pour démo
