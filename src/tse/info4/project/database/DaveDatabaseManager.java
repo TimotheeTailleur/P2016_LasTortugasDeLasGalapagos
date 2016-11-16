@@ -73,19 +73,25 @@ public class DaveDatabaseManager extends DatabaseManager {
 
 			// If a user's id isn't found in either table : execute Insertion prepared Statements 
 			if (stmtUpdatePost.executeUpdate() == 0) {
-
+				stmtUpdatePost.close();
+				
 				stmtInsertPost.setInt(1, userID);
 				stmtInsertPost.setInt(2, idTag);
 				stmtInsertPost.setInt(3, post_count);
 				stmtInsertPost.executeUpdate();
+				stmtInsertPost.close();
 			}
 			
 			if (stmtUpdateScore.executeUpdate() == 0) {
 
+				stmtUpdateScore.close();
+				
 				stmtInsertScore.setInt(1, userID);
 				stmtInsertScore.setInt(2, idTag);
 				stmtInsertScore.setInt(3, score);
 				stmtInsertScore.executeUpdate();
+				
+				stmtInsertScore.close();
 			}
 		}
 	}
@@ -128,10 +134,14 @@ public class DaveDatabaseManager extends DatabaseManager {
 				
 				// If no user was found, insert the new user and his data.
 				if (stmtUpdate.executeUpdate() == 0){
+					stmtUpdate.close();
+					
 					stmtInsert.setInt(1, idUser);
 					stmtInsert.setInt(2, idTag);
 					stmtInsert.setInt(3, postCount);
 					stmtInsert.executeUpdate();
+					
+					stmtInsert.close();
 					
 				}
 			} catch (SQLException e) {
@@ -195,9 +205,12 @@ public class DaveDatabaseManager extends DatabaseManager {
 			stmt.setInt(1, idUser);
 			ResultSet res = stmt.executeQuery();
 			
+			
 			if (res.next()){
 				lastUpdate = res.getDate("LAST_UPDATE_TAG");
 			}
+			stmt.close();
+			res.close();
 			
 		} catch (SQLException e) {
 			System.out.println("getTimeUpdateTopTag (DaveDatabaseManager) - Erreur de la requête sql.");
@@ -233,6 +246,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 			stmt.setInt(1, tag);
 			ResultSet res = stmt.executeQuery();
 			
+			
 			int cpt =0;
 			while (res.next() && cpt <nbUsers){
 				
@@ -244,6 +258,8 @@ public class DaveDatabaseManager extends DatabaseManager {
 				userList.add(userData);
 				cpt++;
 			}
+			stmt.close();
+			res.close();
 		} catch (SQLException e) {
 		System.out.println("getTimeUpdateTopTag (DaveDatabaseManager) - Erreur de la requête sql.");
 		e.printStackTrace();
@@ -265,6 +281,8 @@ public class DaveDatabaseManager extends DatabaseManager {
 			PreparedStatement stmt = databaseConnection.prepareStatement(sql);
 			stmt.setInt(1,idTag);
 			stmt.executeUpdate();
+			
+			stmt.close();
 			
 		} catch (SQLException e) {
 
@@ -292,6 +310,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 				stmtInsert.setInt(1, idUser);
 				
 				stmtInsert.executeUpdate();
+				stmtInsert.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

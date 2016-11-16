@@ -144,10 +144,13 @@ public class DatabaseManager {
 			PreparedStatement stmtSelectTag = DatabaseManager.databaseConnection.prepareStatement(sqlSelectTag);
 			stmtSelectTag.setString(1, addSimpleQuotes(tagName));
 			ResultSet resSelectTag = stmtSelectTag.executeQuery();
+			
 			if (resSelectTag.next()) {
 
 				idTag = resSelectTag.getInt("ID_TAG");
 			}
+			stmtSelectTag.close();
+			resSelectTag.close();
 		} catch (SQLException e) {
 			System.out.println("getTagId (DatabaseManager) - Problème lors de l'exécution de la requête sql");
 			e.printStackTrace();
