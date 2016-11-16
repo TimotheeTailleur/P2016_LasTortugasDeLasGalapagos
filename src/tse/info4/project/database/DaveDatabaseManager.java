@@ -73,27 +73,31 @@ public class DaveDatabaseManager extends DatabaseManager {
 
 			// If a user's id isn't found in either table : execute Insertion prepared Statements 
 			if (stmtUpdatePost.executeUpdate() == 0) {
-				stmtUpdatePost.close();
+				
 				
 				stmtInsertPost.setInt(1, userID);
 				stmtInsertPost.setInt(2, idTag);
 				stmtInsertPost.setInt(3, post_count);
 				stmtInsertPost.executeUpdate();
-				stmtInsertPost.close();
+				
 			}
 			
 			if (stmtUpdateScore.executeUpdate() == 0) {
 
-				stmtUpdateScore.close();
+				
 				
 				stmtInsertScore.setInt(1, userID);
 				stmtInsertScore.setInt(2, idTag);
 				stmtInsertScore.setInt(3, score);
 				stmtInsertScore.executeUpdate();
 				
-				stmtInsertScore.close();
+				
 			}
 		}
+		stmtUpdatePost.close();
+		stmtInsertPost.close();
+		stmtUpdateScore.close();
+		stmtInsertScore.close();
 	}
 	
 	
@@ -177,6 +181,9 @@ public class DaveDatabaseManager extends DatabaseManager {
 			if (res.next()){
 				lastUpdate = res.getDate("LAST_UPDATE_DAVE");
 			}
+			
+			stmt.close();
+			res.close();
 			
 		} catch (SQLException e) {
 			System.out.println("getTimeUpdateTopTag (DaveDatabaseManager) - Erreur de la requête sql.");
@@ -358,7 +365,8 @@ public class DaveDatabaseManager extends DatabaseManager {
 				userList = potentialUsersTemp;
 				}
 				
-				
+				stmt.close();
+				res.close();
 			} catch (SQLException e) {				
 				e.printStackTrace();
 			}
@@ -429,8 +437,10 @@ public class DaveDatabaseManager extends DatabaseManager {
 				
 				user.put(Integer.toString(idTag), postCount);
 				totalPostCount +=postCount;
-								
+				stmt.close();
+				res.close();
 			}
+			
 			user.put("totalPostCount",	totalPostCount);
 			topTagUsers.add(user);
 			

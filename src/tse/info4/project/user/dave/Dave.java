@@ -61,6 +61,7 @@ public class Dave{
 			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate); //Change last Update date to current time
 			updateDatestmt.setInt(1, idTag);
 			updateDatestmt.executeUpdate();
+			updateDatestmt.close();
 		}
 
 		/*
@@ -86,6 +87,8 @@ public class Dave{
 			cpt++;
 		}
 
+		stmtTopAnswerers.close();
+		resQuery.close();
 		DatabaseManager.close();
 		return resList;
 
@@ -127,6 +130,7 @@ public class Dave{
 			PreparedStatement updateDatestmt = DatabaseManager.databaseConnection.prepareStatement(sqlUpdateDate);
 			updateDatestmt.setInt(1, idTag);
 			updateDatestmt.executeUpdate();
+			updateDatestmt.close();
 			System.out.println("données mises à jour");
 
 		}
@@ -146,6 +150,8 @@ public class Dave{
 			return resQuery.getInt("id_user");
 		}
 		
+		stmtTopAnswerers.close();
+		resQuery.close();
 		return -1;
 
 	}
@@ -180,6 +186,8 @@ public class Dave{
 			System.out.println("Veuillez entrer un nom de Tag valide");
 			return null;
 		}
+		stmtSelectTag.close();
+		resSelectTag.close();
 
 		// Get current time and date and convert it into a sql formatted date
 		Date currentDateSql = new Date(new java.util.Date().getTime());
