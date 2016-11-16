@@ -33,7 +33,7 @@ public class Main {
 		System.out.println("");
 		System.out.println("Iteration n2 -- Menu -- Dave");
 		System.out
-				.println("0 - retour \n1 - Mise à jour des données \n2 - Top Tag \n3 - Top 10 Contributeurs tag donné");
+				.println("0 - retour \n1 - Mise à jour des données \n2 - Top Tag \n3 - Top 10 Contributeurs tag donné \n4 - Le contributeur pour liste de tags donnés");
 		System.out.print("Votre choix : ");
 		int res = sc.nextInt();
 		return res;
@@ -50,7 +50,7 @@ public class Main {
 		return res;
 	}
 
-	public static void main(String[] args) throws JSONException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, URISyntaxException {
+	public static void main(String[] args) throws JSONException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, URISyntaxException, InterruptedException {
 
 		DatabaseManager.close();
 		boolean quit = false;
@@ -116,6 +116,38 @@ public class Main {
 							System.out.println(Dave.getLink(intList.get(i)));
 						}
 						break;
+					case 4:
+						System.out.println("Rentrez un des Tags voulus : \n(-1 pour terminer la saisie)");
+						ArrayList<String> tagNameContributeursList = new ArrayList<String>();
+						String tagName=mainScanner.nextLine();
+						int nbTag=0;
+						while (!DatabaseManager.tagExist(tagName))
+						{
+							System.out.println("Veuillez entrer un nom de Tag valide");
+							tagName = mainScanner.nextLine();
+						}
+						while(!tagName.equals("-1")){
+							tagNameContributeursList.add(tagName);
+							nbTag=nbTag+1;
+							System.out.println("Rentrez un des Tags voulus : \n(-1 pour terminer la saisie)");
+							tagName=mainScanner.nextLine();
+							while (!DatabaseManager.tagExist(tagName) && !tagName.equals("-1"))
+							{
+								System.out.println("Veuillez entrer un nom de Tag valide");
+								tagName = mainScanner.nextLine();
+							}
+						}
+						ArrayList<TreeMap<String, Integer>> resContributor = Dave.getTopTag(tagNameContributeursList,nbDays,dataMAJ);
+						
+						TreeMap<String, Integer> dataContibutor=resContributor.get(0);
+						
+						Integer idUser=dataContibutor.get("userId");
+						Integer nbPostCount=dataContibutor.get("totalPostCount");
+						
+						System.out.println("Le top contributeur pour la liste entrée est ");
+						System.out.println(Dave.getLink(idUser)+" avec un nombre de post total de "+nbPostCount+".");
+						
+						break;
 					}
 				}
 				break;
@@ -136,7 +168,7 @@ public class Main {
 							for (Entry<Integer, String> questionEntry : questionMap.entrySet()) {
 								int idQuestion = questionEntry.getKey();
 								String questionTitle = questionEntry.getValue();
-								System.out.println("stackoverflow.com/q/" + idQuestion + " , " + questionTitle);
+								System.out.println(Alice.getLinkQuestion(idQuestion)+ " , " + questionTitle);
 							}
 						}
 						break;
@@ -154,13 +186,13 @@ public class Main {
 						nbQuestions = Integer.parseInt(mainScanner.nextLine());
 						ArrayList<TreeMap<String, Integer>> questionList = alice.sortQuestions(nbQuestions, nbHours,
 								dataMAJ);
-						for (TreeMap<String, Integer> questionData : questionList) {
-							for (Entry<String, Integer> questionEntry : questionData.entrySet()) {
-								String idQuestion = questionEntry.getKey();
-								Integer score = questionEntry.getValue();
-								System.out.println("\n " + idQuestion + " avec un score de " + score.toString());
-							}
+						for (int i=0;i<questionList.size();i++){
+							Integer idQuestion = questionList.get(i).get("idQuestion");
+							Integer score = questionList.get(i).get("score");
+							System.out.println(Alice.getLinkQuestion(idQuestion)+ " avec un score de " + score);
+							
 						}
+						
 						break;
 					}
 				}

@@ -124,6 +124,19 @@ public class Alice {
 		return questionsSorted;
 	}
 	
+	/**
+	 * Returns Stack Overflow profile URL of user (id)
+	 * 
+	 * @param id
+	 * @return Stack Overflow profile URL
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+
+	public static String getLinkQuestion(int id) {
+		return ("stackoverflow.com/q/" + id);
+	}
+	
 	public static void main(String[] args) throws JSONException, IOException {
 		Alice user = new Alice(1200);
 		System.out.println(user.sortQuestions(3, 48, false));

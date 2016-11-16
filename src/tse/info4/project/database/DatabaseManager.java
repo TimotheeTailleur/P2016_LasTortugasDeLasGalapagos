@@ -136,6 +136,7 @@ public class DatabaseManager {
 	
 	public static int getTagId(String tagName)
 	{
+		DatabaseManager.setup();
 		String sqlSelectTag = "SELECT ID_TAG FROM "
 				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
 		int idTag = -1;

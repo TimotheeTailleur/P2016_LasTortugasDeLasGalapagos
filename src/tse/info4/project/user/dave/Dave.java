@@ -223,7 +223,6 @@ public class Dave{
 		return ("stackoverflow.com/u/" + id);
 	}
 
-	
 /**
  * 
  * Return a list of top user int the tags passed as a parameter. The list is sorted by the total post count for each user.
@@ -242,8 +241,9 @@ public class Dave{
  * @throws IOException
  * @throws SQLException
  * @throws URISyntaxException
+ * @throws InterruptedException 
  */
-	public static ArrayList<TreeMap<String, Integer>> getTopTag(ArrayList<String> tagList, int nbDays, boolean forceUpdate) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException{
+	public static ArrayList<TreeMap<String, Integer>> getTopTag(ArrayList<String> tagList, int nbDays, boolean forceUpdate) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException, InterruptedException{
 		DatabaseManager.setup();
 		ArrayList<Integer> tagListId = new ArrayList<Integer>(); // the same list that the one which is passed as a parameter except this is a list of id (the first one was a list of name)
 		for (int i = 0; i<tagList.size(); i++){
@@ -255,7 +255,7 @@ public class Dave{
 			
 			// If the data in the database are too old or if the user wants to force the update
 			
-			if (timeSpentSinceLastTagUpdate == -1 || timeSpentSinceLastTagUpdate <nbDays || forceUpdate){
+			if (timeSpentSinceLastTagUpdate == -1 || timeSpentSinceLastTagUpdate > nbDays * 86_400 || forceUpdate){
 				
 				// Filling of the table
 				DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag);
@@ -277,10 +277,13 @@ public class Dave{
 				int idUser = userList.get(j).get("id");
 				long timeSpentSinceLastUserUpdate = DaveDatabaseManager.getTimeUpdateUserTag(idUser);
 				
-				if (timeSpentSinceLastUserUpdate == -1 || timeSpentSinceLastUserUpdate < nbDays * 86_400 || forceUpdate){
+				if (timeSpentSinceLastUserUpdate == -1 || timeSpentSinceLastUserUpdate > nbDays * 86_400 || forceUpdate){
 					int scoreMin = userList.get(j).get("postCount") / 10;
 					// Filling of the tag_post_count table : adding of all tag for the user (idUser) where postCount > 0.1*maxPostCount
-					DaveDatabaseManager.fillTablePostCount(userList.get(j).get("id"), scoreMin);
+					try{DaveDatabaseManager.fillTablePostCount(userList.get(j).get("id"), scoreMin);}
+					catch(Exception e){
+						break;
+					}
 					DaveDatabaseManager.updateDateUser(idUser);
 				}
 				
@@ -297,7 +300,7 @@ public class Dave{
 	
 	// Méthode main pour démo
 	public static void main(String[] args) throws SQLException, IOException, JSONException, InstantiationException,
-			IllegalAccessException, ClassNotFoundException, URISyntaxException {
+			IllegalAccessException, ClassNotFoundException, URISyntaxException, InterruptedException {
 		
 		//DatabaseManager.setup();
 		//DatabaseManager.truncateTable("tag_post_count");
