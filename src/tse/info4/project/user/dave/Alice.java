@@ -111,6 +111,9 @@ public class Alice {
 				
 			}
 			
+			stmt.close();
+			res.close();
+			
 		} catch (SQLException e) {
 			System.out.println("sortQuestion (Alice) - Erreur lors de la requête sql");
 			e.printStackTrace();

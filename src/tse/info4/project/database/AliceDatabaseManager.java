@@ -111,15 +111,27 @@ public class AliceDatabaseManager extends DatabaseManager {
 				stmtInsertUser.setInt(1, idUser);
 				stmtInsertUser.executeUpdate();
 			}
+			
+			
 				
 			} catch (SQLException e) {
 				System.out.println("fillTableQuestion (AliceDatabaseManager) - Erreur lors de l'affectation des paramètres du prepareStatement");
 				e.printStackTrace();
 			}
 			
-			
-			
-		}		 
+		}
+		
+	
+		try {	
+			stmtInsertQuestions.close();
+			stmtInsertUser.close();
+			stmtUpdateQuestions.close();
+			stmtUpdateUser.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 
@@ -145,6 +157,9 @@ public class AliceDatabaseManager extends DatabaseManager {
 			if (res.next()){
 				lastUpdate = res.getDate("LAST_UPDATE_QUESTIONS");
 			}
+			
+			stmt.close();
+			res.close();
 			
 		} catch (SQLException e) {
 			System.out.println("getTime (AliceDatabaseManager) - Erreur de la requête sql.");
