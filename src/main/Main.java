@@ -33,7 +33,7 @@ public class Main {
 		System.out.println("");
 		System.out.println("Iteration n2 -- Menu -- Dave");
 		System.out
-				.println("0 - retour \n1 - Mise à jour des données \n2 - Top Tag \n3 - Top 10 Contributeurs tag donné \n4 - Le contributeur pour liste de tags donnés");
+				.println("0 - retour \n1 - Mise à jour des données \n2 - Top Tag \n3 - Top 10 Contributeurs tag donné \n4 - Top contributeur pour un ensemble de tags donné");
 		System.out.print("Votre choix : ");
 		int res = sc.nextInt();
 		return res;
@@ -44,7 +44,7 @@ public class Main {
 		System.out.println("");
 		System.out.println("Iteration n2 -- Menu -- Alice");
 		System.out.println(
-				"0 - retour \n1 - Nouvelles questions dans compétences \n2 - Questions auxquelles vous avez répondues triées");
+				"0 - retour \n1 - Nouvelles questions dans vos domaines de compétences \n2 - Questions auxquelles vous avez répondues triées par leur poppularité");
 		System.out.print("Votre choix : ");
 		int res = sc.nextInt();
 		return res;
@@ -184,15 +184,13 @@ public class Main {
 						int nbQuestions=0;
 						System.out.println("Combien de questions voulez-vous afficher ?");
 						nbQuestions = Integer.parseInt(mainScanner.nextLine());
-						ArrayList<TreeMap<String, Integer>> questionList = alice.sortQuestions(nbQuestions, nbHours,
+						ArrayList<TreeMap<String, Integer>> questionList = alice.getSortedAnsweredQuestions(nbQuestions, nbHours,
 								dataMAJ);
 						for (int i=0;i<questionList.size();i++){
 							Integer idQuestion = questionList.get(i).get("idQuestion");
 							Integer score = questionList.get(i).get("score");
 							System.out.println(Alice.getLinkQuestion(idQuestion)+ " avec un score de " + score);
-							
 						}
-						
 						break;
 					}
 				}

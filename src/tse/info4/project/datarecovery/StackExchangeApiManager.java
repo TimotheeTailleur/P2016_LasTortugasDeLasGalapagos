@@ -273,11 +273,7 @@ public class StackExchangeApiManager {
 	
 // Alice user story methods
 
-
-	
 	/**
-<<<<<<< HEAD
-	 * 
 	 *  Return a list of tag concerning a user where the count is bigger than minScore for each tag.
 	 * 
 	 * @param idUser
@@ -408,7 +404,7 @@ public class StackExchangeApiManager {
 	
 	
 	/**
-	 * Get all answers IDs for user (userId)
+	 * Get all question IDs of the question to which user (userId) has given answers
 	 * @param userId
 	 * @return treeMap <key : Question id, value : score>
 	 * @throws JSONException 

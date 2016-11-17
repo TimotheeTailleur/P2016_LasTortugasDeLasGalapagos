@@ -19,15 +19,18 @@ import tse.info4.project.datarecovery.StackExchangeApiManager;
  */
 public class Alice {
 	
-	protected static int userId;
-	protected static ArrayList<String> tagList;;
+	protected  int userId;
+	protected  ArrayList<String> tagList;
+	protected int nbTags=3;
 	
-
 	public int getUserId() {
 		return userId;
 	}
 
-
+	private void setnbTags(int nbTags) {
+		this.nbTags = nbTags;
+	}
+	
 	/**
 	 * Constructor that inits userId from input and creates the list of top 100 tags to which the user has contributed
 	 * @param userId
@@ -36,14 +39,15 @@ public class Alice {
 		super();
 		this.userId = userId;
 		try {
-			tagList=StackExchangeApiManager.getTopTags(userId, 3);
+			tagList=StackExchangeApiManager.getTopTags(userId, nbTags);
 		} catch (IOException | JSONException e) {
 			System.out.println("Alice - (Alice) Accès à l'api impossible");
 		}
 	}
 	
 	/**
-	 * For each tag in top 100 tag List, get 3 newest unanswered posts on stackoverflow and add themp to a treemap for diaplay
+	 * For each tag in top 100 tag List, get 3 the  newest unanswered posts on stackoverflow and add themp to a treemap for display
+	 * 
 	 * @return 
 	 * @throws IOException 
 	 * @throws JSONException 
@@ -74,14 +78,15 @@ public class Alice {
 	
 	/**
 	 * 
-	 * Return a list of question where the user answered. This list is sorted by the score of the user for each question.
+	 * Return a list of questions the user answered ranked by their score
+	 * .
 	 * 
 	 * @param nbQuestions
 	 * @param nbHours
 	 * @param forceUpdate
 	 * @return ArrayList<TreeMap<String, Integer>> : list of map where the keys are idQuestion and score
 	 */
-	public ArrayList<TreeMap<String, Integer>> sortQuestions(int nbQuestions, int nbHours, boolean forceUpdate){
+	public ArrayList<TreeMap<String, Integer>> getSortedAnsweredQuestions(int nbQuestions, int nbHours, boolean forceUpdate){
 		// Duration between the last update and the current time
 		long time = AliceDatabaseManager.getTime(this);
 		
@@ -125,10 +130,10 @@ public class Alice {
 	}
 	
 	/**
-	 * Returns Stack Overflow profile URL of user (id)
+	 * Returns Stack Overflow URL of question (id)
 	 * 
 	 * @param id
-	 * @return Stack Overflow profile URL
+	 * @return Stack Overflow question URL
 	 * @throws IOException
 	 * @throws JSONException
 	 */
@@ -139,7 +144,7 @@ public class Alice {
 	
 	public static void main(String[] args) throws JSONException, IOException {
 		Alice user = new Alice(1200);
-		System.out.println(user.sortQuestions(3, 48, false));
+		System.out.println(user.getSortedAnsweredQuestions(3, 48, false));
 	}
 	
 	
