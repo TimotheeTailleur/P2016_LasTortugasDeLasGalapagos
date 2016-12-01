@@ -1,4 +1,4 @@
-package tse.info4.project.user.dave;
+package fr.tse.info4.project.user;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -9,10 +9,9 @@ import java.util.TreeMap;
 
 import org.json.JSONException;
 
-import main.Main;
-import tse.info4.project.database.AliceDatabaseManager;
-import tse.info4.project.database.DatabaseManager;
-import tse.info4.project.datarecovery.StackExchangeApiManager;
+import fr.tse.info4.project.database.AliceDatabaseManager;
+import fr.tse.info4.project.database.DatabaseManager;
+import fr.tse.info4.project.datarecovery.StackExchangeApiManager;
 
 /**
  * Functions and demo main method for user story Alice

@@ -1,4 +1,4 @@
-package tse.info4.project.database;
+package fr.tse.info4.project.database;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -12,8 +12,8 @@ import java.util.TreeMap;
 
 import org.json.JSONException;
 
-import tse.info4.project.datarecovery.StackExchangeApiManager;
-import tse.info4.project.user.dave.Alice;
+import fr.tse.info4.project.datarecovery.StackExchangeApiManager;
+import fr.tse.info4.project.user.Alice;
 
 /**
  * This class will manage the database tables used in functions implemented for the Alice User Story

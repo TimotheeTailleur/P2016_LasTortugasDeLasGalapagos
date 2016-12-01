@@ -1,4 +1,4 @@
-package tse.info4.project.database;
+package fr.tse.info4.project.database;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,12 +7,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import org.json.JSONException;
 
-import tse.info4.project.datarecovery.StackExchangeApiManager;
+import com.google.code.stackexchange.common.PagedList;
+import com.google.code.stackexchange.schema.Paging;
+import com.google.code.stackexchange.schema.Tag;
+import com.google.code.stackexchange.schema.User;
+
+import fr.tse.info4.project.datarecovery.ApiManager;
+import fr.tse.info4.project.datarecovery.DaveApiManager;
+import fr.tse.info4.project.datarecovery.StackExchangeApiManager;
+import fr.tse.info4.project.schema.TagScore;
 
 /**
  * This class will manage the database tables used in functions implemented for the Dave User Story
@@ -25,24 +34,18 @@ public class DaveDatabaseManager extends DatabaseManager {
 	 * the database, creates new entries in both tables
 	 * @param idTag Tag id
 	 * 
-	 * @throws JSONException
-	 * @throws IOException
 	 * @throws SQLException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
-	 * @throws URISyntaxException
 	 */
-	public static void fillDaveTablesTopAnswerers(int idTag) throws JSONException, IOException, SQLException,
-			InstantiationException, IllegalAccessException, ClassNotFoundException, URISyntaxException {
-
+	public static void fillDaveTablesTopAnswerers(int idTag) throws SQLException{
 		//Get tag name with tag id
-		String tagName= addSimpleQuotes(getTagName(idTag));
+		String tagName= getTagName(idTag);
 		
 		//Get Top Answerers stats in given tag
-		TreeMap<Integer, ArrayList<Integer>> resAns = StackExchangeApiManager.getTopAnswerers(tagName);
+		DaveApiManager apiManager = new DaveApiManager(DaveApiManager.APP_KEY, DaveApiManager.SITE);
+		ArrayList<TagScore> tagScoreList= (ArrayList<TagScore>) apiManager.getTopAnswerers(tagName);
 		
 		//Prepare Statements for updates and insertions
+		setup();
 		PreparedStatement stmtUpdatePost = databaseConnection
 				.prepareStatement("UPDATE " +  addDoubleQuotes(TITLE_TAG_POST_TABLE)  + " SET post_count = ? WHERE id_user = ? AND id_tag = ?");
 		PreparedStatement stmtUpdateScore = databaseConnection
@@ -54,30 +57,32 @@ public class DaveDatabaseManager extends DatabaseManager {
 		PreparedStatement stmtInsertScore = databaseConnection.prepareStatement(
 				"INSERT INTO " +  addDoubleQuotes(TITLE_TAG_SCORE_TABLE) + " (id_User,id_tag,score) VALUES (?,?,?)");
 
-		Integer userID, score,post_count;
-
+		long idUser;
+		int score, postCount;
 		/*
 		 * For each entry in the top Answerers ResultSet, get userID, user score and user Post_Count in given tag
 		 * and set preparedStatements' variables accordingly
 		 */
-		for (Entry<Integer, ArrayList<Integer>> userEntry : resAns.entrySet()) {
+		for (int i =0 ;i<tagScoreList.size() ; i++) {
 
-			userID=userEntry.getKey(); post_count=userEntry.getValue().get(1); score=userEntry.getValue().get(0);
+			idUser = tagScoreList.get(i).getUser().getUserId();
+			postCount = tagScoreList.get(i).getPostCount(); 
+			score = tagScoreList.get(i).getScore();
 			
-			stmtUpdatePost.setInt(1, post_count); 
-			stmtUpdatePost.setInt(2, userID); 
+			stmtUpdatePost.setInt(1, postCount); 
+			stmtUpdatePost.setLong(2, idUser); 
 			stmtUpdatePost.setInt(3, idTag);
 			stmtUpdateScore.setInt(1, score);
-			stmtUpdateScore.setInt(2, userID);
+			stmtUpdateScore.setLong(2, idUser);
 			stmtUpdateScore.setInt(3, idTag);
 
 			// If a user's id isn't found in either table : execute Insertion prepared Statements 
 			if (stmtUpdatePost.executeUpdate() == 0) {
 				
 				
-				stmtInsertPost.setInt(1, userID);
+				stmtInsertPost.setLong(1, idUser);
 				stmtInsertPost.setInt(2, idTag);
-				stmtInsertPost.setInt(3, post_count);
+				stmtInsertPost.setInt(3, postCount);
 				stmtInsertPost.executeUpdate();
 				
 			}
@@ -86,7 +91,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 
 				
 				
-				stmtInsertScore.setInt(1, userID);
+				stmtInsertScore.setLong(1, idUser);
 				stmtInsertScore.setInt(2, idTag);
 				stmtInsertScore.setInt(3, score);
 				stmtInsertScore.executeUpdate();
@@ -98,81 +103,20 @@ public class DaveDatabaseManager extends DatabaseManager {
 		stmtInsertPost.close();
 		stmtUpdateScore.close();
 		stmtInsertScore.close();
+		close();
 	}
 	
-	
-	/**
-	 * Insert or update the post count of a user in a given tag.
-	 * @param idUser
-	 * @throws IOException 
-	 * @throws JSONException 
-	 */
-	public static void fillTablePostCount(int idUser, int minScore) throws JSONException, IOException{
-		setup();
-		
-		// topTag = [{count = , name = }, {count = , name =} ...]
-		ArrayList<TreeMap<String, String>> topTag = StackExchangeApiManager.getTagUserScore(idUser, minScore);
-		String sqlInsert = "INSERT INTO " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + "(ID_USER, ID_TAG, POST_COUNT) VALUES (?, ?, ?)";
-		String sqlUpdate = "UPDATE " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " SET POST_COUNT = ? WHERE ID_USER = ? AND ID_TAG = ?";
-		
-		PreparedStatement stmtInsert = null;
-		PreparedStatement stmtUpdate = null;
-		try {
-			stmtInsert = databaseConnection.prepareStatement(sqlInsert);
-			stmtUpdate = databaseConnection.prepareStatement(sqlUpdate);
-		} catch (SQLException e) {
-			System.out.println("fillTablePostCount (DaveDatabaseManager) - Problème de requête sql");
-			e.printStackTrace();
-		}
-				
-		for (int i = 0; i<topTag.size(); i++){
-			int idTag = getTagId(topTag.get(i).get("name"));
-			int postCount = Integer.parseInt(topTag.get(i).get("count"));
-			
-			try {
-				stmtUpdate.setInt(1, postCount);
-				stmtUpdate.setInt(2, idUser);
-				stmtUpdate.setInt(3, idTag);
-				
-				// If no user was found, insert the new user and his data.
-				if (stmtUpdate.executeUpdate() == 0){
-					
-					
-					stmtInsert.setInt(1, idUser);
-					stmtInsert.setInt(2, idTag);
-					stmtInsert.setInt(3, postCount);
-					stmtInsert.executeUpdate();
-					
-					
-					
-				}
-				
-			} catch (SQLException e) {
-				
-				e.printStackTrace();
-			}
-			
-			
-			
-
-		}
-		
-		try {
-				stmtInsert.close();
-				stmtUpdate.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
 	
 	
 	/**
 	 * 	Returns number of seconds since last update (in Dave tables) of the tag passed as a parameter
 	 *  If last_update_dave is not given (null), returns a number bigger than nbDays in seconds.
+	 *  
 	 * @param tag
-	 * @return number of seconds
-	 * @throws SQLException 
+	 * @return <ul> 
+	 * 			<li>number of seconds </li>
+	 * 		   <li>-1 if there is not date for the specified tag.</li>
+	 * 			</ul>
 	 */
 	public static long getTimeUpdateTopTag(int idTag){
 		setup();
@@ -203,12 +147,12 @@ public class DaveDatabaseManager extends DatabaseManager {
 		if (lastUpdate != null){
 			return (currentDate.getTime() / 1000) - (lastUpdate.getTime() / 1000);
 		}	
-		
+		close();
 		return -1;	
 	
 	}
 	
-	public static long getTimeUpdateUserTag(int idUser){
+	public static long getTimeUpdateUserTags(int idUser){
 		setup();
 		String sql = "SELECT LAST_UPDATE_TAG FROM " + addDoubleQuotes(TITLE_USERS_TABLE) + " WHERE ID_USER = ?";
 		
@@ -242,20 +186,73 @@ public class DaveDatabaseManager extends DatabaseManager {
 		
 	}
 	
+	/**
+	 * Insert a pageList of tag in the table post count.
+	 * Update data if they are already present
+	 * @param tagList
+	 * @param idUser
+	 */
+	public static void insertListTag(PagedList<Tag> tagList, int idUser){
+		setup();
+		String sqlInsert = "INSERT INTO " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + "(ID_USER, ID_TAG, POST_COUNT) VALUES (?, ?, ?)";
+		String sqlUpdate = "UPDATE " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " SET POST_COUNT = ? WHERE ID_USER = ? AND ID_TAG = ?";
+		
+		PreparedStatement stmtInsert = null;
+		PreparedStatement stmtUpdate = null;
+		try {
+			stmtInsert = databaseConnection.prepareStatement(sqlInsert);
+			stmtUpdate = databaseConnection.prepareStatement(sqlUpdate);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		for (int i = 0; i<tagList.size(); i++){
+			int idTag = getTagId(tagList.get(i).getName());
+			int postCount = (int) tagList.get(i).getCount();
+			
+			try {
+				stmtUpdate.setInt(1, postCount);
+				stmtUpdate.setInt(2, idUser);
+				stmtUpdate.setInt(3, idTag);
+				
+				// If no user was found, insert the new user and his data.
+				if (stmtUpdate.executeUpdate() == 0){
+										
+					stmtInsert.setInt(1, idUser);
+					stmtInsert.setInt(2, idTag);
+					stmtInsert.setInt(3, postCount);
+					stmtInsert.executeUpdate();	
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}						
+
+		}
+		
+		try {
+				stmtInsert.close();
+				stmtUpdate.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		close();
+	}
 	
 	/**
 	 * 
-	 * Return the top answerers in a tag
+	 * Return a list of TagScore, sorted by post count(desc) of the top answerers in the given tab
 	 * 
-	 * @param nbUsers : number of users
-	 * @param tag : tag id
-	 * @return [{id : , postCount :}, ...]
+	 * @param nbUsers
+	 * @param tag : id which identified the tag in the tag table
+	 * @return
 	 */
-	public static ArrayList<TreeMap<String, Integer>> getTopAnswerers(int nbUsers, int tag){
+	public static List<TagScore> getTopAnswerers(int nbUsers, int tag){
 		setup();
 		String sql = "SELECT ID_USER, POST_COUNT FROM " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " WHERE ID_TAG = ? ORDER BY POST_COUNT DESC";
 		
-		ArrayList<TreeMap<String, Integer>> userList = new ArrayList<TreeMap<String, Integer>>();
+		ArrayList<TagScore> userList = new ArrayList<TagScore>(nbUsers);
 		try{
 			PreparedStatement stmt = databaseConnection.prepareStatement(sql);
 			stmt.setInt(1, tag);
@@ -267,10 +264,12 @@ public class DaveDatabaseManager extends DatabaseManager {
 				
 				int idUser = res.getInt("ID_USER");
 				int postCount = res.getInt("POST_COUNT");
-				TreeMap<String, Integer> userData = new TreeMap<String, Integer>();
-				userData.put("id", idUser);
-				userData.put("postCount", postCount);
-				userList.add(userData);
+				User user = new User();
+				user.setUserId(idUser);
+				TagScore tagScore = new TagScore();
+				tagScore.setUser(user);
+				tagScore.setPostCount(postCount);
+				userList.add(tagScore);
 				cpt++;
 			}
 			stmt.close();
@@ -278,12 +277,44 @@ public class DaveDatabaseManager extends DatabaseManager {
 		} catch (SQLException e) {
 		System.out.println("getTimeUpdateTopTag (DaveDatabaseManager) - Erreur de la requête sql.");
 		e.printStackTrace();
-	}
+		}finally{
+			close();
+		}
 		
 		return userList;
 	}
-		
 	
+	public static TagScore getTopTag(int tag){
+		setup();
+		String sql = "SELECT ID_USER, SCORE FROM " + addDoubleQuotes(TITLE_TAG_SCORE_TABLE) + " WHERE ID_TAG = ? ORDER BY SCORE DESC";
+		TagScore tagScore = new TagScore();
+		try{
+			PreparedStatement stmt = databaseConnection.prepareStatement(sql);
+			stmt.setInt(1, tag);
+			ResultSet res = stmt.executeQuery();			
+			
+			int cpt =0;
+			if (res.next()){				
+				int idUser = res.getInt("ID_USER");
+				int score = res.getInt("SCORE");
+				User user = new User();
+				user.setUserId(idUser);
+				tagScore.setUser(user);
+				tagScore.setScore(score);
+			}
+			stmt.close();
+			res.close();
+		} catch (SQLException e) {
+		System.out.println("getTimeUpdateTopTag (DaveDatabaseManager) - Erreur de la requête sql.");
+		e.printStackTrace();
+		}finally{
+			close();
+		}
+		
+		return tagScore;
+	}
+		
+
 	/**
 	 * Update the date of the last update concerning post count and score tables (Dave) to the current date in the tag table
 	 * 
@@ -303,6 +334,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 
 			e.printStackTrace();
 		}
+		close();
 		
 	}
 	
@@ -312,6 +344,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	 * @param idUser
 	 */
 	public static void updateDateUser(int idUser){
+		setup();
 		String sqlUpdate = "UPDATE " + addDoubleQuotes(TITLE_USERS_TABLE) + " SET LAST_UPDATE_TAG = CURRENT_DATE WHERE ID_USER = ?";
 		String sqlInsert = "INSERT INTO " + addDoubleQuotes(TITLE_USERS_TABLE) + "(ID_USER, LAST_UPDATE_TAG) VALUES (?, CURRENT_DATE)";
 		
@@ -330,6 +363,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		close();
 	}
 	
 	
@@ -381,7 +415,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 			
 			
 		}
-		
+		close();
 		return userList;
 			
 		
@@ -389,14 +423,14 @@ public class DaveDatabaseManager extends DatabaseManager {
 	
 	
 	/**
-	 * Sort (desc) and ArrayList of TreeMap. Sort the arraylist depending the value identified by totalPostCount in the Treemap
+	 * Sort (desc) and ArrayList of TagScore depending of the postCount
 	 * @param list
 	 */
-	private static void sort(ArrayList<TreeMap<String, Integer>> list){
+	public static void sort(ArrayList<TagScore> list){
 		for (int i =0 ; i<=list.size()-2 ; i++){
 			for (int j = (list.size() -1) ; i<j;j--){
-				if (list.get(j).get("totalPostCount") > list.get(j-1).get("totalPostCount")){
-					TreeMap<String, Integer> temp = list.get(j-1);
+				if (list.get(j).getPostCount() > list.get(j-1).getPostCount()){
+					TagScore temp = list.get(j-1);
 					list.set(j-1, list.get(j));
 					list.set(j, temp);
 				}
@@ -404,33 +438,20 @@ public class DaveDatabaseManager extends DatabaseManager {
 		}
 	}
 	
-	/**
-	 * 
-	 * Return a list of top users who share the tag in the tag list (passed as a parameter).
-	 * The list is sorted by the total score of users.
-	 * @param tagList : tag are identified by their id
-	 * @return [{userId : , totalPostCount : , tag1 :, tag2 : ...}, {userId : , totalPostCount : , tag3 :, tag 4 :, ...}, ...] <br>
-	 * 			For each map in the array list, there are : - the user id is indexed by the key userId <br>
-	 * 														- the total post count is indexed by totalPostCount <br>
-	 *   													- for each tag, the post count of this tag is identified by the id of the tag. <br>
-	 * @throws SQLException 
-	 *   
-	 */
-	public static ArrayList<TreeMap<String, Integer>> getTopAnswerers(ArrayList<Integer> tagList) throws SQLException{
+	public static TagScore getTopAnswererMultipleTag(ArrayList<String> tagName, int topPosition) throws SQLException{
+		ArrayList<Integer> tagId = new ArrayList<Integer>(tagName.size());
+		for (int i =0 ; i<tagName.size(); i++){
+			tagId.add(getTagId(tagName.get(i)));
+		}
+		ArrayList<Integer> potentialUsers = usersSharingTags(tagId);
 		
-		int nbTags = tagList.size();		
-		ArrayList<Integer> potentialUsers = usersSharingTags(tagList);
-		
-		ArrayList<TreeMap<String, Integer>> topTagUsers = new ArrayList<TreeMap<String, Integer>>();
-		
-		for (int i = 0 ;i <potentialUsers.size(); i++){
+		ArrayList<TagScore> tagScoreList = new ArrayList<TagScore>();
+		setup();
+		for (int i =0; i<potentialUsers.size() ; i++){
 			int idUser = potentialUsers.get(i);
 			int totalPostCount = 0;
-			TreeMap<String, Integer> user = new TreeMap<String, Integer>();
-			user.put("userId", idUser);
-			
-			for (int j = 0 ; j< tagList.size(); j++){
-				int idTag = tagList.get(j);
+			for (int j = 0 ; j< tagId.size(); j++){
+				int idTag = tagId.get(j);
 				String sql = "SELECT POST_COUNT FROM " + DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE) +
 						" WHERE ID_USER = ? AND ID_TAG = ?";
 				PreparedStatement stmt = DatabaseManager.databaseConnection.prepareStatement(sql);
@@ -442,27 +463,38 @@ public class DaveDatabaseManager extends DatabaseManager {
 				if (res.next()){
 					postCount = res.getInt("POST_COUNT");
 				}
-				
-				user.put(Integer.toString(idTag), postCount);
+
 				totalPostCount +=postCount;
 				stmt.close();
 				res.close();
 			}
-			
-			user.put("totalPostCount",	totalPostCount);
-			topTagUsers.add(user);
-			
-			
+			User user = new User();
+			user.setUserId(idUser);
+			TagScore tagScore = new TagScore();
+			tagScore.setUser(user);
+			tagScore.setPostCount(totalPostCount);
+			tagScoreList.add(tagScore);
 		}
-		sort(topTagUsers);
-		return topTagUsers;
+		close();
+		sort(tagScoreList);
+		
+		if (topPosition < tagScoreList.size()){
+			return tagScoreList.get(topPosition);
+		}
+		
+		return null;
 	}
 	
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException {
-		ArrayList<Integer> tagList = new ArrayList<Integer>();
-		tagList.add(8);
-		tagList.add(133);
-		updateDateUser(23);
+	
+	public static void main(String[] args) throws SQLException  {
+		
+		ArrayList<String> tagList = new ArrayList<String>();
+		tagList.add("java");
+		tagList.add("c++");
+		TagScore tag = getTopAnswererMultipleTag(tagList, 1);
+		System.out.println(tag.getUser().getUserId());
+		System.out.println(tag.getPostCount());
+
 	}
 
 }

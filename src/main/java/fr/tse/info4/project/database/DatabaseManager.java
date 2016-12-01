@@ -1,4 +1,4 @@
-package tse.info4.project.database;
+package fr.tse.info4.project.database;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,8 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import org.apache.derby.catalog.GetProcedureColumns;
 import org.json.JSONException;
-import tse.info4.project.datarecovery.StackExchangeApiManager;
+
+import fr.tse.info4.project.datarecovery.StackExchangeApiManager;
 
 /**
  * Class that manages the database (connection and driver setup, updates and insertions, general queries, truncature of tables)
@@ -32,7 +35,7 @@ public class DatabaseManager {
 	/**
 	 * Relative path to the derby database repository
 	 */
-	protected static final String DATABASE_PATH = "ProjectDatabase";
+	protected static final String DATABASE_PATH ="ProjectDatabase";
 	
 	/**
 	 * Name of the table in which all post counts for each user are contained 
@@ -64,9 +67,9 @@ public class DatabaseManager {
 	public static Connection databaseConnection;
 	
 	
-	//Methods
 
 
+	
 	public static void getTags(int page) throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
 		// Remplir la table tag à partir de l'api.
 		// L'api limite à 30 appels par secondes et à 10 000 appels par jour (remplissage en plusieurs fois) !
@@ -101,11 +104,16 @@ public class DatabaseManager {
 	/**
 	 * Return the name of the tag corresponding to the id passed at the parameter
 	 * @param idTag the if of the tag (in table tag)
-	 * @return tagName
+	 * @return tagName <br>
+	 * 		   "" (void String) if the tag doesn't exist
 	 */
 	public static String getTagName(int idTag)
 	{
+		setup();
 		String tagName = "";
+		if (idTag<0){
+			return tagName;
+		}
 		String sql="SELECT tag_name FROM" + addDoubleQuotes(TITLE_TAG_TABLE) + "WHERE id_tag="+idTag;
 		PreparedStatement tagNameStmt = null;
 		try {
@@ -129,14 +137,18 @@ public class DatabaseManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		close();
+		if (tagName != ""){
+			return tagName.substring(1, tagName.length()-1);
+		}
+		return "";
 		
-		return tagName;
 	}
 	
 	
 	public static int getTagId(String tagName)
 	{
-		DatabaseManager.setup();
+		setup();
 		String sqlSelectTag = "SELECT ID_TAG FROM "
 				+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_TABLE) + " WHERE tag_name = ? ";
 		int idTag = -1;
@@ -156,10 +168,8 @@ public class DatabaseManager {
 			System.out.println("getTagId (DatabaseManager) - Problème lors de l'exécution de la requête sql");
 			e.printStackTrace();
 		}
-
-
 	
-		
+		close();
 		return idTag;
 		
 		
@@ -171,6 +181,7 @@ public class DatabaseManager {
 	 */
 	public static void setup() {		
 		
+		System.getProperty("user.dir");
 		Class driverClass = null;
 		try {
 			// Loading of embedded driver for the database	
@@ -252,7 +263,7 @@ public class DatabaseManager {
 	 * @return boolean meaning if the tag is in the database or not
 	 * @throws SQLException
 	 */
-	public static boolean tagExist(String tagName) throws SQLException {
+	public static boolean tagExist(String tagName){
 		return getTagId(tagName)>=0;
 	}
 
@@ -261,12 +272,8 @@ public class DatabaseManager {
 			ClassNotFoundException, JSONException, IOException, SQLException, URISyntaxException
 
 	{
-		DatabaseManager.setup();
-		System.out.println(getTagName(1));
-		System.out.println(getTagId("java"));
-		String tagName="java";
-		System.out.println(tagExist(tagName));
-		DatabaseManager.close();
+		String tagName = "\'c\'";
+		System.out.println(tagName.substring(1, tagName.length()-1));
 
 	}
 }

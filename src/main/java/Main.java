@@ -1,4 +1,4 @@
-package main;
+
 
 
 import java.io.IOException;
@@ -10,11 +10,11 @@ import java.util.TreeMap;
 
 import org.json.JSONException;
 
-import java.util.Map.Entry;
+import fr.tse.info4.project.database.DatabaseManager;
+import fr.tse.info4.project.user.Alice;
+import fr.tse.info4.project.user.Dave;
 
-import tse.info4.project.database.DatabaseManager;
-import tse.info4.project.user.dave.Alice;
-import tse.info4.project.user.dave.Dave;
+import java.util.Map.Entry;
 
 public class Main {
 
