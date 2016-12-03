@@ -1,21 +1,18 @@
 package fr.tse.info4.project.user;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
+
 
 import org.json.JSONException;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Paging;
 import com.google.code.stackexchange.schema.Tag;
-import com.google.code.stackexchange.schema.User;
+
 
 import fr.tse.info4.project.database.DatabaseManager;
 import fr.tse.info4.project.database.DaveDatabaseManager;
@@ -261,14 +258,17 @@ public class Dave{
 	public TagScore getTopUserMultipleTags(ArrayList<String> tagNameList, int topPosition) throws SQLException{
 		// Pour chaque tag recherché
 		for (int i =0 ; i< tagNameList.size() ; i++){
-			int idTag = DaveDatabaseManager.getTagId(tagNameList.get(i));
 			
 			// Récupère les utilisateurs qui ont le plus participé dans un tag.
 			// Met à jour si besoin.
 			ArrayList<TagScore> tagTopAnswerers= (ArrayList<TagScore>) getTopAnswerers(tagNameList.get(i));
 			
+			ArrayList<Integer> maxPostCount = new ArrayList<Integer>(tagTopAnswerers.size());
+			for (int j =0 ; j<tagTopAnswerers.size();j++){
+			}
 			// Pour chacun de ces utilisateur
 			for (int j =0 ; j <tagTopAnswerers.size(); j++){
+				
 				int idUser = (int) tagTopAnswerers.get(j).getUser().getUserId();
 				// Temps écoulé depuis la dernière mise à jour des deonnés concernant l'utilisateur
 				long time= DaveDatabaseManager.getTimeUpdateUserTags(idUser);
@@ -299,7 +299,10 @@ public class Dave{
 		
 
 		Dave user = new Dave();
-		user.getTopAnswerers("java");
+		ArrayList<String> tagList = new ArrayList<>();
+		tagList.add("java");
+		tagList.add("c++");
+		user.getTopUserMultipleTags(tagList, 1);
 	}
 		
 }

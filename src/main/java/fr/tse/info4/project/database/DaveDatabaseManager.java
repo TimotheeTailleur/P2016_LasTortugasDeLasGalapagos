@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -151,6 +152,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 		return -1;	
 	
 	}
+	
 	
 	public static long getTimeUpdateUserTags(int idUser){
 		setup();
@@ -486,14 +488,56 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 	
 	
+	/**
+	 * Return the max post count for a user in a set of tags
+	 * @param tagList
+	 * @param idUser
+	 * @return int : max post count
+	 */
+	public static int maxPostCountForTags(ArrayList<Integer> tagList, int idUser){
+		String sql = "SELECT MAX(POST_COUNT) FROM " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " WHERE ID_USER = ? AND ";
+		
+		for (int i =0; i<tagList.size(); i++){
+			if (i !=tagList.size() -1){
+				sql += "ID_TAG = ? OR ";
+			}
+			else{
+				sql +="ID_TAG = ?";
+			}
+		}		
+
+		setup();
+		int maxPostCount = 0;
+		try {
+			PreparedStatement stmt = databaseConnection.prepareStatement(sql);
+			stmt.setInt(1, idUser);
+			for (int i =0 ; i<tagList.size(); i++){
+				stmt.setInt(i+2, tagList.get(i));
+			}
+			ResultSet res = stmt.executeQuery();
+			
+			if (res.next()){
+				maxPostCount = res.getInt(1);
+			}
+			stmt.close();
+			res.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(sql);
+		close();
+		return maxPostCount;
+	}
+	
+	
 	public static void main(String[] args) throws SQLException  {
 		
-		ArrayList<String> tagList = new ArrayList<String>();
-		tagList.add("java");
-		tagList.add("c++");
-		TagScore tag = getTopAnswererMultipleTag(tagList, 1);
-		System.out.println(tag.getUser().getUserId());
-		System.out.println(tag.getPostCount());
+		ArrayList<Integer> tagList = new ArrayList<Integer>();
+		tagList.add(1);
+		tagList.add(2);
+		System.out.println(Collections.min(tagList));
+		System.out.println(maxPostCountForTags(tagList, 1));
 
 	}
 

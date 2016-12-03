@@ -7,10 +7,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.code.stackexchange.client.StackExchangeApiClient;
+import com.google.code.stackexchange.client.StackExchangeApiClientFactory;
 import com.google.code.stackexchange.client.constant.ApplicationConstants;
+import com.google.code.stackexchange.client.constant.StackExchangeApiMethods;
 import com.google.code.stackexchange.client.provider.url.ApiUrlBuilder;
+import com.google.code.stackexchange.client.query.StackAuthApiQuery;
+import com.google.code.stackexchange.client.query.StackExchangeApiQuery;
+import com.google.code.stackexchange.client.query.StackExchangeApiQueryFactory;
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Paging;
+import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.StackExchangeSite;
 import com.google.code.stackexchange.schema.Tag;
 import com.google.code.stackexchange.schema.User;
@@ -41,7 +48,7 @@ public class DaveApiManager extends ApiManager{
 	 * the the stack overflow api returns
 	 * 
 	 * @param String tag
-	 * @return List<TagScore>
+	 * @return List TagScore
 	 */
 	public List<TagScore> getTopAnswerers(String tag){
 		ApiUrlBuilder builder = createStackOverflowApiUrlBuilder(GET_TOP_ANSWERERS)
@@ -97,16 +104,25 @@ public class DaveApiManager extends ApiManager{
 		return false;
 	}
 	
+	public PagedList<Question> getQuestions() {
+		ApiUrlBuilder builder = createStackOverflowApiUrlBuilder(StackExchangeApiMethods.GET_QUESTIONS);
+		String apiUrl = builder.buildUrl();
+		System.out.println(apiUrl);
+		return unmarshallList(Question.class, callApiMethod(apiUrl));
+	}
+	
 	
 
 	public static void main(String[] args) {
-		DaveApiManager manager = new DaveApiManager(APP_KEY, SITE);
-		Paging page = new Paging(5,100);
-		PagedList<Tag> list = manager.getTagsForUsers(page, 1200);
-		for (int i =0 ; i<list.size() ;i++){
-			System.out.println(list.get(i).getName() + " : " + list.get(i).getCount());
+		StackExchangeApiQueryFactory queryFactory = StackExchangeApiQueryFactory.newInstance(
+				APP_KEY, "Mtzw(phejPtNapI79SXRKg))",
+				StackExchangeSite.STACK_OVERFLOW);
 		
-		}
+		PagedList<Question> question14s = (PagedList<Question>) queryFactory
+				.newQuestionApiQuery().listMyQuestions();
+		System.out.println(question14s);
+		
+		
 	}
 	
 }
