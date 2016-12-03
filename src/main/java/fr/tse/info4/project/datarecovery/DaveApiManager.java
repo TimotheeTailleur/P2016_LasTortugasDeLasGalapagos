@@ -7,21 +7,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.code.stackexchange.client.StackExchangeApiClient;
-import com.google.code.stackexchange.client.StackExchangeApiClientFactory;
+
 import com.google.code.stackexchange.client.constant.ApplicationConstants;
 import com.google.code.stackexchange.client.constant.StackExchangeApiMethods;
 import com.google.code.stackexchange.client.provider.url.ApiUrlBuilder;
-import com.google.code.stackexchange.client.query.StackAuthApiQuery;
-import com.google.code.stackexchange.client.query.StackExchangeApiQuery;
-import com.google.code.stackexchange.client.query.StackExchangeApiQueryFactory;
+
 import com.google.code.stackexchange.common.PagedList;
-import com.google.code.stackexchange.schema.Paging;
+
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.StackExchangeSite;
 import com.google.code.stackexchange.schema.Tag;
 import com.google.code.stackexchange.schema.User;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -67,7 +63,6 @@ public class DaveApiManager extends ApiManager{
 		JsonArray elements = adaptee.get("items")
 				.getAsJsonArray();
 		
-		Gson gson = new Gson();
 		ArrayList<TagScore> topAnswerers = new ArrayList<TagScore>(30);
 		for (JsonElement o : elements){
 			JsonObject jsonObject = o.getAsJsonObject();
@@ -107,22 +102,13 @@ public class DaveApiManager extends ApiManager{
 	public PagedList<Question> getQuestions() {
 		ApiUrlBuilder builder = createStackOverflowApiUrlBuilder(StackExchangeApiMethods.GET_QUESTIONS);
 		String apiUrl = builder.buildUrl();
-		System.out.println(apiUrl);
 		return unmarshallList(Question.class, callApiMethod(apiUrl));
 	}
 	
+	public static void main(String[] args) {
+
+	}
 	
 
-	public static void main(String[] args) {
-		StackExchangeApiQueryFactory queryFactory = StackExchangeApiQueryFactory.newInstance(
-				APP_KEY, "Mtzw(phejPtNapI79SXRKg))",
-				StackExchangeSite.STACK_OVERFLOW);
-		
-		PagedList<Question> question14s = (PagedList<Question>) queryFactory
-				.newQuestionApiQuery().listMyQuestions();
-		System.out.println(question14s);
-		
-		
-	}
 	
 }

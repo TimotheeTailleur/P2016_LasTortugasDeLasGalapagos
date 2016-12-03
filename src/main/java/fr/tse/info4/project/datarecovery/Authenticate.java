@@ -4,8 +4,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.derby.impl.tools.sysinfo.Main;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -70,7 +68,6 @@ public class Authenticate extends Application {
             }
         });
 
-        // create scene
         stage.setTitle("Las Tortugas - Projet informatique");
         scene = new Scene(borderPane, 750, 500);
         stage.setScene(scene);

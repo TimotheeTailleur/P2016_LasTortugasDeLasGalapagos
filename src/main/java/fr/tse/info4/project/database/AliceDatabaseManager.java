@@ -176,10 +176,7 @@ public class AliceDatabaseManager extends DatabaseManager {
 		
 	}
 	public static void main(String[] args){
-		Alice user = new Alice(1);
-		System.out.println(getTime(user));
-		
-		fillTableQuestion(user);
+		System.out.println("cou");
 		
 	}
 }
