@@ -13,7 +13,6 @@ public class PageCharlie extends TabReference {
 	public PageCharlie() {
 
 		super();
-		this.setLayout(new FlowLayout());
 		this.add(new JButton("bouton"));
 	}
 }

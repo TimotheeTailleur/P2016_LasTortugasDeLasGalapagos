@@ -11,7 +11,6 @@ public class PageBob extends TabReference {
 	public PageBob(int idUser) {
 
 		super();
-		this.setLayout(new FlowLayout());
 		this.add(new JButton("bouton"));
 	}
 

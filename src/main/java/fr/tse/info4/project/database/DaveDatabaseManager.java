@@ -44,6 +44,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 		//Get Top Answerers stats in given tag
 		DaveApiManager apiManager = new DaveApiManager(DaveApiManager.APP_KEY, DaveApiManager.SITE);
 		ArrayList<TagScore> tagScoreList= (ArrayList<TagScore>) apiManager.getTopAnswerers(tagName);
+
 		
 		//Prepare Statements for updates and insertions
 		setup();
@@ -194,7 +195,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	 * @param tagList
 	 * @param idUser
 	 */
-	public static void insertListTag(PagedList<Tag> tagList, int idUser){
+	public static void insertListTag(ArrayList<Tag> tagList){
 		setup();
 		String sqlInsert = "INSERT INTO " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + "(ID_USER, ID_TAG, POST_COUNT) VALUES (?, ?, ?)";
 		String sqlUpdate = "UPDATE " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " SET POST_COUNT = ? WHERE ID_USER = ? AND ID_TAG = ?";
@@ -211,6 +212,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 		for (int i = 0; i<tagList.size(); i++){
 			int idTag = getTagId(tagList.get(i).getName());
 			int postCount = (int) tagList.get(i).getCount();
+			int idUser = (int) tagList.get(i).getUserId();
 			
 			try {
 				stmtUpdate.setInt(1, postCount);
@@ -533,11 +535,11 @@ public class DaveDatabaseManager extends DatabaseManager {
 	
 	public static void main(String[] args) throws SQLException  {
 		
-		ArrayList<Integer> tagList = new ArrayList<Integer>();
-		tagList.add(1);
-		tagList.add(2);
-		System.out.println(Collections.min(tagList));
-		System.out.println(maxPostCountForTags(tagList, 1));
+		ArrayList<String> tagNameList = new ArrayList<String>();
+		tagNameList.add("java");
+		tagNameList.add("c++");
+		System.out.println(getTopAnswererMultipleTag(tagNameList, 1).getPostCount());
+		
 
 	}
 

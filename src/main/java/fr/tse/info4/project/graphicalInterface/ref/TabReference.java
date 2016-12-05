@@ -22,7 +22,7 @@ public class TabReference extends JPanel {
 	 */
 	JLabel param = new JLabel("Paramètres :");
 
-	static JPanel foot = new JPanel();
+	 JPanel foot = new JPanel();
 
 	public TabReference() {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -51,7 +51,7 @@ public class TabReference extends JPanel {
 		param.setText("");
 	}
 
-	public static JPanel getFoot() {
+	public JPanel getFoot() {
 		return foot;
 	}
 

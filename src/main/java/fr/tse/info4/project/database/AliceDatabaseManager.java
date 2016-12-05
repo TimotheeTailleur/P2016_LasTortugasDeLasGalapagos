@@ -12,7 +12,18 @@ import java.util.TreeMap;
 
 import org.json.JSONException;
 
+import com.google.code.stackexchange.client.constant.StackExchangeApiMethods;
+import com.google.code.stackexchange.client.provider.url.ApiUrlBuilder;
+import com.google.code.stackexchange.client.provider.url.DefaultApiUrlBuilder;
+import com.google.code.stackexchange.client.query.StackExchangeApiQueryFactory;
+import com.google.code.stackexchange.client.query.impl.TagApiQueryImpl;
+import com.google.code.stackexchange.common.PagedList;
+import com.google.code.stackexchange.schema.Range;
+import com.google.code.stackexchange.schema.Tag;
+
+import fr.tse.info4.project.datarecovery.ApiManager;
 import fr.tse.info4.project.datarecovery.StackExchangeApiManager;
+import fr.tse.info4.project.schema.TagScore;
 import fr.tse.info4.project.user.Alice;
 
 /**
@@ -175,8 +186,21 @@ public class AliceDatabaseManager extends DatabaseManager {
 		return -1;
 		
 	}
+	
+	
 	public static void main(String[] args){
-		System.out.println("cou");
+		
+
+		TagApiQueryImpl query = new TagApiQueryImpl(ApiManager.APP_KEY, ApiManager.SITE);
+		 query.withUserIds(1200, 1300);
+		 query.
+		  PagedList<Tag> tags = query.listTagsOnUser();
+		
+		for (int i =0 ; i <tags.size(); i++){
+			System.out.println(tags.get(i).getName());
+			System.out.println(tags.get(i).getCount());
+		}
+		
 		
 	}
 }

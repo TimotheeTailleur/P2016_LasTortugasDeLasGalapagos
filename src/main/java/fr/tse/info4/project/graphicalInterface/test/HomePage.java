@@ -23,7 +23,7 @@ public class HomePage extends JFrame {
 		this.getContentPane().add(onglets);
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
-		this.setSize(1000, 500);
+		this.setSize(1900, 700);
 		this.setVisible(true);
 	}
 
