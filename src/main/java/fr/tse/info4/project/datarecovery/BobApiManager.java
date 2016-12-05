@@ -12,38 +12,7 @@ import com.google.code.stackexchange.schema.Tag;
 
 public class BobApiManager {
 
-	/**
-	 * 
-	 * Return the nbTags best tags of the user (sorted by popularity)
-	 * 
-	 * @param nbTags
-	 * @param idUser
-	 * @return Paged List of best tags of user
-	 */
-	public static PagedList<Tag> getTags(int nbTags, int idUser) {
-		final String filter = "!-.G.68grSaJo";
-		final TagApiQueryImpl tags = new TagApiQueryImpl(ApiManager.APP_KEY, ApiManager.SITE);
-		Paging page = new Paging(1, nbTags);
-
-		tags.withUserIds(idUser);
-		tags.withPaging(page);
-		tags.withFilter(filter);
-		tags.withSort(Tag.SortOrder.MOST_POPULAR);
-
-		return tags.listTagsOnUser();
-	}
-
-	/**
-	 * 
-	 * Return the nbTags best tags of the user (sorted by popularity)
-	 * 
-	 * @param nbTags
-	 * @param accessToken
-	 * @return 
-	 */
-	public static PagedList<Tag> getTags(int nbTags, String accessToken) {
-		return getTags(nbTags, (int) ApiManager.getIdUser(accessToken));
-	}
+	
 
 	/**
 	 * Return the new questions in the tag passed as a parameter. <br>

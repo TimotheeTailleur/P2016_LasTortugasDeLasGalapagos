@@ -62,12 +62,12 @@ public class Bob {
 	 * 
 	 * @return
 	 */
-	public TreeMap<String, ArrayList<Question>> getNewQuestions() {
+	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered() {
 		if (accessToken == null) {
 			System.err.println("Access token doesn't specified");
 			return null;
 		}
-		return getNewQuestions((int) ApiManager.getIdUser(accessToken));
+		return getNewQuestionsAnswered((int) ApiManager.getIdUser(accessToken));
 	}
 
 	/**
@@ -77,8 +77,8 @@ public class Bob {
 	 * 
 	 * @return
 	 */
-	public TreeMap<String, ArrayList<Question>> getNewQuestions(int idUser) {
-		PagedList<Tag> tags = BobApiManager.getTags(nbTags, idUser);
+	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered(int idUser) {
+		PagedList<Tag> tags = ApiManager.getTags(nbTags, idUser);
 		if (tags.size() == 0) {
 			System.err.println("No tag for this user");
 			return null;
@@ -99,7 +99,7 @@ public class Bob {
 	public static void main(String[] args) {
 		Bob user = new Bob();
 		// Avec id user
-		TreeMap<String, ArrayList<Question>> newQuestions = user.getNewQuestions(1200);
+		TreeMap<String, ArrayList<Question>> newQuestions = user.getNewQuestionsAnswered(1200);
 		if (newQuestions != null) {
 
 			for (Entry<String, ArrayList<Question>> entry : newQuestions.entrySet()) {
@@ -114,7 +114,7 @@ public class Bob {
 		/*
 		 * // Avec access token
 		 * user.setAccessToken(Authenticate.getAcessToken()); TreeMap<String,
-		 * ArrayList<Question>> newQuestionsToken = user.getNewQuestions(); if
+		 * ArrayList<Question>> newQuestionsToken = user.getNewQuestionsAnswered(); if
 		 * (newQuestionsToken != null) { for (Entry<String, ArrayList<Question>>
 		 * entry : newQuestionsToken.entrySet()) {
 		 * System.out.println(entry.getKey() + " : "); ArrayList<Question>
