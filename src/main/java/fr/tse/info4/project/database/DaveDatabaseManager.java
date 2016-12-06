@@ -426,6 +426,35 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 	
 	
+	public static int getNbUsers(String tag){
+		
+		int idTag = getTagId(tag);
+		
+		String sql = "SELECT COUNT(*) FROM " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " WHERE ID_TAG = ?";
+		
+		int nbUsers = 0;
+		setup();
+		try {
+			PreparedStatement stmt = databaseConnection.prepareStatement(sql);
+			stmt.setInt(1, idTag);
+			ResultSet res = stmt.executeQuery();
+			
+			if (res.next()){
+				nbUsers = res.getInt(1);
+			}
+			
+			stmt.close();
+			res.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return nbUsers;
+		
+	}
+	
+	
 	/**
 	 * Sort (desc) and ArrayList of TagScore depending of the postCount
 	 * @param list
@@ -535,10 +564,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	
 	public static void main(String[] args) throws SQLException  {
 		
-		ArrayList<String> tagNameList = new ArrayList<String>();
-		tagNameList.add("java");
-		tagNameList.add("c++");
-		System.out.println(getTopAnswererMultipleTag(tagNameList, 1).getPostCount());
+		System.out.println(getNbUsers("ios"));
 		
 
 	}

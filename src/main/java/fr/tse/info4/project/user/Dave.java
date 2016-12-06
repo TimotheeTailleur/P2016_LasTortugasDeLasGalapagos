@@ -195,19 +195,18 @@ public class Dave {
 		int nbUsersTemp = nbUsers;
 		nbUsers = 20;
 		
-		int totalPostCount = 0;
-		ArrayList<TagScore> potentialUser =  (ArrayList<TagScore>) getTopAnswerers(tagNameList.get(0));
 		for (int i = 1 ; i<tagNameList.size(); i++){
-			ArrayList<TagScore> tagTopAnswerers= (ArrayList<TagScore>) getTopAnswerers(tagNameList.get(i));
-			for (int j = 0; j<tagTopAnswerers.size(); j++){
-				if (contains(potentialUser, (int) tagTopAnswerers.get(i).getUser().getUserId())){
-					totalPostCount += tagTopAnswerers.get(i).getPostCount();
-				}
+			String tagName  = tagNameList.get(i);
+			int nbUsersDatabase = DaveDatabaseManager.getNbUsers(tagName);
+			boolean forceUpdateTemp = forceUpdateTopAnswerers;
+			if (nbUsersDatabase < nbUsers){
+				forceUpdateTopAnswerers = true;
 			}
+			getTopAnswerers(tagName);
+			forceUpdateTopAnswerers = forceUpdateTemp;
 		}
 		
-		System.out.println(totalPostCount);
-		
+
 		nbUsers = nbUsersTemp;
 	}
 	
