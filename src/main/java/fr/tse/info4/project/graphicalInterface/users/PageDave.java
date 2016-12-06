@@ -15,9 +15,9 @@ import fr.tse.info4.project.user.Dave;
 
 public class PageDave extends TabReference {
 
+	boolean isList;
 	JTextField tagName = new JTextField(25);
 	
-
 /**
  * 
  */
@@ -30,34 +30,21 @@ public class PageDave extends TabReference {
 		JPanel boutons = new JPanel();
 		boutons.setLayout(new BoxLayout(boutons, BoxLayout.LINE_AXIS));
 
-		JButton option1 = new JButton("bouton");
-		JButton option2 = new JButton("bouton");
+		JButton option1 = new JButton("Top Contributor");
+		JButton option2 = new JButton("Top Tag");
 
 		boutons.add(option1);
 		boutons.add(option2);
 		
 		option1.addActionListener(new ActionListener(){
 			 public void actionPerformed(ActionEvent event){
-			
-				 String nomTag = tagName.getText(); 
-				 int longueur=0;
-				 
-				 for(int i=0; i<=nomTag.length()-1; i++) { // count how many tag were entered by the user
-
-					        if(nomTag.charAt(i)==' '){
-
-					          longueur++;
-					        }  
 					
-					      }                
-			        longueur+=1;
-					  
-				 
-				 if (longueur == 1){ // if one tag was written, launch function 1
-					
+				 isListTag(); 
+				 if(isList == false ){ // if one tag was written, launch function 1 and display results
+					 System.out.println(("SOLOTAG"));
 				 }
-				 else { // else launch function 3
-					 nomTag.split(",;/:?!\\\n");					 
+				 else { // else launch function 3 and display results
+					System.out.println("MULTITAG");		
 				 }
 		}
 		});
@@ -65,22 +52,19 @@ public class PageDave extends TabReference {
 
 		option1.addActionListener(new ActionListener(){
 			 public void actionPerformed(ActionEvent event){
-				 String nomTag = tagName.getText(); // read the tad written by the user and launch function 2
+				 String nomTag = tagName.getText(); // read the tad written by the user,launch function 2  and display results
 				 
 				 }
 		});
-		
 			 
-		
-
 		text.add(tagName);
 		text.setSize(1000, 900);
 		this.getPanel().add(text);
 		this.getPanel().add(boutons);
 	}
 
+	
 	public boolean isListTag() {
-		boolean isList = false;
 		String text = tagName.getText();
 		String[] tagEntered = text.split(" ");
 		if (tagEntered.length != 1) {
