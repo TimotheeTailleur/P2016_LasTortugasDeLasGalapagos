@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.metal.MetalBorders.InternalFrameBorder;
 import javax.xml.crypto.Data;
 
 import org.json.JSONException;
@@ -28,8 +29,6 @@ import fr.tse.info4.project.schema.TagScore;
  */
 public class Dave {
 
-	// ---- First method : getTopAnswerers & Seconde Method : getTopTag
-	// ------------------------
 
 	/*
 	 * Number of top answerers in a given tag (Dave 1). Default value of 10
@@ -51,20 +50,6 @@ public class Dave {
 
 	// ----------------- Third method : --------------------------------------
 
-	/*
-	 * Participation minimal for a tag post count 
-	 */
-	private int  minParticipation = 100;
-
-	/*
-	 * Time between 2 upddtate of data concerning the best tags of an user
-	 */
-	private int refreshRateTagUser = 24;
-	/*
-	 * Variable allowing to foce the update of the data concerning the best tags
-	 * of an user.
-	 */
-	private boolean forceUpdateTagUser = false;
 
 	/* Constructor */
 	public Dave() {
@@ -101,29 +86,7 @@ public class Dave {
 		this.forceUpdateTopAnswerers = forceUpdateTopAnswerers;
 	}
 
-	public float getMinParticipation() {
-		return minParticipation;
-	}
 
-	public void setMinParticipation(float minParticipation) {
-		this.minParticipation = minParticipation;
-	}
-
-	public int getRefreshRateTagUser() {
-		return refreshRateTagUser;
-	}
-
-	public void setRefreshRateTagUser(int refreshRateTagUser) {
-		this.refreshRateTagUser = refreshRateTagUser;
-	}
-
-	public boolean getForceUpdateTagUser() {
-		return forceUpdateTagUser;
-	}
-
-	public void setForceUpdateTagUser(boolean forceUpdateTagUser) {
-		this.forceUpdateTagUser = forceUpdateTagUser;
-	}
 
 	/**
 	 * Returns Stack Overflow profile URL of user (id)
@@ -212,78 +175,55 @@ public class Dave {
 
 	/**
 	 * 
+	 * Return true if the array tagsScore contains the user identified by idUser. <br>
+	 * False otherwise
+	 * 
+	 * @param tagsScores
 	 * @param idUser
-	 * @param postCountMax
+	 * @return
 	 */
-	private void updateTagDataForUser(int idUser, int postCountMax) {
-		boolean nextPage = true;
-		int pageNumber = 1;
-		// Tant que l'on n'a pas trouvé tous les tags où l'utilisateur à un
-		// score supérieux au score mininum attendu
-		//
-		while (nextPage) {
-			Paging page = new Paging(pageNumber, 100);
-			DaveApiManager manager = new DaveApiManager(ApiManager.APP_KEY, ApiManager.SITE);
-			System.out.println(idUser + " : " + pageNumber);
-			PagedList<Tag> list = manager.getTagsForUsers(page, idUser);
-
-			DaveDatabaseManager.insertListTag(list, idUser);
-			// Si le dernider élément de la liste a un post count plus petit que
-			// celui
-			// attendu, on s'arrête
-			if (list.get(list.size() - 1).getCount() < postCountMax * minParticipation) {
-				nextPage = false;
+	public static boolean contains(ArrayList<TagScore> tagsScores, int idUser){
+		for (int i =0 ; i<tagsScores.size(); i++){
+			if ( (int) tagsScores.get(i).getUser().getUserId() == idUser){
+				return true;
 			}
-			pageNumber++;
-
 		}
+		return false;
 	}
 
-	public TagScore getTopUserMultipleTags(ArrayList<String> tagNameList, int topPosition) throws SQLException{
-		ArrayList<Long> ids = new ArrayList<Long>();
-
-		int minPostCount = 0;
+	/**
+	 * 
+	 * Return a tagScore corresponding to the user who have the best post count
+	 * among the tagNameList	 * 
+	 * 
+	 * @param tagNameList
+	 * @return *         <ul>
+	 *         <li>TagScore</li>
+	 *         <li>null if no user have been found </li>
+	 *         </ul>
+	 * @throws SQLException
+	 */
+	public TagScore getTopUserMultipleTags(List<String> tagNameList) throws SQLException{
 		int nbUsersTemp = nbUsers;
-		nbUsers = 20;
-		for (int i = 0; i < tagNameList.size(); i++) {
-
-			ArrayList<TagScore> tagTopAnswerers = (ArrayList<TagScore>) getTopAnswerers(tagNameList.get(i));
-			
-			if(i ==0){
-				minPostCount = tagTopAnswerers.get(0).getPostCount();
+		nbUsers = 30;
+		
+		for (int i = 0 ; i<tagNameList.size(); i++){
+			String tagName  = tagNameList.get(i);
+			int nbUsersDatabase = DaveDatabaseManager.getNbUsers(tagName);
+			boolean forceUpdateTemp = forceUpdateTopAnswerers;
+			if (nbUsersDatabase < nbUsers){
+				forceUpdateTopAnswerers = true;
 			}
-
-			for (int j = 0; j < tagTopAnswerers.size(); j++) {
-				long idUser = tagTopAnswerers.get(j).getUser().getUserId();
-				long time = DaveDatabaseManager.getTimeUpdateUserTags((int)idUser);
-				
-				if (time == -1 || time > refreshRateTagUser * 3600 || forceUpdateTagUser){
-					ids.add(idUser);
-					DaveDatabaseManager.updateDateUser((int)idUser);
-				}
-				
-				int postCount = tagTopAnswerers.get(j).getPostCount();
-				if (minPostCount > postCount && postCount >=minParticipation){
-					minPostCount = postCount;
-				}
-			}
-
+			getTopAnswerers(tagName);
+			forceUpdateTopAnswerers = forceUpdateTemp;
 		}
+		
+
 		nbUsers = nbUsersTemp;
-		System.out.println(ids);
-		System.out.println(minPostCount);
 		
-		DaveApiManager dave = new DaveApiManager(ApiManager.APP_KEY, ApiManager.SITE);
+		return DaveDatabaseManager.getTopAnswererMultipleTag(tagNameList, 1);
 		
 		
-		// Si au moins 1 utilisateur a besoin d'une mise à jour sur ses données, on l'effectue
-		if (ids.size() > 0){
-			ArrayList<Tag> tagList = dave.getTagsOnUsers(ids, minPostCount);
-		
-			DaveDatabaseManager.insertListTag(tagList);
-		}
-		
-		return DaveDatabaseManager.getTopAnswererMultipleTag(tagNameList, topPosition);
 	}
 	
 	
@@ -294,11 +234,12 @@ public class Dave {
 		DatabaseManager.truncateTable(DatabaseManager.TITLE_TAG_POST_TABLE);
 
 		Dave user = new Dave();
+
 		user.setForceUpdateTopAnswerers(true);
 		ArrayList<String> tagNameList = new ArrayList<String>();
-		tagNameList.add("ios");
-		tagNameList.add("android+");
-		TagScore tag = user.getTopUserMultipleTags(tagNameList, 1);
+		tagNameList.add("sql");
+		tagNameList.add("oracle");
+		TagScore tag = user.getTopUserMultipleTags(tagNameList);
 		System.out.println(tag.getUser().getUserId());
 		System.out.println(tag.getPostCount());
 	}
