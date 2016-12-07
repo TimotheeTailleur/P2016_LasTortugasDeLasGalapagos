@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.metal.MetalBorders.InternalFrameBorder;
 import javax.xml.crypto.Data;
 
 import org.json.JSONException;
@@ -190,12 +191,23 @@ public class Dave {
 		return false;
 	}
 
-	
-	public TagScore getTopUserMultipleTags(ArrayList<String> tagNameList){
+	/**
+	 * 
+	 * Return a tagScore corresponding to the user who have the best post count
+	 * among the tagNameList	 * 
+	 * 
+	 * @param tagNameList
+	 * @return *         <ul>
+	 *         <li>TagScore</li>
+	 *         <li>null if no user have been found </li>
+	 *         </ul>
+	 * @throws SQLException
+	 */
+	public TagScore getTopUserMultipleTags(List<String> tagNameList) throws SQLException{
 		int nbUsersTemp = nbUsers;
-		nbUsers = 20;
+		nbUsers = 30;
 		
-		for (int i = 1 ; i<tagNameList.size(); i++){
+		for (int i = 0 ; i<tagNameList.size(); i++){
 			String tagName  = tagNameList.get(i);
 			int nbUsersDatabase = DaveDatabaseManager.getNbUsers(tagName);
 			boolean forceUpdateTemp = forceUpdateTopAnswerers;
@@ -208,6 +220,10 @@ public class Dave {
 		
 
 		nbUsers = nbUsersTemp;
+		
+		return DaveDatabaseManager.getTopAnswererMultipleTag(tagNameList, 1);
+		
+		
 	}
 	
 	
@@ -218,11 +234,12 @@ public class Dave {
 		DatabaseManager.truncateTable(DatabaseManager.TITLE_TAG_POST_TABLE);
 
 		Dave user = new Dave();
+
 		user.setForceUpdateTopAnswerers(true);
 		ArrayList<String> tagNameList = new ArrayList<String>();
-		tagNameList.add("ios");
-		tagNameList.add("android+");
-		TagScore tag = user.getTopUserMultipleTags(tagNameList, 1);
+		tagNameList.add("sql");
+		tagNameList.add("oracle");
+		TagScore tag = user.getTopUserMultipleTags(tagNameList);
 		System.out.println(tag.getUser().getUserId());
 		System.out.println(tag.getPostCount());
 	}

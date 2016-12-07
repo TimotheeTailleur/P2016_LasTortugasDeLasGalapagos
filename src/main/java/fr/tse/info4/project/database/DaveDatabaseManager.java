@@ -374,16 +374,16 @@ public class DaveDatabaseManager extends DatabaseManager {
 	/**
 	 * Return a list of users' id who sharing the tags in the tag list passed as a parameter
 	 * 
-	 * @param tagList : tag are identified by their id in the tag table
+	 * @param tagNameList : tag are identified by their id in the tag table
 	 * @return ArrayList<Integer>
 	 */
-	public static ArrayList<Integer> usersSharingTags(ArrayList<Integer> tagList){
+	public static List<Integer> usersSharingTags(List<Integer> tagIdList){
 		setup();
-		ArrayList<Integer> userList = new ArrayList<Integer>();
+		List<Integer> userList = new ArrayList<Integer>();
 		
-		for (int i = 0 ; i< tagList.size(); i++){
+		for (int i = 0 ; i< tagIdList.size(); i++){
 			
-			int idTag = tagList.get(i);
+			int idTag = tagIdList.get(i);
 			
 			String sql = "SELECT ID_USER FROM " + addDoubleQuotes(TITLE_TAG_POST_TABLE)	+ " WHERE ID_TAG = ?";
 			
@@ -459,7 +459,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	 * Sort (desc) and ArrayList of TagScore depending of the postCount
 	 * @param list
 	 */
-	public static void sort(ArrayList<TagScore> list){
+	public static void sort(List<TagScore> list){
 		for (int i =0 ; i<=list.size()-2 ; i++){
 			for (int j = (list.size() -1) ; i<j;j--){
 				if (list.get(j).getPostCount() > list.get(j-1).getPostCount()){
@@ -471,14 +471,14 @@ public class DaveDatabaseManager extends DatabaseManager {
 		}
 	}
 	
-	public static TagScore getTopAnswererMultipleTag(ArrayList<String> tagName, int topPosition) throws SQLException{
-		ArrayList<Integer> tagId = new ArrayList<Integer>(tagName.size());
+	public static TagScore getTopAnswererMultipleTag(List<String> tagName, int topPosition) throws SQLException{
+		List<Integer> tagId = new ArrayList<Integer>(tagName.size());
 		for (int i =0 ; i<tagName.size(); i++){
 			tagId.add(getTagId(tagName.get(i)));
 		}
-		ArrayList<Integer> potentialUsers = usersSharingTags(tagId);
+		List<Integer> potentialUsers = usersSharingTags(tagId);
 		
-		ArrayList<TagScore> tagScoreList = new ArrayList<TagScore>();
+		List<TagScore> tagScoreList = new ArrayList<TagScore>();
 		setup();
 		for (int i =0; i<potentialUsers.size() ; i++){
 			int idUser = potentialUsers.get(i);
