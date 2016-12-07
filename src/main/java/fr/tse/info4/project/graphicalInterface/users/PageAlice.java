@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.BoxLayout;
@@ -118,8 +120,6 @@ public class PageAlice extends TabReference {
 			}
 		});
 
-		
-
 		return connexion;
 	}
 
@@ -129,7 +129,7 @@ public class PageAlice extends TabReference {
 
 		JPanel newQestion = alice.showNewQuestion(alice);
 		// JPanel comparedBadges = showComparedBadge;//new JPanel();
-		// JPanel sortQuestion = alice.showSortedAnsweredQuestions(alice);
+		JPanel sortQuestion = alice.showSortedAnsweredQuestions(alice);
 
 		// autre solution qui marche toujours pas
 		/*
@@ -141,7 +141,7 @@ public class PageAlice extends TabReference {
 		resultat.setLayout(new BoxLayout(resultat, BoxLayout.LINE_AXIS));
 		resultat.add(newQestion);
 		// resultat.add(comparedBadges);
-		// resultat.add(sortQuestion);
+		resultat.add(sortQuestion);
 
 		return resultat;
 	}
@@ -152,7 +152,7 @@ public class PageAlice extends TabReference {
 
 		Alice al = new Alice();
 
-		TreeMap<String, PagedList<Question>> newQuestion = al.getNewQuestions(1200);
+		Map<String, PagedList<Question>> newQuestion = al.getNewQuestions(1200);
 
 		JLabel title = new JLabel("<html><b />Les nouvelles questions : </html>");
 		// title.setFont( title.getFont().deriveFont(title.BOLD) );
@@ -174,28 +174,25 @@ public class PageAlice extends TabReference {
 		return result;
 	}
 
-	/*
-	 * public JPanel showSortedAnsweredQuestions(PageAlice alice) { JPanel
-	 * result = new JPanel(); result.setLayout(new BoxLayout(result,
-	 * BoxLayout.PAGE_AXIS));
-	 * 
-	 * Alice al = new Alice(); // param : int nbQuestions, int nbHours, boolean
-	 * forceUpdate ArrayList<TreeMap<String, Integer>> listQuestion =
-	 * al.getSortedAnsweredQuestions(3, 0, true);
-	 * 
-	 * JLabel title = new
-	 * JLabel("<html><b />Questions répondues triées : </html>"); //
-	 * title.setFont( title.getFont().deriveFont(title.BOLD) );
-	 * result.add(title);
-	 * 
-	 * for (int i = 0; i < listQuestion.size(); i++) { Integer idQuestion =
-	 * listQuestion.get(i).get("idQuestion"); Integer score =
-	 * listQuestion.get(i).get("score"); JLabel question = new
-	 * JLabel(Alice.getLinkQuestion(idQuestion) + " avec un score de " + score);
-	 * result.add(question); }
-	 * 
-	 * return result; }
-	 */
+	public JPanel showSortedAnsweredQuestions(PageAlice alice) {
+		JPanel result = new JPanel();
+		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
+
+		Alice al = new Alice(); // param : int nbQuestions, int nbHours, boolean
+								// forceUpdate
+		List<Question> listQuestion = al.getSortedAnsweredQuestions(1200);
+
+		JLabel title = new JLabel("<html><b />Questions répondues triées : </html>");
+		// title.setFont( title.getFont().deriveFont(title.BOLD) );
+		result.add(title);
+
+		for (int i = 0; i < listQuestion.size(); i++) {
+			JLabel question = new JLabel(Alice.getLinkQuestion((int)listQuestion.get(i).getQuestionId()) + " avec un score de " + listQuestion.get(i).getScore());
+			result.add(question);
+		}
+
+		return result;
+	}
 
 	public JPanel showComparedBadge(PageAlice alice) {
 		JPanel result = new JPanel();
