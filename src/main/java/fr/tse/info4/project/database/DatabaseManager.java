@@ -274,6 +274,7 @@ public class DatabaseManager {
 	{
 		String tagName = "\'c\'";
 		System.out.println(tagName.substring(1, tagName.length()-1));
+		
 
 	}
 }

@@ -50,7 +50,7 @@ public class Main {
 		System.out.println("");
 		System.out.println("Iteration n2 -- Menu -- Alice");
 		System.out.println(
-				"0 - retour \n1 - Nouvelles questions dans vos domaines de compétences \n2 - Questions auxquelles vous avez répondues triées par leur poppularité");
+				"0 - retour \n1 - Nouvelles questions dans vos domaines de compétences \n2 - Questions auxquelles vous avez répondues triées par leur popularité");
 		System.out.print("Votre choix : ");
 		int res = sc.nextInt();
 		return res;
