@@ -8,11 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Map.Entry;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -31,15 +28,6 @@ import fr.tse.info4.project.user.Alice;
 
 public class PageAlice extends TabReference {
 
-	int idUser;
-
-	public int getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
-	}
 
 	public PageAlice() throws JSONException, IOException {
 
@@ -57,33 +45,64 @@ public class PageAlice extends TabReference {
 		JButton ButtonConnexion = new JButton("Connexion");
 		connexion.add(ButtonConnexion);
 
-		ButtonConnexion.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if ((JButton) e.getSource() == ButtonConnexion) {
-					String accessToken = Authenticate.getAcessToken();
-					alice.setIdUser((int) ApiManager.getIdUser(accessToken));
-					// alice.getPanel().remove(panelConnexion(alice));
-					// alice.getPanel().add(printAliceResults(alice));
-				}
-			}
-		});
-
 		final JButton offline = new JButton("Sans compte Stackoverflow");
 		connexion.add(offline);
 
-		// Les actions marchent pas, le changement de scène ne s'effectue pas
+		ButtonConnexion.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				String accessToken = Authenticate.getAcessToken();
+				Alice alToken=new Alice();
+				alToken.setAccesToken(accessToken);
+				ButtonConnexion.setVisible(false);
+				offline.setVisible(false);
+				try {
+					alice.getPanel().add(printAliceResults(alToken,"Token"));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+		});
+
+
 
 		offline.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				alice.setIdUser(1200);
-				alice.getPanel().remove(ButtonConnexion);
-				alice.getPanel().remove(offline);
+				
+				ButtonConnexion.setVisible(false);
+				offline.setVisible(false);
 				try {
 					alice.getPanel().add(printAliceResults(alice));
 				} catch (JSONException e) {
@@ -96,28 +115,29 @@ public class PageAlice extends TabReference {
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
-			public void mouseExited(MouseEvent arg0) {
+			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
-			public void mousePressed(MouseEvent arg0) {
+			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
+
 		});
 
 		return connexion;
@@ -131,17 +151,12 @@ public class PageAlice extends TabReference {
 		// JPanel comparedBadges = showComparedBadge;//new JPanel();
 		JPanel sortQuestion = alice.showSortedAnsweredQuestions(alice);
 
-		// autre solution qui marche toujours pas
-		/*
-		 * resultat.setLayout(new BorderLayout());
-		 * resultat.getRootPane().add(newQestion, BorderLayout.WEST);
-		 * resultat.getRootPane().add(sortQuestion, BorderLayout.EAST);
-		 */
 
 		resultat.setLayout(new BoxLayout(resultat, BoxLayout.LINE_AXIS));
 		resultat.add(newQestion);
 		// resultat.add(comparedBadges);
 		resultat.add(sortQuestion);
+		resultat.setVisible(true);
 
 		return resultat;
 	}
@@ -200,5 +215,80 @@ public class PageAlice extends TabReference {
 
 		return result;
 	}
+	
+
+	public JPanel printAliceResults(Alice alToken,String str) throws JSONException, IOException {
+
+		JPanel resultat = new JPanel();
+
+		JPanel newQestion = showNewQuestion(alToken,str);
+		// JPanel comparedBadges = showComparedBadge(alToken,str);//new JPanel();
+		JPanel sortQuestion = showSortedAnsweredQuestions(alToken,str);
+
+
+		resultat.setLayout(new BoxLayout(resultat, BoxLayout.LINE_AXIS));
+		resultat.add(newQestion);
+		// resultat.add(comparedBadges);
+		resultat.add(sortQuestion);
+		resultat.setVisible(true);
+
+		return resultat;
+	}
+	
+
+	public JPanel showNewQuestion(Alice alToken,String str) throws JSONException, IOException {
+		JPanel result = new JPanel();
+		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
+
+
+		Map<String, PagedList<Question>> newQuestion = alToken.getNewQuestions();
+
+		JLabel title = new JLabel("<html><b />Les nouvelles questions : </html>");
+		// title.setFont( title.getFont().deriveFont(title.BOLD) );
+		result.add(title);
+
+		for (Entry<String, PagedList<Question>> tagEntry : newQuestion.entrySet()) {
+			String tagName = tagEntry.getKey();
+			JLabel tag = new JLabel("\n- dans le tag " + tagName + " : ");
+			result.add(tag);
+			PagedList<Question> questionMap = tagEntry.getValue();
+			for (int i = 0; i < questionMap.getPageSize(); i++) {
+				String questionTitle = questionMap.get(i).getTitle();
+				JLabel tagQuestion = new JLabel("\t- " + questionTitle);
+				tagQuestion.setMaximumSize(new Dimension(500, 20));
+				result.add(tagQuestion);
+			}
+		}
+
+		return result;
+	}
+
+	public JPanel showSortedAnsweredQuestions(Alice alToken,String str) {
+		JPanel result = new JPanel();
+		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
+		
+		// param : int nbQuestions, int nbHours, boolean
+		// forceUpdate
+		List<Question> listQuestion = alToken.getSortedAnsweredQuestions();
+
+		JLabel title = new JLabel("<html><b />Questions répondues triées : </html>");
+		// title.setFont( title.getFont().deriveFont(title.BOLD) );
+		result.add(title);
+
+		for (int i = 0; i < listQuestion.size(); i++) {
+			JLabel question = new JLabel(Alice.getLinkQuestion((int)listQuestion.get(i).getQuestionId()) + " avec un score de " + listQuestion.get(i).getScore());
+			result.add(question);
+		}
+
+		return result;
+	}
+
+	public JPanel showComparedBadge(Alice alToken,String str) {
+		JPanel result = new JPanel();
+		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
+
+		return result;
+	}
+	
 
 }
