@@ -371,57 +371,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 		close();
 	}
 
-	/**
-	 * Return a list of users' id who sharing the tags in the tag list passed as
-	 * a parameter
-	 * 
-	 * @param tagNameList
-	 *            : tag are identified by their id in the tag table
-	 * @return ArrayList<Integer>
-	 */
-	public static List<Integer> usersSharingTags(List<Integer> tagIdList) {
-		setup();
-		List<Integer> userList = new ArrayList<Integer>();
-
-		for (int i = 0; i < tagIdList.size(); i++) {
-
-			int idTag = tagIdList.get(i);
-
-			String sql = "SELECT ID_USER FROM " + addDoubleQuotes(TITLE_TAG_POST_TABLE) + " WHERE ID_TAG = ?";
-
-			try {
-				PreparedStatement stmt = databaseConnection.prepareStatement(sql);
-				stmt.setInt(1, idTag);
-				ResultSet res = stmt.executeQuery();
-
-				if (i == 0) {
-					while (res.next()) {
-						userList.add(res.getInt("ID_USER"));
-					}
-				} else {
-					ArrayList<Integer> potentialUsersTemp = new ArrayList<Integer>();
-					while (res.next()) {
-						int idUser = res.getInt("ID_USER");
-
-						if (userList.contains(idUser)) {
-							potentialUsersTemp.add(idUser);
-						}
-					}
-					userList = potentialUsersTemp;
-				}
-
-				stmt.close();
-				res.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		close();
-		return userList;
-
-	}
-
+	
 	public static int getNbUsers(String tag) {
 
 		int idTag = getTagId(tag);
@@ -450,70 +400,6 @@ public class DaveDatabaseManager extends DatabaseManager {
 
 	}
 
-	/**
-	 * Sort (desc) and ArrayList of TagScore depending of the postCount
-	 * 
-	 * @param list
-	 */
-	public static void sort(List<TagScore> list) {
-		for (int i = 0; i <= list.size() - 2; i++) {
-			for (int j = (list.size() - 1); i < j; j--) {
-				if (list.get(j).getPostCount() > list.get(j - 1).getPostCount()) {
-					TagScore temp = list.get(j - 1);
-					list.set(j - 1, list.get(j));
-					list.set(j, temp);
-				}
-			}
-		}
-	}
-
-	public static TagScore getTopAnswererMultipleTag(List<String> tagName, int topPosition) throws SQLException {
-		List<Integer> tagId = new ArrayList<Integer>(tagName.size());
-		for (int i = 0; i < tagName.size(); i++) {
-			tagId.add(getTagId(tagName.get(i)));
-		}
-		List<Integer> potentialUsers = usersSharingTags(tagId);
-
-		List<TagScore> tagScoreList = new ArrayList<TagScore>();
-		setup();
-		for (int i = 0; i < potentialUsers.size(); i++) {
-			int idUser = potentialUsers.get(i);
-			int totalPostCount = 0;
-			for (int j = 0; j < tagId.size(); j++) {
-				int idTag = tagId.get(j);
-				String sql = "SELECT POST_COUNT FROM "
-						+ DatabaseManager.addDoubleQuotes(DatabaseManager.TITLE_TAG_POST_TABLE)
-						+ " WHERE ID_USER = ? AND ID_TAG = ?";
-				PreparedStatement stmt = DatabaseManager.databaseConnection.prepareStatement(sql);
-				stmt.setInt(1, idUser);
-				stmt.setInt(2, idTag);
-				ResultSet res = stmt.executeQuery();
-
-				int postCount = 0;
-				if (res.next()) {
-					postCount = res.getInt("POST_COUNT");
-				}
-
-				totalPostCount += postCount;
-				stmt.close();
-				res.close();
-			}
-			User user = new User();
-			user.setUserId(idUser);
-			TagScore tagScore = new TagScore();
-			tagScore.setUser(user);
-			tagScore.setPostCount(totalPostCount);
-			tagScoreList.add(tagScore);
-		}
-		close();
-		sort(tagScoreList);
-
-		if (topPosition < tagScoreList.size()) {
-			return tagScoreList.get(topPosition);
-		}
-
-		return null;
-	}
 
 	/**
 	 * Return the max post count for a user in a set of tags

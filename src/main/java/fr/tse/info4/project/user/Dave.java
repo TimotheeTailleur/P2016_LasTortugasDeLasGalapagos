@@ -1,25 +1,18 @@
 package fr.tse.info4.project.user;
 
 import java.io.IOException;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.plaf.metal.MetalBorders.InternalFrameBorder;
-import javax.xml.crypto.Data;
+import java.util.Map;
 
 import org.json.JSONException;
 
-import com.google.code.stackexchange.common.PagedList;
-import com.google.code.stackexchange.schema.Paging;
-import com.google.code.stackexchange.schema.StackExchangeSite;
-import com.google.code.stackexchange.schema.Tag;
+import com.google.code.stackexchange.schema.User;
 
 import fr.tse.info4.project.database.DatabaseManager;
 import fr.tse.info4.project.database.DaveDatabaseManager;
-import fr.tse.info4.project.datarecovery.ApiManager;
-import fr.tse.info4.project.datarecovery.DaveApiManager;
 import fr.tse.info4.project.schema.TagScore;
 
 /**
@@ -28,7 +21,6 @@ import fr.tse.info4.project.schema.TagScore;
  *
  */
 public class Dave {
-
 
 	/*
 	 * Number of top answerers in a given tag (Dave 1). Default value of 10
@@ -47,9 +39,6 @@ public class Dave {
 	 * false
 	 */
 	private boolean forceUpdateTopAnswerers = false;
-
-	// ----------------- Third method : --------------------------------------
-
 
 	/* Constructor */
 	public Dave() {
@@ -86,8 +75,6 @@ public class Dave {
 		this.forceUpdateTopAnswerers = forceUpdateTopAnswerers;
 	}
 
-
-
 	/**
 	 * Returns Stack Overflow profile URL of user (id)
 	 * 
@@ -103,8 +90,8 @@ public class Dave {
 
 	// -----------------------User story 1 ---------------------------
 
-	/**(
-	 * Return a list of TagScore, sorted by post count(desc) of the top
+	/**
+	 * ( Return a list of TagScore, sorted by post count(desc) of the top
 	 * answerers in the given tag If the refresh rate (of top answerers) is
 	 * exceeded, of if the user wants to force the update (variable
 	 * forceUpdateTopAnswerers), data concerning the tags are updated.
@@ -175,73 +162,66 @@ public class Dave {
 
 	/**
 	 * 
-	 * Return true if the array tagsScore contains the user identified by idUser. <br>
-	 * False otherwise
-	 * 
-	 * @param tagsScores
-	 * @param idUser
-	 * @return
-	 */
-	public static boolean contains(ArrayList<TagScore> tagsScores, int idUser){
-		for (int i =0 ; i<tagsScores.size(); i++){
-			if ( (int) tagsScores.get(i).getUser().getUserId() == idUser){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * 
 	 * Return a tagScore corresponding to the user who have the best post count
-	 * among the tagNameList	 * 
+	 * among the tagNameList *
 	 * 
 	 * @param tagNameList
-	 * @return *         <ul>
-	 *         <li>TagScore</li>
-	 *         <li>null if no user have been found </li>
-	 *         </ul>
+	 * @return TagScore
 	 * @throws SQLException
 	 */
-	public TagScore getTopUserMultipleTags(List<String> tagNameList) throws SQLException{
+	public TagScore getTopUserMultipleTags(List<String> tagNameList) throws SQLException {
 		int nbUsersTemp = nbUsers;
 		nbUsers = 30;
-		
-		for (int i = 0 ; i<tagNameList.size(); i++){
-			String tagName  = tagNameList.get(i);
+
+		List<TagScore> topAnswerers = new ArrayList<TagScore>();
+		for (int i = 0; i < tagNameList.size(); i++) {
+			String tagName = tagNameList.get(i);
 			int nbUsersDatabase = DaveDatabaseManager.getNbUsers(tagName);
 			boolean forceUpdateTemp = forceUpdateTopAnswerers;
-			if (nbUsersDatabase < nbUsers){
+			if (nbUsersDatabase < nbUsers) {
 				forceUpdateTopAnswerers = true;
 			}
-			getTopAnswerers(tagName);
+			List<TagScore> topAnswerersPerTag = getTopAnswerers(tagName);
+			for (int j = 0; j < topAnswerersPerTag.size(); j++) {
+				topAnswerers.add(topAnswerersPerTag.get(j));
+			}
 			forceUpdateTopAnswerers = forceUpdateTemp;
 		}
-		
+
+		Map<Long, Integer> users = new HashMap<Long, Integer>();
+		for (int i = 0; i < topAnswerers.size(); i++) {
+			long userId = topAnswerers.get(i).getUser().getUserId();
+			int postCount = topAnswerers.get(i).getPostCount();
+			if (!users.containsKey(userId)) {
+				users.put(userId, postCount);
+			} else {
+				users.put(userId, users.get(userId) + postCount);
+			}
+		}
 
 		nbUsers = nbUsersTemp;
-		
-		return DaveDatabaseManager.getTopAnswererMultipleTag(tagNameList, 1);
-		
-		
+
+		int maxPostCount = 0;
+		long id = 0;
+		for (Map.Entry<Long, Integer> entry : users.entrySet()) {
+			int postCount = entry.getValue();
+			Long idUser = entry.getKey();
+			if (postCount > maxPostCount) {
+				maxPostCount = postCount;
+				id = idUser;
+
+			}
+		}
+
+		User user = new User();
+		user.setUserId(id);
+		return new TagScore(maxPostCount, 0, user);
+
 	}
-	
-	
 
 	// Méthode main pour démo
-	public static void main(String[] args) throws SQLException {
-		DatabaseManager.setup();
-		DatabaseManager.truncateTable(DatabaseManager.TITLE_TAG_POST_TABLE);
+	public static void main(String[] args) {
 
-		Dave user = new Dave();
-
-		user.setForceUpdateTopAnswerers(true);
-		ArrayList<String> tagNameList = new ArrayList<String>();
-		tagNameList.add("sql");
-		tagNameList.add("oracle");
-		TagScore tag = user.getTopUserMultipleTags(tagNameList);
-		System.out.println(tag.getUser().getUserId());
-		System.out.println(tag.getPostCount());
 	}
 
 }

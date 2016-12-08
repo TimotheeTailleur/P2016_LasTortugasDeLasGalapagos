@@ -4,7 +4,9 @@ import com.google.code.stackexchange.schema.User;
 
 public class TagScore {
 
-	
+
+
+
 	public static enum Period{
 		ALL_TIME("all_time"),
 		MOUTH("mouth");
@@ -77,6 +79,30 @@ public class TagScore {
 	public String toString() {
 		return "TagScore [postCount=" + postCount + ", score=" + score + ", user=[userId=" + user.getUserId() + ", display_name="+user.getDisplayName()+"]";
 	}
+
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TagScore other = (TagScore) obj;
+		if (postCount != other.postCount)
+			return false;
+		if (score != other.score)
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+
 	
 	
 	

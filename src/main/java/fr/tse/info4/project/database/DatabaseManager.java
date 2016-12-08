@@ -9,12 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
-import org.apache.derby.catalog.GetProcedureColumns;
 import org.json.JSONException;
 
-import fr.tse.info4.project.datarecovery.StackExchangeApiManager;
+
 
 /**
  * Class that manages the database (connection and driver setup, updates and insertions, general queries, truncature of tables)
@@ -65,33 +63,8 @@ public class DatabaseManager {
 	 * Connection item to manipulate the database
 	 */
 	public static Connection databaseConnection;
-	
-	
-
 
 	
-	public static void getTags(int page) throws JSONException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
-		// Remplir la table tag à partir de l'api.
-		// L'api limite à 30 appels par secondes et à 10 000 appels par jour (remplissage en plusieurs fois) !
-		
-		
-		ArrayList<String> tagNames = StackExchangeApiManager.getTags(page);
-		setup();
-		PreparedStatement stmtSelect = databaseConnection.prepareStatement("SELECT ID_TAG FROM "+addDoubleQuotes(TITLE_TAG_TABLE)+"WHERE TAG_NAME =  ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-		PreparedStatement stmtInsert = databaseConnection.prepareStatement("INSERT INTO "+addDoubleQuotes(TITLE_TAG_TABLE)+"(TAG_NAME) VALUES (?)");
-		
-		for(String name : tagNames){			
-			name= addSimpleQuotes(name);
-			stmtSelect.setString(1,name);
-			ResultSet res = stmtSelect.executeQuery();
-			if(res.isBeforeFirst()==false){
-				stmtInsert.setString(1,name);
-				stmtInsert.executeUpdate();
-			}			
-		}
-		close();
-		
-	}
 	
 	public static String addDoubleQuotes(String str){
 		return '"' + str + '"';
