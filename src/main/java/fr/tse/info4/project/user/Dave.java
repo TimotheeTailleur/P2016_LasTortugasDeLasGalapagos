@@ -23,20 +23,20 @@ import fr.tse.info4.project.schema.TagScore;
 public class Dave {
 
 	/*
-	 * Number of top answerers in a given tag (Dave 1). Default value of 10
+	 * Number of top answerers in a given tag (Dave 1). 
+	 * <br> Default value : 10
 	 */
 	private int nbUsers = 10;
 
 	/*
-	 * Time between 2 update of data concerning the top answerers (in hours).
-	 * Default value : 24h.
+	 * Time between 2 updates of top answerers data (in hours).
+	 * <br> Default value : 24h.
 	 */
 	private int refreshRateTopAnswerers = 24;
 
 	/*
-	 * Variable allowing to force the update of the data of the first dave story
-	 * (topAnswerers), even if the refreshRate is not exceeded. Default value :
-	 * false
+	 * Boolean changed or not by the user. If true, database update will be forced. If false, time between two updates will be refreshRateTopAnswerers
+	 * <br> Default value : false
 	 */
 	private boolean forceUpdateTopAnswerers = false;
 
@@ -91,7 +91,7 @@ public class Dave {
 	// -----------------------User story 1 ---------------------------
 
 	/**
-	 * ( Return a list of TagScore, sorted by post count(desc) of the top
+	 * Returns a list of TagScore objects, sorted by post count(desc) of the top
 	 * answerers in the given tag If the refresh rate (of top answerers) is
 	 * exceeded, of if the user wants to force the update (variable
 	 * forceUpdateTopAnswerers), data concerning the tags are updated.
@@ -126,11 +126,8 @@ public class Dave {
 
 	// --------------------------- User Story 2 ------------------------------
 	/**
-	 * Return the tagScore corresponding to the user who has the best score in a
-	 * given tag (passed as a parameter) If the refresh rate (of top answerers)
-	 * is exceeded, of if the user wants to force the update (variable
-	 * forceUpdateTopAnswerers), data concerning the tags are updated.
-	 * 
+	 * Return Top tag in given tag (aka : user who has highest score in given tag)
+	 * Returns a list of TagScore objects.
 	 * @param tag
 	 * @return
 	 *         <ul>
@@ -162,8 +159,8 @@ public class Dave {
 
 	/**
 	 * 
-	 * Return a tagScore corresponding to the user who have the best post count
-	 * among the tagNameList *
+	 * Returns top contributor in given tag list (aka : user who has posted the most in the given set of tags
+	 * Returns a TagScore object
 	 * 
 	 * @param tagNameList
 	 * @return TagScore

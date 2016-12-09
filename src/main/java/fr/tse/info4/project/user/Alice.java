@@ -23,6 +23,9 @@ import fr.tse.info4.project.datarecovery.ApiManager;
  */
 public class Alice {
 
+	/*
+	 * Application user access token. <br> Default value : null
+	 */
 	private String accessToken = null;
 
 	// ------------- Alice 1 ----------------
@@ -30,8 +33,9 @@ public class Alice {
 	protected int nbTags = 3;
 
 	/*
-	 * Number of question for each tag. Limited tp 100 questions <br> Default
-	 * value : 3
+	 * Number of newest questions displayed for each tag. 
+	 * <br> Limited to 100 questions 
+	 * <br> Default value : 3
 	 */
 	private int nbQuestionsPerTag = 3;
 
@@ -60,9 +64,10 @@ public class Alice {
 
 	// ----------------------- Alice 1 : New Questions ------------------------
 	/**
-	 * For each tag in top 100 tag List, get nbQuestionsPerTag the newest
-	 * unanswered posts on stackoverflow and add themp to a treemap for display
-	 * User id identified by its id.
+	 * For each tag in top 100 tag List, get the nbQuestionsPerTag newest
+	 * unanswered posts on stackoverflow and add them to a treemap for display
+	 * 
+	 * Overloaded to use AccessToken authentication or enter a given userId
 	 * 
 	 * @param idUser
 	 * @return
@@ -71,7 +76,7 @@ public class Alice {
 	public Map<String, PagedList<Question>> getNewQuestions(int idUser) {
 		PagedList<Tag> tags = ApiManager.getTags(nbTags, idUser);
 		if (tags.size() == 0) {
-			System.err.println("No tag for this user");
+			System.err.println("No tags for this user");
 			return null;
 		}
 		Map<String, PagedList<Question>> questionsForTags = new HashMap<String, PagedList<Question>>();
@@ -86,15 +91,14 @@ public class Alice {
 	}
 
 	/**
-	 * For each tag in top 100 tag List, get nbQuestionsPerTag the newest
-	 * unanswered posts on stackoverflow and add themp to a treemap for display.
-	 * User id identified by its access token.
+	 * Overloads getNewQuestions to allow for accesToken authentication
+	 * 
 	 * 
 	 * @return
 	 */
 	public Map<String, PagedList<Question>> getNewQuestions() {
 		if (accessToken == null) {
-			System.err.println("Access token doesn't specified");
+			System.err.println("Access token isn't specified");
 			return null;
 		}
 		return getNewQuestions((int) ApiManager.getIdUser(accessToken));
@@ -113,6 +117,13 @@ public class Alice {
 		// StackExchangeApiManager.getUserBadgeAwardCounts(userId);
 		return null;
 	}
+	
+	/**
+	 * Sort the questions to which a user has given answers by popularity
+	 * Overloaded to use AccessToken authentication or enter a given userId
+	 * @param idUser
+	 * @return
+	 */
 
 	public List<Question> getSortedAnsweredQuestions(int idUser) {
 		List<Answer> answers = AliceApiManager.getAnswers(idUser, nbAnswers);
@@ -128,6 +139,10 @@ public class Alice {
 		return AliceApiManager.getSortedQuestions(idsQuestions);
 	}
 	
+	/**
+	 * Overloads getSortedAnsweredQuestions to allow for accessToken authentication
+	 * @return
+	 */
 	public List<Question> getSortedAnsweredQuestions(){
 		if (accessToken == null) {
 			System.err.println("Access token doesn't specified");

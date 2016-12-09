@@ -22,7 +22,7 @@ public class Bob {
 	
 	/*
 	 * Number of Bob's most popular tags. <br> Number limited to 100 tags
-	 * Default value : 5.
+	 * <br> Default value : 5.
 	 */
 	private int nbTags = 5;
 
