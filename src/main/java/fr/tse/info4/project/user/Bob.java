@@ -14,15 +14,14 @@ import fr.tse.info4.project.datarecovery.BobApiManager;
 public class Bob {
 
 	/*
-	 * Access token of the user for the application. <br> Default value : null
-	 * 
+	 * Application user access token. <br> Default value : null
 	 */
 	private String accessToken = null;
 
-	// ------------------ BOB 4 : new Questions by user's tags -----------------
+	// ------------------ BOB 4 : Recent answered questions in user's top tags -----------------
 	
 	/*
-	 * Number of the most popular tags of Bob. <br> Number limited to 100 tags
+	 * Number of Bob's most popular tags. <br> Number limited to 100 tags
 	 * Default value : 5.
 	 */
 	private int nbTags = 5;
@@ -56,15 +55,14 @@ public class Bob {
 	}
 
 	/**
-	 * Return the new questions (with at least one answer) amon user's best
-	 * popular tags <br>
-	 * User id identified by his acces token.
+	 * Returns recent answered  questions (with at least one answer) in user's top tags <br>
+	 * User id obtained by access token.
 	 * 
 	 * @return
 	 */
 	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered() {
 		if (accessToken == null) {
-			System.err.println("Access token doesn't specified");
+			System.err.println("Access token isn't specified");
 			return null;
 		}
 		return getNewQuestionsAnswered((int) ApiManager.getIdUser(accessToken));
@@ -73,7 +71,7 @@ public class Bob {
 	/**
 	 * Return the new questions (with at least one answer) amon user's best
 	 * popular tags <br>
-	 * User id identified by his id.
+	 * User  identified by his id.
 	 * 
 	 * @return
 	 */
