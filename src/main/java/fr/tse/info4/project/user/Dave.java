@@ -9,18 +9,17 @@ import java.util.Map;
 
 import org.json.JSONException;
 
-import com.google.code.stackexchange.schema.User;
-
 import fr.tse.info4.project.database.DatabaseManager;
 import fr.tse.info4.project.database.DaveDatabaseManager;
 import fr.tse.info4.project.schema.TagScore;
+import fr.tse.info4.project.schema.TopTagUser;
 
 /**
  * 
  * Function and demo main method for user story Dave
  *
  */
-public class Dave {
+public class Dave{
 
 	/*
 	 * Number of top answerers in a given tag (Dave 1). 
@@ -157,68 +156,54 @@ public class Dave {
 
 	// ----------------------------- User Story 3 -------------------------
 
+	
 	/**
 	 * 
 	 * Returns top contributor in given tag list (aka : user who has posted the most in the given set of tags
 	 * Returns a TagScore object
 	 * 
-	 * @param tagNameList
+	 * @param tagsName
 	 * @return TagScore
 	 * @throws SQLException
 	 */
-	public TagScore getTopUserMultipleTags(List<String> tagNameList) throws SQLException {
+	public TagScore getTopUserMultipleTags(List<String> tagsName){
 		int nbUsersTemp = nbUsers;
 		nbUsers = 30;
 
-		List<TagScore> topAnswerers = new ArrayList<TagScore>();
-		for (int i = 0; i < tagNameList.size(); i++) {
-			String tagName = tagNameList.get(i);
+		Map<Integer, TopTagUser> topTagUsers = new HashMap<>();
+		for (int i = 0; i < tagsName.size(); i++) {
+			String tagName = tagsName.get(i);
 			int nbUsersDatabase = DaveDatabaseManager.getNbUsers(tagName);
 			boolean forceUpdateTemp = forceUpdateTopAnswerers;
 			if (nbUsersDatabase < nbUsers) {
 				forceUpdateTopAnswerers = true;
 			}
 			List<TagScore> topAnswerersPerTag = getTopAnswerers(tagName);
-			for (int j = 0; j < topAnswerersPerTag.size(); j++) {
-				topAnswerers.add(topAnswerersPerTag.get(j));
+			
+			for (TagScore topAnswerer : topAnswerersPerTag){
+				int id = (int) topAnswerer.getUser().getUserId();
+				if (topTagUsers.containsKey(id)){
+					
+				}
+				else
+				{
+					
+				}
+				
 			}
+			
 			forceUpdateTopAnswerers = forceUpdateTemp;
 		}
 
-		Map<Long, Integer> users = new HashMap<Long, Integer>();
-		for (int i = 0; i < topAnswerers.size(); i++) {
-			long userId = topAnswerers.get(i).getUser().getUserId();
-			int postCount = topAnswerers.get(i).getPostCount();
-			if (!users.containsKey(userId)) {
-				users.put(userId, postCount);
-			} else {
-				users.put(userId, users.get(userId) + postCount);
-			}
-		}
-
-		nbUsers = nbUsersTemp;
-
-		int maxPostCount = 0;
-		long id = 0;
-		for (Map.Entry<Long, Integer> entry : users.entrySet()) {
-			int postCount = entry.getValue();
-			Long idUser = entry.getKey();
-			if (postCount > maxPostCount) {
-				maxPostCount = postCount;
-				id = idUser;
-
-			}
-		}
-
-		User user = new User();
-		user.setUserId(id);
-		return new TagScore(maxPostCount, 0, user);
+		
+		return null;
 
 	}
 
 	// Méthode main pour démo
 	public static void main(String[] args) {
 
+		
 	}
 
 }
