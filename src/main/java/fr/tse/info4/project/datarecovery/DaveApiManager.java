@@ -29,16 +29,20 @@ public class DaveApiManager extends ApiManager {
 
 	public static final String GET_TOP_ANSWERERS = "com.google.code.stackexchange.client.getTagTopAnswerers";
 
-	/* FILTERS */
+	// FILTERS
 	private static final String TOP_ANSWERERS_FILTER = "!*Jxe6D.tT0bNxx(Z";
 
+	/**
+	 * Constructor to use applicationKey and specify StackExchangeSite
+	 * @param applicationKey
+	 * @param site
+	 */
 	public DaveApiManager(String applicationKey, StackExchangeSite site) {
 		super(applicationKey, site);
 	}
 
 	/**
-	 * Returns the top 30 answerers active un a single taf of the last 30 days
-	 * the the stack overflow api returns
+	 * Returns the top 30 answerers active in a single tag in the last 30 days
 	 * 
 	 * @param String
 	 *            tag
@@ -82,7 +86,7 @@ public class DaveApiManager extends ApiManager {
 	 * 
 	 * @param tagName
 	 * @param list
-	 * @return True if the pagedList contains the tag named tagName
+	 * @return True if pagedList contains tag (tagName)
 	 */
 	public static boolean contains(String tagName, PagedList<Tag> list) {
 		for (int i = 0; i < list.size(); i++) {

@@ -16,6 +16,12 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	/* Site (stack overflow) */
 	public final static StackExchangeSite SITE = StackExchangeSite.STACK_OVERFLOW;
 	
+	/**
+	 * Constructor to use application key with every api url execution
+	 * and specify StackExchange website on which execute querries
+	 * @param applicationKey
+	 * @param site
+	 */
 	public ApiManager(String applicationKey, StackExchangeSite site) {
 		super(applicationKey, site);
 
@@ -23,7 +29,7 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 
 	/**
 	 * 
-	 * Return the id of the user identified with its acces token
+	 * Returns userId of user identified by (accessToken)
 	 * 
 	 * @param accessToken
 	 * @return

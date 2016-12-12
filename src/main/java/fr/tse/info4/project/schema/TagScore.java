@@ -2,11 +2,19 @@ package fr.tse.info4.project.schema;
 
 import com.google.code.stackexchange.schema.User;
 
+/**
+ * Class that regroups tag data (tag name, tag score and post count)
+ * ALso implements an enum to pass periods of time as parameters in Api Urls
+ *
+ */
 public class TagScore {
 
 
-
-
+	/**
+	 * Enum representing Period Tag Api Urls parameter
+	 * 
+	 *
+	 */
 	public static enum Period{
 		ALL_TIME("all_time"),
 		MOUTH("mouth");
@@ -27,7 +35,7 @@ public class TagScore {
 	private int postCount;
 	/* Score in the given tag */
 	private int score;
-		/* The user */
+	/* The user */
 	private User user;
 	
 	/**
@@ -36,8 +44,6 @@ public class TagScore {
 	 * @param score
 	 * @param user
 	 */
-	
-	
 	
 	public TagScore(int postCount, int score, User user) {
 		super();
@@ -55,27 +61,54 @@ public class TagScore {
 	}
 
 
-
+	/**
+	 * tag post count getter
+	 * @return
+	 */
 	public int getPostCount() {
 		return postCount;
 	}
+	/**
+	 * tag post count setter
+	 * @param postCount
+	 */
 	public void setPostCount(int postCount) {
 		this.postCount = postCount;
 	}
+	/**
+	 * tag score getter
+	 * @return
+	 */
 	public int getScore() {
 		return score;
 	}
+	/**
+	 * Score setter
+	 * @param score
+	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
+	/**
+	 * staeckexchange api sdk User Object getter
+	 * @return
+	 */
 	public User getUser() {
 		return user;
 	}
+	/**
+	 * User setter
+	 * @param user
+	 */
 	public void setUser(User user) {
 		this.user = user;
 	}
 	
+
 	@Override
+	/**
+	 * Returns a String object representing TagScore object
+	 */
 	public String toString() {
 		return "TagScore [postCount=" + postCount + ", score=" + score + ", user=[userId=" + user.getUserId() + ", display_name="+user.getDisplayName()+"]";
 	}

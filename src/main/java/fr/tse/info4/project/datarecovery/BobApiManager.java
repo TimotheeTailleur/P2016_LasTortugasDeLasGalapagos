@@ -15,8 +15,8 @@ public class BobApiManager {
 	
 
 	/**
-	 * Return the new questions in the tag passed as a parameter. <br>
-	 * The questions returned have at least one answer
+	 * Return the new questions in the tag passed as parameter. <br>
+	 * The returned questions have at least one answer
 	 * 
 	 * @param tag
 	 * @param nbQuestions

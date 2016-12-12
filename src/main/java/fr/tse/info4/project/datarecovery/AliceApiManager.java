@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.google.code.stackexchange.client.StackExchangeApiClient;
 import com.google.code.stackexchange.client.StackExchangeApiClientFactory;
@@ -180,7 +180,6 @@ public class AliceApiManager extends ApiManager {
 					case "bronze":
 						currentBadge.setRank(BadgeRank.BRONZE);
 						break;
-					
 					case "silver":
 						currentBadge.setRank(BadgeRank.SILVER);
 						break;
@@ -196,12 +195,16 @@ public class AliceApiManager extends ApiManager {
 		return userBadges;
 }
 
-	public List<Badge> getRarestBadges (int userId)
+	/**
+	 
+	 * @param userId
+	 * @return 
+	 */
+	
+	public void compareBadges (int userId)
 	{
 		List<Badge> userBadges = getUserBadges(userId);
-		
-		
-		return null;
+
 	}
 	
 	

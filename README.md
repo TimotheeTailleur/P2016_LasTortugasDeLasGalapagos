@@ -26,11 +26,6 @@ pom.xml :
 ```
 <dependencies>
 	<dependency>
-		<groupId>org.json</groupId>
-		<artifactId>json</artifactId>
-		<version>20090211</version>
-	</dependency>
-	<dependency>
 		<groupId>org.apache.derby</groupId>
 		<artifactId>derby</artifactId>
 		<version>10.12.1.1</version>
@@ -44,11 +39,11 @@ pom.xml :
 ```
 Apache Derby : Embedded database containing static tables of StackOverflowData (i.e : list of the 47k tags on StackOverflow)
 
-Org.Json : Used to parse JSON data returned by the StackExchangeApi
-
 StackOverflow Java Sdk Release : StackExchange Api Java SDK released by [SanjivSingh] (https://github.com/sanjivsingh/stackoverflow-java-sdk) based on work by a [google code user] (http://code.google.com/p/stackoverflow-java-sdk/) 
 
 ## Javadoc
 
 Javadoc located [here](http://lastortugas-javadoc.pagesperso-orange.fr/) (last update : 08/12/2016)
 
+## Credits
+Sanjivsingh for his StackExchange Api Java SDK [github repo] (https://github.com/sanjivsingh/stackoverflow-java-sdk)

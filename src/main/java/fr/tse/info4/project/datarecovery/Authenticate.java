@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 /**
  * 
- * Handle the authentification for an end user thanks to the OAuth2 protocol
+ * Handles end user authentication using Oauth2
  *
  */
 @SuppressWarnings("restriction")
@@ -78,7 +78,7 @@ public class Authenticate extends Application {
     
    /**
     * 
-    * Open a window asking to the user his username and his password.
+    * Open a window asking the user his username and password.
     * Uses JavaFx library
     * @return access token
     */
