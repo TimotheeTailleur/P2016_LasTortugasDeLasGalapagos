@@ -2,14 +2,13 @@ package fr.tse.info4.project.user;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
 
-import fr.tse.info4.project.database.DatabaseManager;
+
 import fr.tse.info4.project.database.DaveDatabaseManager;
 import fr.tse.info4.project.schema.TagScore;
 import fr.tse.info4.project.schema.TopTagUser;
@@ -19,7 +18,7 @@ import fr.tse.info4.project.schema.TopTagUser;
  * Function and demo main method for user story Dave
  *
  */
-public class Dave{
+public class Dave extends Personae {
 
 	/*
 	 * Number of top answerers in a given tag (Dave 1). 
@@ -41,7 +40,7 @@ public class Dave{
 
 	/* Constructor */
 	public Dave() {
-
+		manager = new DaveDatabaseManager();
 	}
 
 	// --------- Getters & Setters -------------
@@ -103,23 +102,23 @@ public class Dave{
 	 *         </ul>
 	 */
 	public List<TagScore> getTopAnswerers(String tag) {
-		int idTag = DatabaseManager.getTagId(tag);
+		int idTag = manager.getTagId(tag);
 		if (idTag == -1) {
 			return null;
 		}
-		long time = DaveDatabaseManager.getTimeUpdateTopTag(idTag);
+		long time = ((DaveDatabaseManager)manager).getTimeUpdateTopTag(idTag);
 
 		if (time > refreshRateTopAnswerers * 3600 || time == -1 || forceUpdateTopAnswerers) {
 
-			DaveDatabaseManager.updateDateTag(idTag);
+			((DaveDatabaseManager)manager).updateDateTag(idTag);
 			try {
-				DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag);
+				((DaveDatabaseManager)manager).fillDaveTables(idTag);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 
-		return DaveDatabaseManager.getTopAnswerers(nbUsers, idTag);
+		return ((DaveDatabaseManager)manager).getTopAnswerers(nbUsers, idTag);
 
 	}
 
@@ -135,23 +134,23 @@ public class Dave{
 	 *         </ul>
 	 */
 	public TagScore getTopTag(String tag) {
-		int idTag = DatabaseManager.getTagId(tag);
+		int idTag = manager.getTagId(tag);
 		if (idTag == -1) {
 			return null;
 		}
-		long time = DaveDatabaseManager.getTimeUpdateTopTag(idTag);
+		long time = ((DaveDatabaseManager)manager).getTimeUpdateTopTag(idTag);
 
 		if (time > refreshRateTopAnswerers * 3600 || time == -1 || forceUpdateTopAnswerers) {
-			DaveDatabaseManager.updateDateTag(idTag);
+			((DaveDatabaseManager)manager).updateDateTag(idTag);
 			try {
-				DaveDatabaseManager.fillDaveTablesTopAnswerers(idTag);
+				((DaveDatabaseManager)manager).fillDaveTables(idTag);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		return DaveDatabaseManager.getTopTag(idTag);
+		return ((DaveDatabaseManager)manager).getTopTag(idTag);
 	}
 
 	// ----------------------------- User Story 3 -------------------------
@@ -173,7 +172,7 @@ public class Dave{
 		Map<Integer, TopTagUser> topTagUsers = new HashMap<>();
 		for (int i = 0; i < tagsName.size(); i++) {
 			String tagName = tagsName.get(i);
-			int nbUsersDatabase = DaveDatabaseManager.getNbUsers(tagName);
+			int nbUsersDatabase = ((DaveDatabaseManager)manager).getNbUsers(tagName);
 			boolean forceUpdateTemp = forceUpdateTopAnswerers;
 			if (nbUsersDatabase < nbUsers) {
 				forceUpdateTopAnswerers = true;
@@ -203,7 +202,8 @@ public class Dave{
 	// Méthode main pour démo
 	public static void main(String[] args) {
 
-		
+		Personae personne = new Dave();
+		System.out.println(((Dave) personne).getTopAnswerers("c++"));
 	}
 
 }
