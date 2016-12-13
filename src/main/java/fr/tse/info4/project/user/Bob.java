@@ -1,6 +1,7 @@
 package fr.tse.info4.project.user;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -17,6 +18,26 @@ public class Bob {
 	 * Application user access token. <br> Default value : null
 	 */
 	private String accessToken = null;
+	
+	/**
+	 * ApiManager for Bob user story
+	 */
+	private BobApiManager apiManager;
+	
+	/**
+	 * Constructor. Initiates BobApiManager
+	 */
+	public Bob() {
+		super();
+		apiManager = new BobApiManager();
+	}
+	/**
+	 * Accesstoken getter
+	 * @param accessToken
+	 */
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
 
 	// ------------------ BOB 4 : Recent answered questions in user's top tags -----------------
 	
@@ -31,10 +52,6 @@ public class Bob {
 	 * <br> Number limited to 30 questions
 	 */
 	private int nbQuestionsPerTag = 3;
-
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
 
 	public int getNbTags() {
 		return nbTags;
@@ -69,8 +86,7 @@ public class Bob {
 	}
 
 	/**
-	 * Return the new questions (with at least one answer) amon user's best
-	 * popular tags <br>
+	 * Returns recent answered  questions (with at least one answer) in user's top tags <br>
 	 * User  identified by his id.
 	 * 
 	 * @return
@@ -94,6 +110,51 @@ public class Bob {
 
 	}
 
+	// ------------------ BOB 2 : Suggest keywords (tags) based on user input of a Question title -----------------
+	
+	/**
+	 * Suggest keywords based on title of the question the user wishes to submit
+	 * @param questionTitle
+	 * @return
+	 */
+	public List<String> findKeyWords(String questionTitle)
+	{
+		
+		return apiManager.findKeyWords(questionTitle);
+	}
+	
+	// ------------------ BOB 1 : Find similar questions to the one the user wishes to submit -----------------
+	
+	/**
+	 * Number of similar questions to display when a user's entering a questionTitle
+	 * <br> Default value : 10
+	 */
+	private int nbSimilarQuestions = 10;
+	
+	/**
+	 * nbSimilarQuestions setter
+	 * @param nbSimilarQuestions
+	 */
+	public void setNbSimilarQuestions(int nbSimilarQuestions) {
+		this.nbSimilarQuestions = nbSimilarQuestions;
+	}
+	
+	/**
+	 * Find similar questions to that which the user wishes to submit
+	 * @param questionTitle 
+	 * @return
+	 */
+	public List<Question> findSimilarQuestions(String questionTitle)
+	{
+		return apiManager.findSimilarQuestions(questionTitle, nbSimilarQuestions);
+	}
+	
+	
+	
+	/**
+	 * Main demo method
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Bob user = new Bob();
 		// Avec id user

@@ -1,4 +1,4 @@
-# Las Tortugas de las Galapagos - Projet Informatique 
+# Las Tortugas de las Galapagos - Java programming project
 
 Student programming project. 
 This app provides new ways of looking at StackOverflow data to improve site users' experience with an emphasis on personalization.

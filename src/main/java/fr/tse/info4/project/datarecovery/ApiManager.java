@@ -28,6 +28,13 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	}
 
 	/**
+	 * Default constructor
+	 */
+	public ApiManager() {
+		super(APP_KEY,SITE);
+	}
+
+	/**
 	 * 
 	 * Returns userId of user identified by (accessToken)
 	 * 
