@@ -2,16 +2,15 @@ package fr.tse.info4.project.user;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONException;
 
-
 import fr.tse.info4.project.database.DaveDatabaseManager;
 import fr.tse.info4.project.schema.TagScore;
-import fr.tse.info4.project.schema.TopTagUser;
+import fr.tse.info4.project.schema.TopUser;
 
 /**
  * 
@@ -21,20 +20,20 @@ import fr.tse.info4.project.schema.TopTagUser;
 public class Dave extends Personae {
 
 	/*
-	 * Number of top answerers in a given tag (Dave 1). 
-	 * <br> Default value : 10
+	 * Number of top answerers in a given tag (Dave 1). <br> Default value : 10
 	 */
 	private int nbUsers = 10;
 
 	/*
-	 * Time between 2 updates of top answerers data (in hours).
-	 * <br> Default value : 24h.
+	 * Time between 2 updates of top answerers data (in hours). <br> Default
+	 * value : 24h.
 	 */
 	private int refreshRateTopAnswerers = 24;
 
 	/*
-	 * Boolean changed or not by the user. If true, database update will be forced. If false, time between two updates will be refreshRateTopAnswerers
-	 * <br> Default value : false
+	 * Boolean changed or not by the user. If true, database update will be
+	 * forced. If false, time between two updates will be
+	 * refreshRateTopAnswerers <br> Default value : false
 	 */
 	private boolean forceUpdateTopAnswerers = false;
 
@@ -106,26 +105,27 @@ public class Dave extends Personae {
 		if (idTag == -1) {
 			return null;
 		}
-		long time = ((DaveDatabaseManager)manager).getTimeUpdateTopTag(idTag);
+		long time = ((DaveDatabaseManager) manager).getTimeUpdateTopTag(idTag);
 
 		if (time > refreshRateTopAnswerers * 3600 || time == -1 || forceUpdateTopAnswerers) {
 
-			((DaveDatabaseManager)manager).updateDateTag(idTag);
+			((DaveDatabaseManager) manager).updateDateTag(idTag);
 			try {
-				((DaveDatabaseManager)manager).fillDaveTables(idTag);
+				((DaveDatabaseManager) manager).fillDaveTables(idTag);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 
-		return ((DaveDatabaseManager)manager).getTopAnswerers(nbUsers, idTag);
+		return ((DaveDatabaseManager) manager).getTopAnswerers(nbUsers, idTag);
 
 	}
 
 	// --------------------------- User Story 2 ------------------------------
 	/**
-	 * Return Top tag in given tag (aka : user who has highest score in given tag)
-	 * Returns a list of TagScore objects.
+	 * Return Top tag in given tag (aka : user who has highest score in given
+	 * tag) Returns a list of TagScore objects.
+	 * 
 	 * @param tag
 	 * @return
 	 *         <ul>
@@ -138,72 +138,94 @@ public class Dave extends Personae {
 		if (idTag == -1) {
 			return null;
 		}
-		long time = ((DaveDatabaseManager)manager).getTimeUpdateTopTag(idTag);
+		long time = ((DaveDatabaseManager) manager).getTimeUpdateTopTag(idTag);
 
 		if (time > refreshRateTopAnswerers * 3600 || time == -1 || forceUpdateTopAnswerers) {
-			((DaveDatabaseManager)manager).updateDateTag(idTag);
+			((DaveDatabaseManager) manager).updateDateTag(idTag);
 			try {
-				((DaveDatabaseManager)manager).fillDaveTables(idTag);
+				((DaveDatabaseManager) manager).fillDaveTables(idTag);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		return ((DaveDatabaseManager)manager).getTopTag(idTag);
+		return ((DaveDatabaseManager) manager).getTopTag(idTag);
 	}
 
 	// ----------------------------- User Story 3 -------------------------
 
-	
 	/**
 	 * 
-	 * Returns top contributor in given tag list (aka : user who has posted the most in the given set of tags
-	 * Returns a TagScore object
+	 * Returns top contributor in given tag list (aka : user who has posted the
+	 * most in the given set of tags Returns a TagScore object
 	 * 
 	 * @param tagsName
 	 * @return TagScore
-	 * @throws SQLException
 	 */
-	public TagScore getTopUserMultipleTags(List<String> tagsName){
+	public TopUser getTopUserMultipleTags(List<String> tagsName) {
 		int nbUsersTemp = nbUsers;
 		nbUsers = 30;
-
-		Map<Integer, TopTagUser> topTagUsers = new HashMap<>();
+		List<TopUser> topAnswerers = new ArrayList<TopUser>();
 		for (int i = 0; i < tagsName.size(); i++) {
 			String tagName = tagsName.get(i);
-			int nbUsersDatabase = ((DaveDatabaseManager)manager).getNbUsers(tagName);
+			int nbUsersDatabase = ((DaveDatabaseManager) manager).getNbUsers(tagName);
 			boolean forceUpdateTemp = forceUpdateTopAnswerers;
 			if (nbUsersDatabase < nbUsers) {
 				forceUpdateTopAnswerers = true;
 			}
+
 			List<TagScore> topAnswerersPerTag = getTopAnswerers(tagName);
-			
-			for (TagScore topAnswerer : topAnswerersPerTag){
-				int id = (int) topAnswerer.getUser().getUserId();
-				if (topTagUsers.containsKey(id)){
-					
-				}
-				else
+
+			for (TagScore topAnswerer : topAnswerersPerTag) {
+				long id = topAnswerer.getUser().getUserId();
+
+				int index = topAnswerers.indexOf(new TopUser(id));
+				if (index > -1) // topAnswerers already contains the user with
+								// this id
 				{
-					
+					TopUser topUser = topAnswerers.get(index);
+					int postCount = topAnswerer.getPostCount();
+					topUser.increasePostCount(postCount);
+					topUser.addTag(tagName, postCount);
+					topAnswerers.set(index, topUser);
+				} else {
+					TopUser topUser = new TopUser(id);
+					int postCount = topAnswerer.getPostCount();
+					topUser.setPostCount(postCount);
+					topUser.addTag(tagName, postCount);
+					topAnswerers.add(topUser);
 				}
-				
+
 			}
-			
+
 			forceUpdateTopAnswerers = forceUpdateTemp;
 		}
+		nbUsers = nbUsersTemp;
 
-		
-		return null;
+		return Collections.max(topAnswerers);
 
 	}
 
 	// Méthode main pour démo
 	public static void main(String[] args) {
+		Dave user = new Dave();
+		List<String> tagsName = new ArrayList<String>();
 
-		Personae personne = new Dave();
-		System.out.println(((Dave) personne).getTopAnswerers("c++"));
+		tagsName.add("oracle");
+		tagsName.add("sql");
+		tagsName.add("oracle");
+		System.out.println(user.getTopUserMultipleTags(tagsName));
+
+		// Le post count contenu dans l'objet TopUser ne correspond pas toujours
+		// à la somme des contributions
+		// de tous les tags (si l'utilisateur a rentré plusieurs fois le même
+		// tag, le postCount est biaisé).
+		// Pour avoir le vrai post count, utiliser la méthode getRealPostCount
+		// Exemple :
+
+		System.out.println(user.getTopUserMultipleTags(tagsName).getRealPostCount());
+
 	}
 
 }

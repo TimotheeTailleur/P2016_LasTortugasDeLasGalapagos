@@ -1,25 +1,17 @@
 package fr.tse.info4.project.datarecovery;
 
-import java.awt.RenderingHints.Key;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import com.google.code.stackexchange.client.StackExchangeApiClient;
-import com.google.code.stackexchange.client.StackExchangeApiClientFactory;
 import com.google.code.stackexchange.client.constant.ApplicationConstants;
-import com.google.code.stackexchange.client.impl.StackExchangeApiJsonClient;
+
 import com.google.code.stackexchange.client.provider.url.ApiUrlBuilder;
-import com.google.code.stackexchange.client.query.BadgeApiQuery;
+
 import com.google.code.stackexchange.client.query.StackExchangeApiQueryFactory;
-import com.google.code.stackexchange.client.query.UserApiQuery;
-import com.google.code.stackexchange.client.query.impl.AnswerApiQueryImpl;
-import com.google.code.stackexchange.client.query.impl.BadgeApiQueryImpl;
-import com.google.code.stackexchange.client.query.impl.UserApiQueryImpl;
+
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
 import com.google.code.stackexchange.schema.Badge;
@@ -27,16 +19,14 @@ import com.google.code.stackexchange.schema.BadgeRank;
 import com.google.code.stackexchange.schema.Paging;
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.StackExchangeSite;
-import com.google.code.stackexchange.schema.User;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import fr.tse.info4.project.schema.TagScore;
-
 public class AliceApiManager extends ApiManager {
-	
+
 	public static final String GET_BADGES_FOR_USERS = "com.google.code.stackexchange.client.getBadgesForUser";
 	public static final String USER_BADGES_FILTER = "!1zSsisCpHXb2m(HIl6*I0";
 	public static final String GET_SITE_BADGES = "com.google.code.stackexchange.client.getBadges";
@@ -73,7 +63,7 @@ public class AliceApiManager extends ApiManager {
 
 		final PagedList<Question> questions = factory.newQuestionApiQuery().withQuestionIds(idQuestions)
 				.withSort(Question.SortOrder.MOST_VOTED).list();
-		
+
 		return questions;
 	}
 
@@ -138,28 +128,28 @@ public class AliceApiManager extends ApiManager {
 
 	}
 
-	
 	/**
-	 * Get a user's Badges info (badge ids, user award count for each badge, badge Name and Rank) 
+	 * Get a user's Badges info (badge ids, user award count for each badge,
+	 * badge Name and Rank)
+	 * 
 	 * @param userId
 	 * @return A list of badges acquired by the user
 	 */
-	public List<Badge> getUserBadges(int userId)
-	{
-		//-------------Badges d'Alice----------------//
+	public List<Badge> getUserBadges(int userId) {
+		// -------------Badges d'Alice----------------//
 		ArrayList<Badge> userBadges = new ArrayList<Badge>(100);
 		Charset UTF_8_CHAR_SET = Charset.forName(ApplicationConstants.CONTENT_ENCODING);
 		JsonParser parser = new JsonParser();
-		int nbPage= 1;
-		boolean hasMore=true;
-		
-		ApiUrlBuilder builder = createStackOverflowApiUrlBuilder(GET_BADGES_FOR_USERS).withId(userId).withFilter(USER_BADGES_FILTER);
-		
-		while (hasMore)
-		{
+		int nbPage = 1;
+		boolean hasMore = true;
+
+		ApiUrlBuilder builder = createStackOverflowApiUrlBuilder(GET_BADGES_FOR_USERS).withId(userId)
+				.withFilter(USER_BADGES_FILTER);
+
+		while (hasMore) {
 			String apiUrl = builder.buildUrl();
-			apiUrl+="&pagesize=100&sort=awarded&order=desc";
-			apiUrl+="&page="+nbPage;
+			apiUrl += "&pagesize=100&sort=awarded&order=desc";
+			apiUrl += "&page=" + nbPage;
 
 			InputStream jsonContent = callApiMethod(apiUrl);
 			JsonElement response = parser.parse(new InputStreamReader(jsonContent, UTF_8_CHAR_SET));
@@ -171,54 +161,51 @@ public class AliceApiManager extends ApiManager {
 				int awardCount = Integer.parseInt(jsonObject.get("award_count").toString());
 				int badgeId = Integer.parseInt(jsonObject.get("badge_id").toString());
 				String badgeName = jsonObject.get("name").toString();
-				String badgeRankName = jsonObject.get("rank").toString().replace('"',' ').trim();
+				String badgeRankName = jsonObject.get("rank").toString().replace('"', ' ').trim();
 				Badge currentBadge = new Badge();
-				currentBadge.setAwardCount(awardCount); currentBadge.setBadgeId(badgeId); currentBadge.setName(badgeName);
-				
-				switch(badgeRankName)
-				{
-					case "bronze":
-						currentBadge.setRank(BadgeRank.BRONZE);
-						break;
-					case "silver":
-						currentBadge.setRank(BadgeRank.SILVER);
-						break;
-					case "gold":
-						currentBadge.setRank(BadgeRank.GOLD);
-						break;
+				currentBadge.setAwardCount(awardCount);
+				currentBadge.setBadgeId(badgeId);
+				currentBadge.setName(badgeName);
+
+				switch (badgeRankName) {
+				case "bronze":
+					currentBadge.setRank(BadgeRank.BRONZE);
+					break;
+				case "silver":
+					currentBadge.setRank(BadgeRank.SILVER);
+					break;
+				case "gold":
+					currentBadge.setRank(BadgeRank.GOLD);
+					break;
 				}
 				userBadges.add(currentBadge);
 			}
 			nbPage++;
-			hasMore= adaptee.get("has_more").toString().equals("true");
+			hasMore = adaptee.get("has_more").toString().equals("true");
 		}
 		return userBadges;
-}
+	}
 
 	/**
-	 
+	 * 
 	 * @param userId
-	 * @return 
+	 * @return
 	 */
-	
-	public void compareBadges (int userId)
-	{
+
+	public void compareBadges(int userId) {
 		List<Badge> userBadges = getUserBadges(userId);
 
 	}
-	
-	
+
 	public static void main(String[] args) {
-		
+
 		AliceApiManager manager = new AliceApiManager(APP_KEY, SITE);
 		List<Badge> list = manager.getUserBadges(1);
 		System.out.println(list.size());
-		for (int i =0;i<list.size();i++)
-		{
+		for (int i = 0; i < list.size(); i++) {
 			System.out.println(list.get(i).getName());
 			System.out.println(list.get(i).getAwardCount());
 			System.out.println(list.get(i).getRank());
-		} 
+		}
 	}
 }
-

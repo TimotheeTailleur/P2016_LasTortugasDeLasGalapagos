@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.derby.iapi.store.raw.Page;
 
 import com.google.code.stackexchange.client.constant.ApplicationConstants;
 import com.google.code.stackexchange.client.constant.StackExchangeApiMethods;
@@ -14,7 +13,6 @@ import com.google.code.stackexchange.client.provider.url.ApiUrlBuilder;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Paging;
-import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.StackExchangeSite;
 import com.google.code.stackexchange.schema.Tag;
 import com.google.code.stackexchange.schema.User;
@@ -122,10 +120,10 @@ public class DaveApiManager extends ApiManager {
 	 * @param min
 	 * @return
 	 */
-	public ArrayList<Tag> getTagsOnUsers(List<Long> ids, int min) {
+	public List<Tag> getTagsOnUsers(List<Long> ids, int min) {
 		Paging firstPage = new Paging(1, 100);
 		PagedList<Tag> userTagsPage = getTagsOnUsers(ids, min, firstPage);
-		ArrayList<Tag> userTags = new ArrayList<Tag>();
+		List<Tag> userTags = new ArrayList<Tag>();
 
 		for (int i = 0; i < userTagsPage.size(); i++) {
 			userTags.add(userTagsPage.get(i));
