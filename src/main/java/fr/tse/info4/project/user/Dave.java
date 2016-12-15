@@ -145,7 +145,6 @@ public class Dave extends Personae {
 			try {
 				((DaveDatabaseManager) manager).fillDaveTables(idTag);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -203,7 +202,10 @@ public class Dave extends Personae {
 		}
 		nbUsers = nbUsersTemp;
 
-		return Collections.max(topAnswerers);
+		TopUser top = Collections.max(topAnswerers);
+		top.setPostCount(top.getRealPostCount());
+		
+		return top;
 
 	}
 
@@ -217,14 +219,6 @@ public class Dave extends Personae {
 		tagsName.add("oracle");
 		System.out.println(user.getTopUserMultipleTags(tagsName));
 
-		// Le post count contenu dans l'objet TopUser ne correspond pas toujours
-		// à la somme des contributions
-		// de tous les tags (si l'utilisateur a rentré plusieurs fois le même
-		// tag, le postCount est biaisé).
-		// Pour avoir le vrai post count, utiliser la méthode getRealPostCount
-		// Exemple :
-
-		System.out.println(user.getTopUserMultipleTags(tagsName).getRealPostCount());
 
 	}
 

@@ -22,6 +22,13 @@ public class TopUser implements Comparable<TopUser> {
 		this.postCount = postCount;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public Map<String, Integer> getTagPostCount(){
+		return tagPostCount;
+	}
 	public void addTag(String tag, int postCount) {
 		if (!tagPostCount.containsKey(tag)) {
 			tagPostCount.put(tag, postCount);
