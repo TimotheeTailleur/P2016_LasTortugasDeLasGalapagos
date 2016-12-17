@@ -32,6 +32,9 @@ public class AliceApiManager extends ApiManager {
 	public static final String GET_SITE_BADGES = "com.google.code.stackexchange.client.getBadges";
 	public static final String SITE_BADGES_FILTER = "!b8c7G.MYOLLIHp";
 
+	public static final String BADGES_WITH_IDS_URL = "https://api.stackexchange.com/2.2/badges/";
+	public static final String BADGES_WITH_IDS_FILTER = "";
+	
 	public AliceApiManager(String applicationKey, StackExchangeSite site) {
 		super(applicationKey, site);
 	}
@@ -130,7 +133,7 @@ public class AliceApiManager extends ApiManager {
 
 	/**
 	 * Get a user's Badges info (badge ids, user award count for each badge,
-	 * badge Name and Rank)
+	 * badge Name and Rank) sorted by their award counts
 	 * 
 	 * @param userId
 	 * @return A list of badges acquired by the user
@@ -187,13 +190,111 @@ public class AliceApiManager extends ApiManager {
 	}
 
 	/**
-	 * 
+	 * For each user badge, check if a next level of the badge exists. <br>
+	 * If there is one, find users who have it and return the Badge and it's info
+	 * If there isn't check other badges
+	 * Ex : the bronze badge Nice Question's (Question Score of 10 or more) next level is Good Question (Question Score of 25 or more)
 	 * @param userId
-	 * @return
+	 * @return A 2-list of Alice's badges and their next levels of size 9
 	 */
 
-	public void compareBadges(int userId) {
+	public List<List<Badge>> compareBadges(int userId) {
 		List<Badge> userBadges = getUserBadges(userId);
+		ArrayList<Long> badgePlusOneIds = new ArrayList<Long>(userBadges.size());
+		
+		for (Badge badge : userBadges)
+		{
+			Long id = badge.getBadgeId()+1;
+			badgePlusOneIds.add(id);
+		}
+		
+		ArrayList<Badge> idPlusOneBadges = new ArrayList<Badge>();
+		ArrayList<Badge> aliceBadgesWithNextLevel= new ArrayList<Badge>(9);
+		ArrayList<Badge> nextLevelBadges = new ArrayList<Badge>(9);
+		
+		Charset UTF_8_CHAR_SET = Charset.forName(ApplicationConstants.CONTENT_ENCODING);
+		JsonParser parser = new JsonParser();
+		int nbPage = 1;
+		boolean hasMore = true;
+		int size= 0;
+
+		 String apiUrlBase = BADGES_WITH_IDS_URL + badgePlusOneIds.toString().replaceAll(",","%3B").replace('[',' ').replace(']',' ').trim() + "&filter="+BADGES_WITH_IDS_FILTER;
+
+		while (hasMore) {
+			String apiUrl = apiUrlBase;
+			apiUrl += "order=desc&sort=rank" + "&pagesize=100" + "&page=" + nbPage + "&key="+ApiManager.APP_KEY + "site="+ "stackoverflow";
+
+			InputStream jsonContent = callApiMethod(apiUrl);
+			JsonElement response = parser.parse(new InputStreamReader(jsonContent, UTF_8_CHAR_SET));
+			JsonObject adaptee = response.getAsJsonObject();
+			JsonArray elements = adaptee.get("items").getAsJsonArray();
+
+			for (JsonElement o : elements) {
+				JsonObject jsonObject = o.getAsJsonObject();
+				int awardCount = Integer.parseInt(jsonObject.get("award_count").toString());
+				int badgeId = Integer.parseInt(jsonObject.get("badge_id").toString());
+				String badgeName = jsonObject.get("name").toString();
+				String badgeRankName = jsonObject.get("rank").toString().replace('"', ' ').trim();
+				Badge currentBadge = new Badge();
+				currentBadge.setAwardCount(awardCount);
+				currentBadge.setBadgeId(badgeId);
+				currentBadge.setName(badgeName);
+				
+				//TODO getUser data
+
+				switch (badgeRankName) {
+				case "bronze":
+					currentBadge.setRank(BadgeRank.BRONZE);
+					break;
+				case "silver":
+					currentBadge.setRank(BadgeRank.SILVER);
+					break;
+				case "gold":
+					currentBadge.setRank(BadgeRank.GOLD);
+					break;
+				}
+				idPlusOneBadges.add(currentBadge);
+			}
+			nbPage++;
+			hasMore = adaptee.get("has_more").toString().equals("true");
+		} 
+		
+		int index =0;
+		while (size<9)
+		{
+		for (Badge badge : userBadges)
+		{
+			String badgeRankName = badge.getRank().value();
+			Badge plusOneBadge=idPlusOneBadges.get(index);
+			switch(badgeRankName)
+			{
+			case "bronze":
+				if (plusOneBadge.getRank().value().equals("silver"))
+				{
+					nextLevelBadges.add(plusOneBadge);
+					aliceBadgesWithNextLevel.add(badge);
+					size++;
+				}
+				break;
+			case "silver":
+				if (plusOneBadge.getRank().value().equals("gold"))
+				{
+					nextLevelBadges.add(plusOneBadge);
+					aliceBadgesWithNextLevel.add(badge);
+					size++;
+				}
+				break;
+			case "gold":
+				break;
+			}
+			index++;
+		}
+		}
+		// Add both lists to the returned variable
+		List<List<Badge>> returnedList = new ArrayList<List<Badge>>();
+		returnedList.add(aliceBadgesWithNextLevel);
+		returnedList.add(nextLevelBadges);
+		return returnedList;
 
 	}
 

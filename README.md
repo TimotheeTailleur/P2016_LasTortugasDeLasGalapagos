@@ -10,10 +10,10 @@ This app provides new ways of looking at StackOverflow data to improve site user
 * project.datarecovery : Handles data recovery from the StackExchangeApi using the Java sdk by SanjivSingh (see credits)
 * project.main : Main package with project entry point
 * project.schema : Classes not in the StackExchangeApi sdk that we needed
-* project.user : Implementations of user Oauth authentication and functionnalities
+* project.user : Implementations of user Oauth authentication and functionalities
 
 ### User Stories
-* Alice : Get recent unanswered questions in your top tags. Find out which users have more badges than you. Sort the questions you've answered to by their poppularity
+* Alice : Get recent unanswered questions in your top tags. Find out which users have more badges than you. Sort the questions you've answered to by their popularity
 * Bob : Get recent answered questions in your top tags. Suggest experts to follow. Suggestion tool for post titles and tags based on similar questions and common tag pairings.
 * Dave : Find top answerers in a given single tag or the top contributor in a list of tags. Find the top tag in a given tag.
 
@@ -34,12 +34,21 @@ pom.xml :
 		<groupId>com.googlecode.stackexchange</groupId>  
 		 <artifactId>stackoverflow-java-sdk-release</artifactId>  
 		  <version>2.2.0</version>  
-		</dependency>  
+		</dependency> 
+	<dependency>
+	  <groupId>commons-lang</groupId>
+	  <artifactId>commons-lang</artifactId>
+	  <version>2.6</version>
+	</dependency> 
 </dependencies>
 ```
-Apache Derby : Embedded database containing static tables of StackOverflowData (i.e : list of the 47k tags on StackOverflow)
+Apache Derby : Embedded database containing tables of StackOverflowData (i.e : list of the 47k tags on StackOverflow & some user's tagscores & postcounts)
 
 StackOverflow Java Sdk Release : StackExchange Api Java SDK released by [SanjivSingh] (https://github.com/sanjivsingh/stackoverflow-java-sdk) based on work by a [google code user] (http://code.google.com/p/stackoverflow-java-sdk/) 
+
+Commons-lang : Used for different methods of String manipulation
+
+Also google's GSON library is used through our dependency towards the aforementioned stackoverflow Sdk
 
 ## Javadoc
 

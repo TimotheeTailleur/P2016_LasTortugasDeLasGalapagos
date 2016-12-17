@@ -94,7 +94,7 @@ public class Bob {
 	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered(int idUser) {
 		PagedList<Tag> tags = ApiManager.getTags(nbTags, idUser);
 		if (tags.size() == 0) {
-			System.err.println("No tag for this user");
+			System.err.println("No tags for this user");
 			return null;
 		}
 

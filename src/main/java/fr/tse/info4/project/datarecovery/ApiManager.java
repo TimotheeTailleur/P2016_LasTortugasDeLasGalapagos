@@ -11,7 +11,7 @@ import com.google.code.stackexchange.schema.User;
 
 public class ApiManager extends StackExchangeApiJsonClient  {
 
-	/*  Key of the application */
+	/*  Application key */
 	public final static String APP_KEY = "6WGYkZgsp2UiQfMqTj3LCQ((";
 	/* Site (stack overflow) */
 	public final static StackExchangeSite SITE = StackExchangeSite.STACK_OVERFLOW;
