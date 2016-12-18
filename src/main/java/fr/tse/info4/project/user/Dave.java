@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.json.JSONException;
-
 import fr.tse.info4.project.database.DaveDatabaseManager;
 import fr.tse.info4.project.schema.TagScore;
 import fr.tse.info4.project.schema.TopUser;

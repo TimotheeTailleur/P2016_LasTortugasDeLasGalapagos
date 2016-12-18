@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.json.JSONException;
-
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
 import com.google.code.stackexchange.schema.Question;
@@ -110,7 +108,7 @@ public class Alice {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public ArrayList<Integer> compareBadge() throws IOException, JSONException {
+	public ArrayList<Integer> compareBadge() throws IOException {
 
 		// On récupère les badges d'alice et leurs nombres
 		// TreeMap<Integer, Integer> badgesAlice =
@@ -164,7 +162,7 @@ public class Alice {
 		return ("stackoverflow.com/q/" + id);
 	}
 
-	public static void main(String[] args) throws JSONException, IOException {
+	public static void main(String[] args) throws IOException {
 		Alice user = new Alice();
 
 		List<Question> questions = user.getSortedAnsweredQuestions(1200);
