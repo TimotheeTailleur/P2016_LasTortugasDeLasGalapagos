@@ -1,4 +1,4 @@
-package fr.tse.info4.project.datarecovery;
+package fr.tse.info4.project.model.datarecovery;
 
 import com.google.code.stackexchange.client.impl.StackExchangeApiJsonClient;
 import com.google.code.stackexchange.client.query.impl.TagApiQueryImpl;

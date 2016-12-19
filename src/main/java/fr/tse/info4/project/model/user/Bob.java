@@ -1,4 +1,4 @@
-package fr.tse.info4.project.user;
+package fr.tse.info4.project.model.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.Tag;
 
-import fr.tse.info4.project.datarecovery.ApiManager;
-import fr.tse.info4.project.datarecovery.BobApiManager;
+import fr.tse.info4.project.model.datarecovery.ApiManager;
+import fr.tse.info4.project.model.datarecovery.BobApiManager;
 
 public class Bob {
 

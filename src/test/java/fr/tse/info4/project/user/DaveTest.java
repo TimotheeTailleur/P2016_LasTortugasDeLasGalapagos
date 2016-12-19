@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import com.google.code.stackexchange.schema.User;
 
-import fr.tse.info4.project.schema.TagScore;
+import fr.tse.info4.project.model.schema.TagScore;
+import fr.tse.info4.project.model.user.Dave;
 
 public class DaveTest {
 

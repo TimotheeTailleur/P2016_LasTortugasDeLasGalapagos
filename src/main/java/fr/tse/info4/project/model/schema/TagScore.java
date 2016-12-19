@@ -1,4 +1,4 @@
-package fr.tse.info4.project.schema;
+package fr.tse.info4.project.model.schema;
 
 import com.google.code.stackexchange.schema.User;
 

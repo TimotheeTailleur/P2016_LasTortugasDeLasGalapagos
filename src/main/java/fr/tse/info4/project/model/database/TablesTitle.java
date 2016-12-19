@@ -1,4 +1,4 @@
-package fr.tse.info4.project.database;
+package fr.tse.info4.project.model.database;
 
 public final class TablesTitle {	
 	

@@ -1,4 +1,4 @@
-package fr.tse.info4.project.database;
+package fr.tse.info4.project.model.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

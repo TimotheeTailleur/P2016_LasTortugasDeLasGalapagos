@@ -1,4 +1,4 @@
-package fr.tse.info4.project.datarecovery;
+package fr.tse.info4.project.model.datarecovery;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,7 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import fr.tse.info4.project.main.Main;
-import fr.tse.info4.project.schema.TagScore;
+import fr.tse.info4.project.model.schema.TagScore;
 
 public class BobApiManager extends ApiManager {
 

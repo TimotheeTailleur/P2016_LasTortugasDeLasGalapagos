@@ -1,4 +1,4 @@
-package fr.tse.info4.project.user;
+package fr.tse.info4.project.model.user;
 
 import java.io.IOException;
 
@@ -13,8 +13,8 @@ import com.google.code.stackexchange.schema.Answer;
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.Tag;
 
-import fr.tse.info4.project.datarecovery.AliceApiManager;
-import fr.tse.info4.project.datarecovery.ApiManager;
+import fr.tse.info4.project.model.datarecovery.AliceApiManager;
+import fr.tse.info4.project.model.datarecovery.ApiManager;
 
 /**
  * Functions and demo main method for user story Alice

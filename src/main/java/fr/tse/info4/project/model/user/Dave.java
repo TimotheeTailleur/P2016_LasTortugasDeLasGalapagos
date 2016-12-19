@@ -1,4 +1,4 @@
-package fr.tse.info4.project.user;
+package fr.tse.info4.project.model.user;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import fr.tse.info4.project.database.DaveDatabaseManager;
-import fr.tse.info4.project.schema.TagScore;
-import fr.tse.info4.project.schema.TopUser;
+import fr.tse.info4.project.model.database.DaveDatabaseManager;
+import fr.tse.info4.project.model.schema.TagScore;
+import fr.tse.info4.project.model.schema.TopUser;
 
 /**
  * 
@@ -37,7 +37,7 @@ public class Dave extends Personae {
 
 	/* Constructor */
 	public Dave() {
-		manager = new DaveDatabaseManager();
+		databaseManager = new DaveDatabaseManager();
 	}
 
 	// --------- Getters & Setters -------------
@@ -99,23 +99,23 @@ public class Dave extends Personae {
 	 *         </ul>
 	 */
 	public List<TagScore> getTopAnswerers(String tag) {
-		int idTag = manager.getTagId(tag);
+		int idTag = databaseManager.getTagId(tag);
 		if (idTag == -1) {
 			return null;
 		}
-		long time = ((DaveDatabaseManager) manager).getTimeUpdateTopTag(idTag);
+		long time = ((DaveDatabaseManager) databaseManager).getTimeUpdateTopTag(idTag);
 
 		if (time > refreshRateTopAnswerers * 3600 || time == -1 || forceUpdateTopAnswerers) {
 
-			((DaveDatabaseManager) manager).updateDateTag(idTag);
+			((DaveDatabaseManager) databaseManager).updateDateTag(idTag);
 			try {
-				((DaveDatabaseManager) manager).fillDaveTables(idTag);
+				((DaveDatabaseManager) databaseManager).fillDaveTables(idTag);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 
-		return ((DaveDatabaseManager) manager).getTopAnswerers(nbUsers, idTag);
+		return ((DaveDatabaseManager) databaseManager).getTopAnswerers(nbUsers, idTag);
 
 	}
 
@@ -132,22 +132,22 @@ public class Dave extends Personae {
 	 *         </ul>
 	 */
 	public TagScore getTopTag(String tag) {
-		int idTag = manager.getTagId(tag);
+		int idTag = databaseManager.getTagId(tag);
 		if (idTag == -1) {
 			return null;
 		}
-		long time = ((DaveDatabaseManager) manager).getTimeUpdateTopTag(idTag);
+		long time = ((DaveDatabaseManager) databaseManager).getTimeUpdateTopTag(idTag);
 
 		if (time > refreshRateTopAnswerers * 3600 || time == -1 || forceUpdateTopAnswerers) {
-			((DaveDatabaseManager) manager).updateDateTag(idTag);
+			((DaveDatabaseManager) databaseManager).updateDateTag(idTag);
 			try {
-				((DaveDatabaseManager) manager).fillDaveTables(idTag);
+				((DaveDatabaseManager) databaseManager).fillDaveTables(idTag);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 
-		return ((DaveDatabaseManager) manager).getTopTag(idTag);
+		return ((DaveDatabaseManager) databaseManager).getTopTag(idTag);
 	}
 
 	// ----------------------------- User Story 3 -------------------------
@@ -166,7 +166,7 @@ public class Dave extends Personae {
 		List<TopUser> topAnswerers = new ArrayList<TopUser>();
 		for (int i = 0; i < tagsName.size(); i++) {
 			String tagName = tagsName.get(i);
-			int nbUsersDatabase = ((DaveDatabaseManager) manager).getNbUsers(tagName);
+			int nbUsersDatabase = ((DaveDatabaseManager) databaseManager).getNbUsers(tagName);
 			boolean forceUpdateTemp = forceUpdateTopAnswerers;
 			if (nbUsersDatabase < nbUsers) {
 				forceUpdateTopAnswerers = true;

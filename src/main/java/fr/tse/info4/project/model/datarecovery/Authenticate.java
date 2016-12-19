@@ -1,4 +1,4 @@
-package fr.tse.info4.project.datarecovery;
+package fr.tse.info4.project.model.datarecovery;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;

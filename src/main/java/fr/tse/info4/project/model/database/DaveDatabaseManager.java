@@ -1,4 +1,4 @@
-package fr.tse.info4.project.database;
+package fr.tse.info4.project.model.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,8 @@ import java.util.List;
 
 import com.google.code.stackexchange.schema.User;
 
-import fr.tse.info4.project.datarecovery.DaveApiManager;
-import fr.tse.info4.project.schema.TagScore;
+import fr.tse.info4.project.model.datarecovery.DaveApiManager;
+import fr.tse.info4.project.model.schema.TagScore;
 
 public class DaveDatabaseManager extends DatabaseManager {
 
