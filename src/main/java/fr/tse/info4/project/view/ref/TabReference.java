@@ -1,4 +1,4 @@
-package fr.tse.info4.project.graphicalInterface.ref;
+package fr.tse.info4.project.view.ref;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
