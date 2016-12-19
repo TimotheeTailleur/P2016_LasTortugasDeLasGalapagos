@@ -1,4 +1,4 @@
-package fr.tse.info4.project.datarecovery;
+package fr.tse.info4.project.model.datarecovery;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.derby.iapi.store.raw.Page;
 
 import com.google.code.stackexchange.client.constant.ApplicationConstants;
 import com.google.code.stackexchange.client.constant.StackExchangeApiMethods;
@@ -14,7 +13,6 @@ import com.google.code.stackexchange.client.provider.url.ApiUrlBuilder;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Paging;
-import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.StackExchangeSite;
 import com.google.code.stackexchange.schema.Tag;
 import com.google.code.stackexchange.schema.User;
@@ -23,22 +21,26 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import fr.tse.info4.project.schema.TagScore;
+import fr.tse.info4.project.model.schema.TagScore;
 
 public class DaveApiManager extends ApiManager {
 
 	public static final String GET_TOP_ANSWERERS = "com.google.code.stackexchange.client.getTagTopAnswerers";
 
-	/* FILTERS */
+	// FILTERS
 	private static final String TOP_ANSWERERS_FILTER = "!*Jxe6D.tT0bNxx(Z";
 
+	/**
+	 * Constructor to use applicationKey and specify StackExchangeSite
+	 * @param applicationKey
+	 * @param site
+	 */
 	public DaveApiManager(String applicationKey, StackExchangeSite site) {
 		super(applicationKey, site);
 	}
 
 	/**
-	 * Returns the top 30 answerers active un a single taf of the last 30 days
-	 * the the stack overflow api returns
+	 * Returns the top 30 answerers active in a single tag in the last 30 days
 	 * 
 	 * @param String
 	 *            tag
@@ -82,7 +84,7 @@ public class DaveApiManager extends ApiManager {
 	 * 
 	 * @param tagName
 	 * @param list
-	 * @return True if the pagedList contains the tag named tagName
+	 * @return True if pagedList contains tag (tagName)
 	 */
 	public static boolean contains(String tagName, PagedList<Tag> list) {
 		for (int i = 0; i < list.size(); i++) {
@@ -118,10 +120,10 @@ public class DaveApiManager extends ApiManager {
 	 * @param min
 	 * @return
 	 */
-	public ArrayList<Tag> getTagsOnUsers(List<Long> ids, int min) {
+	public List<Tag> getTagsOnUsers(List<Long> ids, int min) {
 		Paging firstPage = new Paging(1, 100);
 		PagedList<Tag> userTagsPage = getTagsOnUsers(ids, min, firstPage);
-		ArrayList<Tag> userTags = new ArrayList<Tag>();
+		List<Tag> userTags = new ArrayList<Tag>();
 
 		for (int i = 0; i < userTagsPage.size(); i++) {
 			userTags.add(userTagsPage.get(i));
