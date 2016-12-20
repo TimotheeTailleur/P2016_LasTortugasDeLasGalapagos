@@ -117,7 +117,7 @@ public class Alice extends Personae {
 	 * 
 	 */
 	private Map<String[], PagedList<Question>> getNewQuestions(int idUser) {
-		PagedList<Tag> tags = ApiManager.getTags(nbTags, idUser);
+		PagedList<Tag> tags = ApiManager.getBestTags(nbTags, idUser);
 		
 		if (tags.size() == 0) {
 			System.err.println("No tags for this user");
@@ -194,20 +194,4 @@ public class Alice extends Personae {
 		return getSortedAnswers((int) ApiManager.getIdUser(accessToken));
 	}
 
-	public static void main(String[] args) {
-		 Alice alice = new Alice();
-		 Map<String[], PagedList<Question>> questions = alice.getNewQuestions();
-		 for( Map.Entry<String[], PagedList<Question>> e : questions.entrySet()){
-			 String[] tags = e.getKey();
-			 for (int i = 0 ; i<tags.length; i++){
-				 System.out.print(tags[i] + " ");
-			 }
-			 System.out.println("\n");
-			 List<Question> listQuestions= e.getValue();
-			 for (Question question : listQuestions){
-				 System.out.println(question.getTitle());
-			 }
-			 System.out.println();
-		 }
-	}
 }

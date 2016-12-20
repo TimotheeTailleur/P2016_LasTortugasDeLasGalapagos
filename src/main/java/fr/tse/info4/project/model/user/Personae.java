@@ -6,16 +6,28 @@ import fr.tse.info4.project.model.datarecovery.ApiManager;
 
 public abstract class Personae {
 
+	/**
+	 * Database manager.
+	 */
 	protected DatabaseManager databaseManager;
 	
+	/**
+	 * Api manager : object used to handle the data recovery.
+	 */
 	protected ApiManager apiManager;
 	
+	/**
+	 * Id of the user.
+	 */
 	protected int idUser = 1;
 	
-	/*
+	/**
 	 * Application user access token. <br> Default value : null
 	 */
 	protected String accessToken = null;
+	
+	
+	// Getter and setter 
 	
 	public String getAccesToken() {
 		return accessToken;
@@ -28,6 +40,10 @@ public abstract class Personae {
 	public void setIdUser(int idUser){
 		if (idUser >1)
 			this.idUser = idUser;
+	}
+	
+	public int getIdUser(){
+		return idUser;
 	}
 	
 	/**

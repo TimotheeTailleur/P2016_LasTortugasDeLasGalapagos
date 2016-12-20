@@ -35,8 +35,6 @@ public class AliceApiManager extends ApiManager {
 	public static final String BADGES_WITH_IDS_URL = "https://api.stackexchange.com/2.2/badges/";
 	public static final String BADGES_WITH_IDS_FILTER = "";
 	
-	private StackExchangeApiQueryFactory factory;
-	
 	public AliceApiManager(){
 		super(APP_KEY, SITE);
 	}	
