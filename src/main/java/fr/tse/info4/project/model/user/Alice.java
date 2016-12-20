@@ -27,7 +27,7 @@ public class Alice extends Personae {
 	protected int nbTags = 3;
 
 	/**
-	 * Number of newest questions displayed for each tag. <br>
+	 * Number of the newest displayed questions for each tag. <br>
 	 * Limited to 100 questions <br>
 	 * Default value : 3
 	 */

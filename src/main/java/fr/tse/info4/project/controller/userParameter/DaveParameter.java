@@ -2,40 +2,86 @@ package fr.tse.info4.project.controller.userParameter;
 
 import fr.tse.info4.project.model.user.Dave;
 
+/**
+ * 
+ * Handles the Dave parameters
+ */
 public class DaveParameter {
+	/**
+	 * Dave object.
+	 */
 	private Dave dave;
-	
-	public DaveParameter(){
+
+	/**
+	 * Default constructor. <br>
+	 * Default values : 
+	 * <ul>
+	 * <li>nbUsers = 10</li>
+	 * <li>refreshRateTopAnswerers = 24 hours</li>
+	 * <li>forceUpdtate = false</li>
+	 * </ul>
+	 */
+	public DaveParameter() {
 		dave = new Dave();
 	}
-	
-	public DaveParameter(String accessToken){
+
+	/**
+	 * Constructor.
+	 * <ul>
+	 * <li>nbUsers = 10</li>
+	 * <li>refreshRateTopAnswerers = 24 hours</li>
+	 * <li>forceUpdtate = false</li>
+	 * </ul>
+	 * @param accessToken
+	 */
+	public DaveParameter(String accessToken) {
 		dave = new Dave(accessToken);
 	}
-	
-	public DaveParameter withNbUsers(int nbUsers){
+
+	/**
+	 * Number of top answerer users in a given tag.
+	 * @param nbUsers
+	 * @return the DaveParameter object.
+	 */
+	public DaveParameter withNbUsers(int nbUsers) {
 		dave.setNbUsers(nbUsers);
 		return this;
 	}
-	
-	public DaveParameter withForceUpdate(){
+
+	/**
+	 * Force the database update
+	 * @return the DaveParameter object.
+	 */
+	public DaveParameter withForceUpdate() {
 		dave.setForceUpdateTopAnswerers(true);
 		return this;
 	}
-	
-	public DaveParameter withoutForceUpdate(){
+
+	/**
+	 * Don't force the database update
+	 * @return the DaveParameter object.
+	 */
+	public DaveParameter withoutForceUpdate() {
 		dave.setForceUpdateTopAnswerers(false);
 		return this;
 	}
-	
-	public DaveParameter withRefreshRate(int refreshRate){
+
+	/**
+	 * Time between two data update (in hours).
+	 * @param refreshRate
+	 * @return the DaveParameter object.
+	 */
+	public DaveParameter withRefreshRate(int refreshRate) {
 		dave.setRefreshRateTopAnswerers(refreshRate);
 		return this;
 	}
 
-	public Dave get(){
+	/**
+	 * 
+	 * @return the Dave object.
+	 */
+	public Dave get() {
 		return dave;
 	}
-	
-	
+
 }
