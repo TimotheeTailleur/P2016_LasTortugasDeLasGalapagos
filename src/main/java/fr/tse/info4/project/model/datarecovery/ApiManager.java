@@ -28,7 +28,7 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	}
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public ApiManager() {
 		super(APP_KEY,SITE);
@@ -36,10 +36,10 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 
 	/**
 	 * 
-	 * Returns userId of user identified by (accessToken)
+	 * Retrieves the id of user identified by his accessToken
 	 * 
 	 * @param accessToken
-	 * @return
+	 * @return the user id
 	 */
 	public static long getIdUser(String accessToken){
 		String filter = "!6Xcz2t9HFnLLg";
@@ -53,11 +53,11 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	
 	/**
 	 * 
-	 * Return the nbTags best tags of the user (sorted by popularity)
+	 * Retrieves the best tags of the user (sorted by popularity)
 	 * 
 	 * @param nbTags
 	 * @param idUser
-	 * @return Paged List of best tags of user
+	 * @return the best tags of a user.
 	 */
 	public static PagedList<Tag> getTags(int nbTags, int idUser) {
 		final String filter = "!-.G.68grSaJo";
@@ -74,11 +74,11 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 
 	/**
 	 * 
-	 * Return the nbTags best tags of the user (sorted by popularity)
+	 * Retrieves the best tags of the user (sorted by popularity)
 	 * 
 	 * @param nbTags
 	 * @param accessToken
-	 * @return 
+	 * @return the best tags of the user.
 	 */
 	public static PagedList<Tag> getTags(int nbTags, String accessToken) {
 		return getTags(nbTags, (int) ApiManager.getIdUser(accessToken));

@@ -35,6 +35,8 @@ public class AliceApiManager extends ApiManager {
 	public static final String BADGES_WITH_IDS_URL = "https://api.stackexchange.com/2.2/badges/";
 	public static final String BADGES_WITH_IDS_FILTER = "";
 	
+	private StackExchangeApiQueryFactory factory;
+	
 	public AliceApiManager(){
 		super(APP_KEY, SITE);
 	}	
@@ -50,11 +52,11 @@ public class AliceApiManager extends ApiManager {
 	 * @param nbQuestions
 	 * @return
 	 */
-	public static PagedList<Question> getNewQuestionsByTag(String tag, int nbQuestions) {
-		final StackExchangeApiQueryFactory factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
+	public PagedList<Question> getNewQuestionsByTag(String[] tags, int nbQuestions) {
+		factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
 				ApiManager.SITE);
 		Paging page = new Paging(1, nbQuestions);
-		PagedList<Question> questions = factory.newQuestionApiQuery().withTags(tag).withPaging(page)
+		PagedList<Question> questions = factory.newQuestionApiQuery().withTags(tags).withPaging(page)
 				.withSort(Question.SortOrder.MOST_RECENTLY_CREATED).list();
 		try {
 			Thread.sleep(questions.getBackoff() * 1000);
@@ -64,8 +66,8 @@ public class AliceApiManager extends ApiManager {
 		return questions;
 	}
 
-	public static PagedList<Question> getSortedQuestions(List<Long> idQuestions) {
-		final StackExchangeApiQueryFactory factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
+	public PagedList<Question> getSortedQuestions(List<Long> idQuestions) {
+		factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
 				ApiManager.SITE);
 
 		final PagedList<Question> questions = factory.newQuestionApiQuery().withQuestionIds(idQuestions)
@@ -82,15 +84,15 @@ public class AliceApiManager extends ApiManager {
 	 * @param nbAnswers
 	 * @return
 	 */
-	public static List<Answer> getAnswers(int idUser, int nbAnswers) {
-		StackExchangeApiQueryFactory queryFactory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
+	public List<Answer> getAnswers(int idUser, int nbAnswers) {
+		factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
 				ApiManager.SITE);
 
 		String filter = "!-*f(6t0WUWsK";
 		if (nbAnswers <= 100) {
 			Paging page = new Paging(1, nbAnswers);
 
-			PagedList<Answer> answers = queryFactory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
+			PagedList<Answer> answers = factory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
 					.withSort(Answer.SortOrder.MOST_RECENTLY_UPDATED).withPaging(page).listByUsers();
 
 			return answers;
@@ -101,7 +103,7 @@ public class AliceApiManager extends ApiManager {
 			PagedList<Answer> answer = null;
 			for (int i = 1; i <= (int) nbPages; i++) {
 				Paging page = new Paging(i, 100);
-				PagedList<Answer> answersPage = queryFactory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
+				PagedList<Answer> answersPage = factory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
 						.withSort(Answer.SortOrder.MOST_RECENTLY_UPDATED).withPaging(page).listByUsers();
 				if (i == 1) {
 					answer = answersPage;
@@ -120,7 +122,7 @@ public class AliceApiManager extends ApiManager {
 			int nbAnswersLastPage = nbAnswers - (int) nbPages * 100;
 			System.out.println(nbAnswersLastPage);
 			Paging lastPage = new Paging((int) nbPages + 1, 100);
-			PagedList<Answer> answersPage = queryFactory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
+			PagedList<Answer> answersPage = factory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
 					.withSort(Answer.SortOrder.MOST_VOTED).withPaging(lastPage).listByUsers();
 			for (int j = 0; j < nbAnswersLastPage; j++) {
 				answer.add(answersPage.get(j));
@@ -300,17 +302,5 @@ public class AliceApiManager extends ApiManager {
 		returnedList.add(nextLevelBadges);
 		return returnedList;
 
-	}
-
-	public static void main(String[] args) {
-
-		AliceApiManager manager = new AliceApiManager(APP_KEY, SITE);
-		List<Badge> list = manager.getUserBadges(1);
-		System.out.println(list.size());
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i).getName());
-			System.out.println(list.get(i).getAwardCount());
-			System.out.println(list.get(i).getRank());
-		}
 	}
 }
