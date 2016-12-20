@@ -1,14 +1,9 @@
-package fr.tse.info4.project.graphicalInterface.ref;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
+package fr.tse.info4.project.view.ref;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 
 /**
  * 
@@ -47,40 +42,6 @@ public class TabReference extends JPanel {
 
 		foot.add(settings);
 		foot.add(boutonLeave);
-		
-		boutonLeave.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				DatabaseManager.close();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-		});
 
 		this.add(foot);
 	}

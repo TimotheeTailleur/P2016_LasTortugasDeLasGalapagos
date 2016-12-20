@@ -1,4 +1,4 @@
-package fr.tse.info4.project.graphicalInterface.users;
+package fr.tse.info4.project.view.users;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -16,20 +16,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.json.JSONException;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Question;
 
-import fr.tse.info4.project.datarecovery.ApiManager;
-import fr.tse.info4.project.datarecovery.Authenticate;
-import fr.tse.info4.project.graphicalInterface.ref.TabReference;
-import fr.tse.info4.project.user.Alice;
+import fr.tse.info4.project.model.datarecovery.ApiManager;
+import fr.tse.info4.project.model.datarecovery.Authenticate;
+import fr.tse.info4.project.model.user.Alice;
+import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageAlice extends TabReference {
 
 
-	public PageAlice() throws JSONException, IOException {
+	public PageAlice() throws IOException {
 
 		super();
 		// this.remove(TabReference.getFoot());
@@ -59,9 +58,6 @@ public class PageAlice extends TabReference {
 				offline.setVisible(false);
 				try {
 					alice.getPanel().add(printAliceResults(alToken,"Token"));
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -105,9 +101,6 @@ public class PageAlice extends TabReference {
 				offline.setVisible(false);
 				try {
 					alice.getPanel().add(printAliceResults(alice));
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -143,7 +136,7 @@ public class PageAlice extends TabReference {
 		return connexion;
 	}
 
-	public JPanel printAliceResults(PageAlice alice) throws JSONException, IOException {
+	public JPanel printAliceResults(PageAlice alice) throws IOException {
 
 		JPanel resultat = new JPanel();
 
@@ -161,7 +154,7 @@ public class PageAlice extends TabReference {
 		return resultat;
 	}
 
-	public JPanel showNewQuestion(PageAlice alice) throws JSONException, IOException {
+	public JPanel showNewQuestion(PageAlice alice) throws IOException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
@@ -217,7 +210,7 @@ public class PageAlice extends TabReference {
 	}
 	
 
-	public JPanel printAliceResults(Alice alToken,String str) throws JSONException, IOException {
+	public JPanel printAliceResults(Alice alToken,String str) throws IOException {
 
 		JPanel resultat = new JPanel();
 
@@ -236,7 +229,7 @@ public class PageAlice extends TabReference {
 	}
 	
 
-	public JPanel showNewQuestion(Alice alToken,String str) throws JSONException, IOException {
+	public JPanel showNewQuestion(Alice alToken,String str) throws IOException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 

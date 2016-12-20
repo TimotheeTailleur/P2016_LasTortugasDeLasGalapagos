@@ -1,4 +1,4 @@
-package fr.tse.info4.project.datarecovery;
+package fr.tse.info4.project.model.datarecovery;
 
 import com.google.code.stackexchange.client.impl.StackExchangeApiJsonClient;
 import com.google.code.stackexchange.client.query.impl.TagApiQueryImpl;
@@ -11,19 +11,32 @@ import com.google.code.stackexchange.schema.User;
 
 public class ApiManager extends StackExchangeApiJsonClient  {
 
-	/*  Key of the application */
+	/*  Application key */
 	public final static String APP_KEY = "6WGYkZgsp2UiQfMqTj3LCQ((";
 	/* Site (stack overflow) */
 	public final static StackExchangeSite SITE = StackExchangeSite.STACK_OVERFLOW;
 	
+	/**
+	 * Constructor to use application key with every api url execution
+	 * and specify StackExchange website on which execute querries
+	 * @param applicationKey
+	 * @param site
+	 */
 	public ApiManager(String applicationKey, StackExchangeSite site) {
 		super(applicationKey, site);
 
 	}
 
 	/**
+	 * Default constructor
+	 */
+	public ApiManager() {
+		super(APP_KEY,SITE);
+	}
+
+	/**
 	 * 
-	 * Return the id of the user identified with its acces token
+	 * Returns userId of user identified by (accessToken)
 	 * 
 	 * @param accessToken
 	 * @return

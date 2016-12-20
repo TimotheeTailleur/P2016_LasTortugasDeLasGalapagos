@@ -1,18 +1,16 @@
-package fr.tse.info4.project.graphicalInterface.test;
+package fr.tse.info4.project.view.test;
 
 import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import org.json.JSONException;
-
-import fr.tse.info4.project.graphicalInterface.ref.PageConnexion;
-import fr.tse.info4.project.graphicalInterface.users.*;
+import fr.tse.info4.project.view.ref.PageConnexion;
+import fr.tse.info4.project.view.users.*;
 
 public class HomePage extends JFrame {
 
-	public HomePage() throws JSONException, IOException {
+	public HomePage() throws IOException {
 		JTabbedPane onglets = new JTabbedPane();
 
 		onglets.addTab("Alice", new PageAlice());
@@ -49,7 +47,7 @@ public class HomePage extends JFrame {
 		this.setVisible(true);
 	}*/
 
-	public static void main(String[] args) throws JSONException, IOException {
+	public static void main(String[] args) throws IOException {
 		HomePage page = new HomePage();
 	}
 }

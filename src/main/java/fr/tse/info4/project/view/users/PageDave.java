@@ -1,4 +1,4 @@
-package fr.tse.info4.project.graphicalInterface.users;
+package fr.tse.info4.project.view.users;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,9 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import fr.tse.info4.project.graphicalInterface.ref.TabReference;
+import fr.tse.info4.project.view.ref.TabReference;
 
-import fr.tse.info4.project.user.Dave;
 
 
 public class PageDave extends TabReference {

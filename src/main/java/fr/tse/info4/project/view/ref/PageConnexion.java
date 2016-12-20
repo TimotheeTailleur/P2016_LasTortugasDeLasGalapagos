@@ -1,4 +1,4 @@
-package fr.tse.info4.project.graphicalInterface.ref;
+package fr.tse.info4.project.view.ref;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import fr.tse.info4.project.datarecovery.Authenticate;
-import fr.tse.info4.project.graphicalInterface.test.HomePage;
+import fr.tse.info4.project.model.datarecovery.Authenticate;
+import fr.tse.info4.project.view.test.HomePage;
 
 public class PageConnexion extends JPanel {
 

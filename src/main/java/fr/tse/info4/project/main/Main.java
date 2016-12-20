@@ -14,11 +14,11 @@ import org.json.JSONException;
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Question;
 
-import fr.tse.info4.project.database.DatabaseManager;
-import fr.tse.info4.project.schema.TagScore;
-import fr.tse.info4.project.user.Alice;
-import fr.tse.info4.project.user.Bob;
-import fr.tse.info4.project.user.Dave;
+import fr.tse.info4.project.model.database.DatabaseManager;
+import fr.tse.info4.project.model.schema.TagScore;
+import fr.tse.info4.project.model.user.Alice;
+import fr.tse.info4.project.model.user.Bob;
+import fr.tse.info4.project.model.user.Dave;
 
 import java.util.Map.Entry;
 
