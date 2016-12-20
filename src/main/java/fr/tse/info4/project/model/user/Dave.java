@@ -1,6 +1,5 @@
 package fr.tse.info4.project.model.user;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +38,11 @@ public class Dave extends Personae {
 	public Dave() {
 		databaseManager = new DaveDatabaseManager();
 	}
+	
+	public Dave(String accessToken){
+		databaseManager = new DaveDatabaseManager();
+		this.accessToken = accessToken;
+	}
 
 	// --------- Getters & Setters -------------
 
@@ -70,19 +74,7 @@ public class Dave extends Personae {
 		this.forceUpdateTopAnswerers = forceUpdateTopAnswerers;
 	}
 
-	/**
-	 * Returns Stack Overflow profile URL of user (id)
-	 * 
-	 * @param id
-	 * @return Stack Overflow profile URL
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-
-	public static String getLink(int id) {
-		return ("stackoverflow.com/u/" + id);
-	}
-
+	
 	// -----------------------User story 1 ---------------------------
 
 	/**

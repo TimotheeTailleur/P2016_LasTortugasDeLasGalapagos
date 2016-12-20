@@ -12,30 +12,18 @@ import com.google.code.stackexchange.schema.Tag;
 import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.datarecovery.BobApiManager;
 
-public class Bob {
+public class Bob extends Personae{
 
-	/*
-	 * Application user access token. <br> Default value : null
-	 */
-	private String accessToken = null;
-	
-	/**
-	 * ApiManager for Bob user story
-	 */
-	private BobApiManager apiManager;
 	
 	/**
 	 * Constructor. Initiates BobApiManager
 	 */
 	public Bob() {
-		super();
 		apiManager = new BobApiManager();
 	}
-	/**
-	 * Accesstoken getter
-	 * @param accessToken
-	 */
-	public void setAccessToken(String accessToken) {
+
+	public Bob(String accessToken){
+		apiManager = new BobApiManager();
 		this.accessToken = accessToken;
 	}
 
@@ -79,8 +67,7 @@ public class Bob {
 	 */
 	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered() {
 		if (accessToken == null) {
-			System.err.println("Access token isn't specified");
-			return null;
+			return getNewQuestionsAnswered(idUser);
 		}
 		return getNewQuestionsAnswered((int) ApiManager.getIdUser(accessToken));
 	}
@@ -91,7 +78,7 @@ public class Bob {
 	 * 
 	 * @return
 	 */
-	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered(int idUser) {
+	private TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered(int idUser) {
 		PagedList<Tag> tags = ApiManager.getTags(nbTags, idUser);
 		if (tags.size() == 0) {
 			System.err.println("No tags for this user");
@@ -120,7 +107,7 @@ public class Bob {
 	public List<String> findKeyWords(String questionTitle)
 	{
 		
-		return apiManager.findKeyWords(questionTitle);
+		return ((BobApiManager)apiManager).findKeyWords(questionTitle);
 	}
 	
 	// ------------------ BOB 1 : Find similar questions to the one the user wishes to submit -----------------
@@ -146,7 +133,7 @@ public class Bob {
 	 */
 	public List<Question> findSimilarQuestions(String questionTitle)
 	{
-		return apiManager.findSimilarQuestions(questionTitle, nbSimilarQuestions);
+		return ((BobApiManager)apiManager).findSimilarQuestions(questionTitle, nbSimilarQuestions);
 	}
 	
 	
