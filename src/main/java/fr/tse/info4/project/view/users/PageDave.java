@@ -38,9 +38,10 @@ public class PageDave extends TabReference {
 			public void actionPerformed(ActionEvent event){
 					
 				 isListTag(); 
+				 
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
 					Dave dave=new Dave();
-					System.out.println(dave.getTopTag(tagName.getText()));
+					dave.getTopTag(tagName.getText());
 				 }
 				 else { // else launch function 3 and display results
 					System.out.println("MULTITAG");		
@@ -63,7 +64,7 @@ public class PageDave extends TabReference {
 		panel3.add(panel1);
 		panel3.add(panel2);
 		
-		 this.getPanel().add(panel3);
+		this.getPanel().add(panel3);
 	}
 
 	
@@ -75,6 +76,4 @@ public class PageDave extends TabReference {
 		}
 		return isList;
 	}
-	
-	
 }

@@ -20,66 +20,53 @@ public class TabReference extends JPanel {
 	 * This attribute is modified by each tab for showing results.
 	 */
 	JPanel panel = new JPanel();
+	
 	/**
 	 * This attribute is modified by each tab by settings chosen when method of
 	 * users story are called.
 	 */
-	JLabel param = new JLabel("Paramètres :");
-
 	 JPanel foot = new JPanel();
 
-		
 
 	public TabReference() {
 		
+		
+		JButton Parametres = new JButton("Parametres");
+		panel.add(Parametres);
+		panel.setAlignmentX(RIGHT_ALIGNMENT);
+		
+		JButton Quitter = new JButton("Quitter");
+		foot.add(Quitter);
+		foot.setAlignmentX(CENTER_ALIGNMENT);
+	
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		this.add(panel);
-
+		
 		foot.setLayout(new BoxLayout(foot, BoxLayout.PAGE_AXIS));
-
-		JPanel settings = new JPanel();
-		settings.setLayout(new BoxLayout(settings, BoxLayout.LINE_AXIS));
-
-		JButton boutonSettings = new JButton("Paramètres");
-		JButton boutonLeave = new JButton("Quitter");
-
-		settings.add(param);
-		settings.add(boutonSettings);
-
-		foot.add(settings);
-		foot.add(boutonLeave);
-
 		this.add(foot);
 	}
 
-	public void setSettings() {
+	
 
-		param.setText("");
-	}
+public JPanel getPanel() {
+	return panel;
+}
 
-	public JPanel getFoot() {
-		return foot;
-	}
 
-	public void setFoot(JPanel foot) {
-		this.foot = foot;
-	}
+public void setPanel(JPanel panel) {
+	this.panel = panel;
+}
 
-	public JPanel getPanel() {
-		return panel;
-	}
 
-	public void setPanel(JPanel panel) {
-		this.panel = panel;
-	}
+public JPanel getFoot() {
+	return foot;
+}
 
-	public JLabel getParam() {
-		return param;
-	}
+public void setFoot(JPanel foot) {
+	this.foot = foot;
+}
 
-	public void setParam(JLabel param) {
-		this.param = param;
-	}
+
 
 }
