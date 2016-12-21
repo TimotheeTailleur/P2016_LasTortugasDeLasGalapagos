@@ -17,7 +17,7 @@ import fr.tse.info4.project.view.ref.TabReference;
 public class PageDave extends TabReference {
 
 	boolean isList;
-	JTextField tagName = new JTextField(25);
+	JTextField tagName = new JTextField(35);
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
@@ -33,10 +33,28 @@ public class PageDave extends TabReference {
 
 		tagName.setHorizontalAlignment(JTextField.CENTER);
 
-		JButton option1 = new JButton("Top Contributor");
-		JButton option2 = new JButton("Top Tag");
+		JButton option1 = new JButton("Top Tag");
+		option1.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+					
+				 isListTag(); 
+				 if(isList == false ){ // if one tag was written, launch function 1 and display results
+					 System.out.println(("SOLOTAG"));
+				 }
+				 else { // else launch function 3 and display results
+					System.out.println("MULTITAG");		
+				 }
+		}
+		});
 		
-		
+		JButton option2 = new JButton("Top Contributor");
+		option2.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				 String nomTag = tagName.getText(); // read the tad written by the user,launch function 2  and display results
+				 
+				 }
+		});
+
 		panel1.add(tagName);
 		panel2.add(option1);
 		panel2.add(option2);
@@ -45,32 +63,6 @@ public class PageDave extends TabReference {
 		panel3.add(panel2);
 		
 		this.getPanel().add(panel3);
-
-//		option1.addActionListener(new ActionListener(){
-//			 public void actionPerformed(ActionEvent event){
-//					
-//				 isListTag(); 
-//				 if(isList == false ){ // if one tag was written, launch function 1 and display results
-//					 System.out.println(("SOLOTAG"));
-//				 }
-//				 else { // else launch function 3 and display results
-//					System.out.println("MULTITAG");		
-//				 }
-//		}
-//		});
-//		
-//
-//		option1.addActionListener(new ActionListener(){
-//			 public void actionPerformed(ActionEvent event){
-//				 String nomTag = tagName.getText(); // read the tad written by the user,launch function 2  and display results
-//				 
-//				 }
-//		});
-//			 
-//		text.add(tagName);
-//		text.setSize(1000, 900);
-//		this.getPanel().add(text);
-//		// this.getPanel().add(tagName);
 	}
 
 	
