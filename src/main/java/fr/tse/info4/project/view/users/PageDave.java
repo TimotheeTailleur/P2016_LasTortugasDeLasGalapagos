@@ -1,13 +1,16 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
 
@@ -15,32 +18,30 @@ import fr.tse.info4.project.view.ref.TabReference;
 public class PageDave extends TabReference {
 
 	boolean isList;
-	JTextField tagName = new JTextField(25);
-	
+	JTextField tagName = new JTextField(35);
+	JPanel panel1 = new JPanel();
+	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
 /**
  * 
  */
 	public PageDave() {
 		super();
-
-		JPanel text = new JPanel();
+		
+		panel1.setLayout(new FlowLayout());
+		panel2.setLayout(new FlowLayout());
+		panel3.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
 		tagName.setHorizontalAlignment(JTextField.CENTER);
-		
-		JPanel boutons = new JPanel();
-		boutons.setLayout(new BoxLayout(boutons, BoxLayout.LINE_AXIS));
 
-		JButton option1 = new JButton("Top Contributor");
-		JButton option2 = new JButton("Top Tag");
-
-		boutons.add(option1);
-		boutons.add(option2);
-		
-		option1.addActionListener(new ActionListener(){
-			 public void actionPerformed(ActionEvent event){
+		JButton option1 = new JButton("Top Tag");
+		option1.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent event){
 					
 				 isListTag(); 
+				 
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
-					 System.out.println(("SOLOTAG"));
+					Dave dave=new Dave();
+					dave.getTopTag(tagName.getText());
 				 }
 				 else { // else launch function 3 and display results
 					System.out.println("MULTITAG");		
@@ -48,18 +49,22 @@ public class PageDave extends TabReference {
 		}
 		});
 		
-
-		option1.addActionListener(new ActionListener(){
+		JButton option2 = new JButton("Top Contributor");
+		option2.addActionListener(new ActionListener(){
 			 public void actionPerformed(ActionEvent event){
-				 String nomTag = tagName.getText(); // read the tad written by the user,launch function 2  and display results
+				 String nomTag = tagName.getText(); // read the tag written by the user,launch function 2  and display results
 				 
 				 }
 		});
-			 
-		text.add(tagName);
-		text.setSize(1000, 900);
-		this.getPanel().add(text);
-		this.getPanel().add(boutons);
+
+		panel1.add(tagName);
+		panel2.add(option1);
+		panel2.add(option2);
+		
+		panel3.add(panel1);
+		panel3.add(panel2);
+		
+		this.getPanel().add(panel3);
 	}
 
 	
@@ -71,6 +76,4 @@ public class PageDave extends TabReference {
 		}
 		return isList;
 	}
-	
-	
 }

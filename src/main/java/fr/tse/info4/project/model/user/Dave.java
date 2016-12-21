@@ -1,6 +1,5 @@
 package fr.tse.info4.project.model.user;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,27 +16,36 @@ import fr.tse.info4.project.model.schema.TopUser;
  */
 public class Dave extends Personae {
 
-	/*
+	/**
 	 * Number of top answerers in a given tag (Dave 1). <br> Default value : 10
 	 */
 	private int nbUsers = 10;
 
-	/*
+	/**
 	 * Time between 2 updates of top answerers data (in hours). <br> Default
 	 * value : 24h.
 	 */
 	private int refreshRateTopAnswerers = 24;
 
-	/*
+	/**
 	 * Boolean changed or not by the user. If true, database update will be
 	 * forced. If false, time between two updates will be
 	 * refreshRateTopAnswerers <br> Default value : false
 	 */
 	private boolean forceUpdateTopAnswerers = false;
 
-	/* Constructor */
+	/** Default constructor */
 	public Dave() {
 		databaseManager = new DaveDatabaseManager();
+	}
+	
+	/**
+	 * Constructor
+	 * @param accessToken
+	 */
+	public Dave(String accessToken){
+		databaseManager = new DaveDatabaseManager();
+		this.accessToken = accessToken;
 	}
 
 	// --------- Getters & Setters -------------
@@ -70,19 +78,7 @@ public class Dave extends Personae {
 		this.forceUpdateTopAnswerers = forceUpdateTopAnswerers;
 	}
 
-	/**
-	 * Returns Stack Overflow profile URL of user (id)
-	 * 
-	 * @param id
-	 * @return Stack Overflow profile URL
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-
-	public static String getLink(int id) {
-		return ("stackoverflow.com/u/" + id);
-	}
-
+	
 	// -----------------------User story 1 ---------------------------
 
 	/**
@@ -204,19 +200,6 @@ public class Dave extends Personae {
 		top.setPostCount(top.getRealPostCount());
 		
 		return top;
-
-	}
-
-	// Méthode main pour démo
-	public static void main(String[] args) {
-		Dave user = new Dave();
-		List<String> tagsName = new ArrayList<String>();
-
-		tagsName.add("oracle");
-		tagsName.add("sql");
-		tagsName.add("oracle");
-		System.out.println(user.getTopUserMultipleTags(tagsName));
-
 
 	}
 
