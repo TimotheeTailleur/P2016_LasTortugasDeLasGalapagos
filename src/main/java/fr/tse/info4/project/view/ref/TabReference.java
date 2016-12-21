@@ -47,7 +47,6 @@ public class TabReference extends JPanel {
 		this.add(foot);
 	}
 
-	
 
 public JPanel getPanel() {
 	return panel;
@@ -66,7 +65,5 @@ public JPanel getFoot() {
 public void setFoot(JPanel foot) {
 	this.foot = foot;
 }
-
-
 
 }
