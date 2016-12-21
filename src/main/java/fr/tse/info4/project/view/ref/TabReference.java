@@ -1,7 +1,11 @@
 package fr.tse.info4.project.view.ref;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,7 +17,7 @@ import javax.swing.JPanel;
  */
 public class TabReference extends JPanel {
 	/**
-	 * This attribute is modified by each tab for schowing results.
+	 * This attribute is modified by each tab for showing results.
 	 */
 	JPanel panel = new JPanel();
 	/**
@@ -24,7 +28,10 @@ public class TabReference extends JPanel {
 
 	 JPanel foot = new JPanel();
 
+		
+
 	public TabReference() {
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		this.add(panel);
