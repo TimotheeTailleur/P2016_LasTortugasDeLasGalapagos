@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
 
@@ -29,17 +30,17 @@ public class PageDave extends TabReference {
 		
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new FlowLayout());
-		panel3.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS));
-
+		panel3.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
 		tagName.setHorizontalAlignment(JTextField.CENTER);
 
 		JButton option1 = new JButton("Top Tag");
-		option1.addActionListener(new ActionListener(){
-			 public void actionPerformed(ActionEvent event){
+		option1.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent event){
 					
 				 isListTag(); 
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
-					 System.out.println(("SOLOTAG"));
+					Dave dave=new Dave();
+					System.out.println(dave.getTopTag(tagName.getText()));
 				 }
 				 else { // else launch function 3 and display results
 					System.out.println("MULTITAG");		
@@ -50,7 +51,7 @@ public class PageDave extends TabReference {
 		JButton option2 = new JButton("Top Contributor");
 		option2.addActionListener(new ActionListener(){
 			 public void actionPerformed(ActionEvent event){
-				 String nomTag = tagName.getText(); // read the tad written by the user,launch function 2  and display results
+				 String nomTag = tagName.getText(); // read the tag written by the user,launch function 2  and display results
 				 
 				 }
 		});
@@ -62,7 +63,7 @@ public class PageDave extends TabReference {
 		panel3.add(panel1);
 		panel3.add(panel2);
 		
-		this.getPanel().add(panel3);
+		 this.getPanel().add(panel3);
 	}
 
 	
