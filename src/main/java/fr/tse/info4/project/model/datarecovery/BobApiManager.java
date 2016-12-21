@@ -31,6 +31,7 @@ public class BobApiManager extends ApiManager {
 	
 	public static final String SIMILAR_QUESTIONS_FILTER = "!bA1d_KFuD9Rmoo";
 	
+	
 	/**
 	 * Constructor to use applicationKey and specify StackExchangeSite
 	 * @param applicationKey
@@ -56,8 +57,8 @@ public class BobApiManager extends ApiManager {
 	 * @param nbQuestions
 	 * @return
 	 */
-	public static ArrayList<Question> getAnsweredQuestionsByTag(String tag, int nbQuestions) {
-		final StackExchangeApiQueryFactory factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
+	public List<Question> getAnsweredQuestionsByTag(String tag, int nbQuestions) {
+		factory = StackExchangeApiQueryFactory.newInstance(ApiManager.APP_KEY,
 				ApiManager.SITE);
 		int numPage = 1;
 		int nbQuestionsAdded = 0;
@@ -113,7 +114,7 @@ public class BobApiManager extends ApiManager {
 	 * @param questionTitle
 	 * @return list of String Objects
 	 */
-	public ArrayList<String> findKeyWords(String questionTitle)
+	public List<String> findKeyWords(String questionTitle)
 	{
 		ArrayList<String> relatedTags = new ArrayList<String>();
 		
@@ -141,7 +142,7 @@ public class BobApiManager extends ApiManager {
 	 * @param nbQuestions Number of Questions you wish to look for (limited to 100)
 	 * @return list of Question Objects
 	 */
-	public ArrayList<Question> findSimilarQuestions(String questionTitle,int nbQuestions)
+	public List<Question> findSimilarQuestions(String questionTitle,int nbQuestions)
 	{
 		if (nbQuestions > 100)
 		{
@@ -163,27 +164,4 @@ public class BobApiManager extends ApiManager {
 		return similarQuestions;
 	}
 	
-
-	public static void main(String[] args) {
-		BobApiManager manager = new BobApiManager(APP_KEY, SITE);
-		System.out.println("Rentrez un titre de question :");
-		Scanner sc = new Scanner(System.in);
-		String questionTitle = sc.nextLine();
-		ArrayList<String> relatedTags = manager.findKeyWords(questionTitle);
-		System.out.println("Tags suggérés pour une question dont le titre est :"+questionTitle);
-		for (String s : relatedTags)
-		{
-			System.out.println(s);
-		}
-		System.out.println("Rentrez un titre de question pour trouver des questions similaires :");
-		sc.next();
-		String questionTitle2 = sc.nextLine();
-		ArrayList<Question> similarQuestions = manager.findSimilarQuestions(questionTitle2,20);
-		System.out.println("Questions similaires à "+questionTitle2);
-		for (Question q : similarQuestions)
-		{
-			System.out.println(q.getQuestionId());
-			System.out.println(q.getTitle());
-		}
-	}
 }

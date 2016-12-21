@@ -1,65 +1,76 @@
 package fr.tse.info4.project.model.user;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.Tag;
+import com.google.code.stackexchange.schema.User;
 
 import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.datarecovery.BobApiManager;
+import fr.tse.info4.project.model.schema.TagScore;
 
-public class Bob {
+public class Bob extends Personae {
 
-	/*
-	 * Application user access token. <br> Default value : null
-	 */
-	private String accessToken = null;
-	
 	/**
-	 * ApiManager for Bob user story
+	 * Number of Bob's most popular tags. <br>
+	 * Number limited to 100 tags <br>
+	 * Default value : 5.
 	 */
-	private BobApiManager apiManager;
-	
+	private int nbBestTags = 5;
+
+	/**
+	 * Number of questions displayed for each tag. <br>
+	 * Default value : 3 <br>
+	 * Number limited to 30 questions
+	 */
+	private int nbQuestionsPerTag = 3;
+
+	/**
+	 * Number of similar questions to display when a user's entering a
+	 * questionTitle <br>
+	 * Default value : 10
+	 */
+	private int nbSimilarQuestions = 10;
+
+	/**
+	 * Number of experts to follow in each tag.
+	 */
+	private int nbExpertsPerTag = 3;
+
+	// ---------------- Constructor ----------------
+
 	/**
 	 * Constructor. Initiates BobApiManager
 	 */
 	public Bob() {
-		super();
 		apiManager = new BobApiManager();
 	}
+
 	/**
-	 * Accesstoken getter
+	 * Constructor.
+	 * 
 	 * @param accessToken
 	 */
-	public void setAccessToken(String accessToken) {
+	public Bob(String accessToken) {
+		apiManager = new BobApiManager();
 		this.accessToken = accessToken;
 	}
 
-	// ------------------ BOB 4 : Recent answered questions in user's top tags -----------------
-	
-	/*
-	 * Number of Bob's most popular tags. <br> Number limited to 100 tags
-	 * <br> Default value : 5.
-	 */
-	private int nbTags = 5;
-
-	/*
-	 * Number of questions displayed for each tag. <br> Default value : 3
-	 * <br> Number limited to 30 questions
-	 */
-	private int nbQuestionsPerTag = 3;
+	// -------- Getters and Setters ----------
 
 	public int getNbTags() {
-		return nbTags;
+		return nbBestTags;
 	}
 
 	public void setNbTags(int nbTags) {
-		if (nbTags >0 && nbTags <=100)
-			this.nbTags = nbTags;
+		if (nbTags > 0 && nbTags <= 100)
+			this.nbBestTags = nbTags;
 	}
 
 	public int getNbQuestionsPerTag() {
@@ -67,119 +78,123 @@ public class Bob {
 	}
 
 	public void setNbQuestionsPerTag(int nbQuestionsPerTag) {
-		if (nbQuestionsPerTag >0 && nbQuestionsPerTag <=30)
+		if (nbQuestionsPerTag > 0 && nbQuestionsPerTag <= 30)
 			this.nbQuestionsPerTag = nbQuestionsPerTag;
 	}
 
+	public void setNbSimilarQuestions(int nbSimilarQuestions) {
+		if (nbSimilarQuestions > 0)
+			this.nbSimilarQuestions = nbSimilarQuestions;
+	}
+
+	public void setNbExpertsPerTag(int nbExperts) {
+		if (nbExperts > 0)
+			this.nbExpertsPerTag = nbExperts;
+	}
+
+	// -------------- Methods ----------------
+
+	// ------------------ BOB 1 : Find similar questions to the one the user
+	// wishes to submit -----------------
+
 	/**
-	 * Returns recent answered  questions (with at least one answer) in user's top tags <br>
-	 * User id obtained by access token.
+	 * Find similar questions to that which the user wishes to submit
 	 * 
+	 * @param questionTitle
 	 * @return
 	 */
-	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered() {
+	public List<Question> findSimilarQuestions(String questionTitle) {
+		return ((BobApiManager) apiManager).findSimilarQuestions(questionTitle, nbSimilarQuestions);
+	}
+
+	// ------------------ BOB 2 : Suggest keywords (tags) based on user input of
+	// a Question title -----------------
+
+	/**
+	 * Suggest keywords based on title of the question the user wishes to submit
+	 * 
+	 * @param questionTitle
+	 * @return
+	 */
+	public List<String> findKeyWords(String questionTitle) {
+
+		return ((BobApiManager) apiManager).findKeyWords(questionTitle);
+	}
+
+	// ------------------ BOB 3 -------------------
+
+	/**
+	 * Retrieves the best users (sorted by score) in the top bob tags.
+	 *  @return the best users that a beginner developer could follow.
+	 */
+	public Set<User> getExperts() {
 		if (accessToken == null) {
-			System.err.println("Access token isn't specified");
+			return getExperts(idUser);
+		}
+		return getExperts((int) ApiManager.getIdUser(accessToken));
+	}
+
+	/**
+	 * Retrieves the best users (sorted by score) in the top bob tags.
+	 * @param idUser
+	 * @return the best users that a beginner developer could follow.
+	 */
+	private Set<User> getExperts(int idUser) {
+		PagedList<Tag> tags = ApiManager.getBestTags(nbBestTags, idUser);
+		if (tags.size() == 0) {
+			System.err.println("No tags for this user");
 			return null;
+		}
+		Set<User> users = new HashSet<>();
+		for (Tag tag : tags) {
+			List<TagScore> bestUsers = apiManager.getTopAnswerers(tag.getName());
+			for (int i = 0; i < nbExpertsPerTag; i++) {
+				users.add(bestUsers.get(i).getUser());
+			}
+		}
+
+		return users;
+	}
+
+	// ----------- BOB 4 -----------------
+	/**
+	 * Retrieves recent answered questions (with at least one answer) in user's
+	 * top tags <br>
+	 * 
+	 * @return recent answered questions.
+	 */
+	public Map<String, List<Question>> getNewQuestionsAnswered() {
+		if (accessToken == null) {
+			return getNewQuestionsAnswered(idUser);
 		}
 		return getNewQuestionsAnswered((int) ApiManager.getIdUser(accessToken));
 	}
 
 	/**
-	 * Returns recent answered  questions (with at least one answer) in user's top tags <br>
-	 * User  identified by his id.
+	 * Retrieves recent answered questions (with at least one answer) in user's
+	 * top tags <br>
 	 * 
-	 * @return
+	 * @param idUser
+	 * @return recent answered questions.
 	 */
-	public TreeMap<String, ArrayList<Question>> getNewQuestionsAnswered(int idUser) {
-		PagedList<Tag> tags = ApiManager.getTags(nbTags, idUser);
+	private Map<String, List<Question>> getNewQuestionsAnswered(int idUser) {
+		PagedList<Tag> tags = ApiManager.getBestTags(nbBestTags, idUser);
 		if (tags.size() == 0) {
 			System.err.println("No tags for this user");
 			return null;
 		}
 
-		TreeMap<String, ArrayList<Question>> questionsForTags = new TreeMap<String, ArrayList<Question>>();
+		Map<String, List<Question>> questionsForTags = new TreeMap<String, List<Question>>();
 
 		for (int i = 0; i < tags.size(); i++) {
 			String tagName = tags.get(i).getName();
-			ArrayList<Question> questionsForTag = BobApiManager.getAnsweredQuestionsByTag(tagName, nbQuestionsPerTag);
+			List<Question> questionsForTag = ((BobApiManager) apiManager).getAnsweredQuestionsByTag(tagName,
+					nbQuestionsPerTag);
 			questionsForTags.put(tagName, questionsForTag);
 		}
 
 		return questionsForTags;
 
-	}
-
-	// ------------------ BOB 2 : Suggest keywords (tags) based on user input of a Question title -----------------
-	
-	/**
-	 * Suggest keywords based on title of the question the user wishes to submit
-	 * @param questionTitle
-	 * @return
-	 */
-	public List<String> findKeyWords(String questionTitle)
-	{
-		
-		return apiManager.findKeyWords(questionTitle);
-	}
-	
-	// ------------------ BOB 1 : Find similar questions to the one the user wishes to submit -----------------
-	
-	/**
-	 * Number of similar questions to display when a user's entering a questionTitle
-	 * <br> Default value : 10
-	 */
-	private int nbSimilarQuestions = 10;
-	
-	/**
-	 * nbSimilarQuestions setter
-	 * @param nbSimilarQuestions
-	 */
-	public void setNbSimilarQuestions(int nbSimilarQuestions) {
-		this.nbSimilarQuestions = nbSimilarQuestions;
-	}
-	
-	/**
-	 * Find similar questions to that which the user wishes to submit
-	 * @param questionTitle 
-	 * @return
-	 */
-	public List<Question> findSimilarQuestions(String questionTitle)
-	{
-		return apiManager.findSimilarQuestions(questionTitle, nbSimilarQuestions);
-	}
-	
-	
-	
-	/**
-	 * Main demo method
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Bob user = new Bob();
-		// Avec id user
-		TreeMap<String, ArrayList<Question>> newQuestions = user.getNewQuestionsAnswered(1200);
-		if (newQuestions != null) {
-
-			for (Entry<String, ArrayList<Question>> entry : newQuestions.entrySet()) {
-				System.out.println(entry.getKey() + " : ");
-				ArrayList<Question> questions = entry.getValue();
-				for (int i = 0; i < questions.size(); i++) {
-					System.out.println("- " + questions.get(i).getTitle());
-				}
-			}
-		}
-
-		/*
-		 * // Avec access token
-		 * user.setAccessToken(Authenticate.getAcessToken()); TreeMap<String,
-		 * ArrayList<Question>> newQuestionsToken = user.getNewQuestionsAnswered(); if
-		 * (newQuestionsToken != null) { for (Entry<String, ArrayList<Question>>
-		 * entry : newQuestionsToken.entrySet()) {
-		 * System.out.println(entry.getKey() + " : "); ArrayList<Question>
-		 * questions = entry.getValue(); for (int i = 0; i < questions.size();
-		 * i++) { System.out.println("- " + questions.get(i).getTitle()); } } }
-		 */
 	}
 
 }
