@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 /**
  * 
  * This class is a reference for tabs of the class HomePage. It fixes the bottom
@@ -30,15 +31,24 @@ public class TabReference extends JPanel {
 
 	public TabReference() {
 		
-		
-		JButton Parametres = new JButton("Parametres");
-		panel.add(Parametres);
-		panel.setAlignmentX(RIGHT_ALIGNMENT);
-		
 		JButton Quitter = new JButton("Quitter");
+		Quitter.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				 System.exit(0); 
+				 }
+		});
 		foot.add(Quitter);
 		foot.setAlignmentX(CENTER_ALIGNMENT);
-	
+		
+		JButton Parametres = new JButton("Parametres");
+		Parametres.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				
+				
+				 }
+		});
+		
+		panel.add(Parametres);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		this.add(panel);
