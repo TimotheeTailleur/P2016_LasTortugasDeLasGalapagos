@@ -1,5 +1,6 @@
 package fr.tse.info4.project.view.ref;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 
 /**
  * 
@@ -30,15 +33,34 @@ public class TabReference extends JPanel {
 
 	public TabReference() {
 		
-		
-		JButton Parametres = new JButton("Parametres");
-		panel.add(Parametres);
-		panel.setAlignmentX(RIGHT_ALIGNMENT);
-		
 		JButton Quitter = new JButton("Quitter");
+		Quitter.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				 System.exit(0); 
+				 }
+		});
 		foot.add(Quitter);
 		foot.setAlignmentX(CENTER_ALIGNMENT);
-	
+		
+		JButton Parametres = new JButton("Parametres");
+		Parametres.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				JFrame parametre = new JFrame("Parametres");
+				JPanel panelParam = new JPanel();
+				JTextField Txtparam = new JTextField(30);
+				
+				panelParam.setLayout(new FlowLayout());
+				parametre.setLocationRelativeTo(null);		
+				parametre.pack();
+				panelParam.add(Txtparam);
+				
+				parametre.getContentPane().add(panelParam);
+				parametre.setVisible(true);
+				
+				 }
+		});
+		
+		panel.add(Parametres);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		this.add(panel);
