@@ -14,7 +14,7 @@ public class HomePage extends JFrame {
 		JTabbedPane onglets = new JTabbedPane();
 
 		onglets.addTab("Alice", new PageAlice());
-		// onglets.addTab("Bob", new PageConnexion(1, this));
+		onglets.addTab("Bob", new PageBob());
 		onglets.addTab("Charlie", new PageCharlie());
 		onglets.addTab("Dave", new PageDave());
 

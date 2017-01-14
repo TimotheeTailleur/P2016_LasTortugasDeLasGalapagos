@@ -1,13 +1,11 @@
 package fr.tse.info4.project.view.users;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Map.Entry;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,14 +16,17 @@ import javax.swing.JPanel;
 
 
 import com.google.code.stackexchange.common.PagedList;
+import com.google.code.stackexchange.schema.Answer;
 import com.google.code.stackexchange.schema.Question;
 
-import fr.tse.info4.project.model.datarecovery.ApiManager;
+import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.datarecovery.Authenticate;
 import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageAlice extends TabReference {
+	
+	Alice al=null;
 
 
 	public PageAlice() throws IOException {
@@ -52,12 +53,12 @@ public class PageAlice extends TabReference {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				String accessToken = Authenticate.getAcessToken();
-				Alice alToken=new Alice();
-				alToken.setAccesToken(accessToken);
+				al = new UserFactory(accessToken).newAlice().get();
+				
 				ButtonConnexion.setVisible(false);
 				offline.setVisible(false);
 				try {
-					alice.getPanel().add(printAliceResults(alToken,"Token"));
+					alice.getPanel().add(printAliceResults(alice));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -97,6 +98,9 @@ public class PageAlice extends TabReference {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
+				al = new UserFactory().newAlice().get();
+				al.setIdUser(1200);
+				
 				ButtonConnexion.setVisible(false);
 				offline.setVisible(false);
 				try {
@@ -135,6 +139,7 @@ public class PageAlice extends TabReference {
 
 		return connexion;
 	}
+	
 
 	public JPanel printAliceResults(PageAlice alice) throws IOException {
 
@@ -154,26 +159,35 @@ public class PageAlice extends TabReference {
 		return resultat;
 	}
 
-	public JPanel showNewQuestion(PageAlice alice) throws IOException {
+	private JPanel showNewQuestion(PageAlice alice) throws IOException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
-		Alice al = new Alice();
 
-		Map<String, PagedList<Question>> newQuestion = al.getNewQuestions(1200);
+		Map<String[], PagedList<Question>> newQuestion = al.getNewQuestions();
 
 		JLabel title = new JLabel("<html><b />Les nouvelles questions : </html>");
 		// title.setFont( title.getFont().deriveFont(title.BOLD) );
 		result.add(title);
 
-		for (Entry<String, PagedList<Question>> tagEntry : newQuestion.entrySet()) {
-			String tagName = tagEntry.getKey();
-			JLabel tag = new JLabel("\n- dans le tag " + tagName + " : ");
+		for (Entry<String[], PagedList<Question>> tagEntry : newQuestion.entrySet()) {
+			String[] tagName = tagEntry.getKey();
+			String str= "\n- dans le(s) tag(s) ";
+			int nb = tagName.length;
+			for(int i = 0;i<nb;i++){
+				if(i!=(nb-1) && nb != 1 ){
+					str+= tagName[i] +", ";
+				}else{
+					str+= tagName[i];
+				}
+			}
+			str += " : ";
+			JLabel tag = new JLabel(str);
 			result.add(tag);
 			PagedList<Question> questionMap = tagEntry.getValue();
 			for (int i = 0; i < questionMap.getPageSize(); i++) {
 				String questionTitle = questionMap.get(i).getTitle();
-				JLabel tagQuestion = new JLabel("\t- " + questionTitle);
+				JLabel tagQuestion = new JLabel("\t-- " + questionTitle + "\n "+ (Alice.getLinkQuestion((int)questionMap.get(i).getQuestionId())));
 				tagQuestion.setMaximumSize(new Dimension(500, 20));
 				result.add(tagQuestion);
 			}
@@ -182,13 +196,12 @@ public class PageAlice extends TabReference {
 		return result;
 	}
 
-	public JPanel showSortedAnsweredQuestions(PageAlice alice) {
+	private JPanel showSortedAnsweredQuestions(PageAlice alice) {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
-		Alice al = new Alice(); // param : int nbQuestions, int nbHours, boolean
-								// forceUpdate
-		List<Question> listQuestion = al.getSortedAnsweredQuestions(1200);
+								
+		List<Answer> listQuestion = al.getSortedAnswers();
 
 		JLabel title = new JLabel("<html><b />Questions répondues triées : </html>");
 		// title.setFont( title.getFont().deriveFont(title.BOLD) );
@@ -202,86 +215,13 @@ public class PageAlice extends TabReference {
 		return result;
 	}
 
-	public JPanel showComparedBadge(PageAlice alice) {
+	private JPanel showComparedBadge(PageAlice alice) {
 		JPanel result = new JPanel();
-		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
-
-		return result;
-	}
-	
-
-	public JPanel printAliceResults(Alice alToken,String str) throws IOException {
-
-		JPanel resultat = new JPanel();
-
-		JPanel newQestion = showNewQuestion(alToken,str);
-		// JPanel comparedBadges = showComparedBadge(alToken,str);//new JPanel();
-		JPanel sortQuestion = showSortedAnsweredQuestions(alToken,str);
-
-
-		resultat.setLayout(new BoxLayout(resultat, BoxLayout.LINE_AXIS));
-		resultat.add(newQestion);
-		// resultat.add(comparedBadges);
-		resultat.add(sortQuestion);
-		resultat.setVisible(true);
-
-		return resultat;
-	}
-	
-
-	public JPanel showNewQuestion(Alice alToken,String str) throws IOException {
-		JPanel result = new JPanel();
-		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
-
-
-		Map<String, PagedList<Question>> newQuestion = alToken.getNewQuestions();
-
-		JLabel title = new JLabel("<html><b />Les nouvelles questions : </html>");
-		// title.setFont( title.getFont().deriveFont(title.BOLD) );
-		result.add(title);
-
-		for (Entry<String, PagedList<Question>> tagEntry : newQuestion.entrySet()) {
-			String tagName = tagEntry.getKey();
-			JLabel tag = new JLabel("\n- dans le tag " + tagName + " : ");
-			result.add(tag);
-			PagedList<Question> questionMap = tagEntry.getValue();
-			for (int i = 0; i < questionMap.getPageSize(); i++) {
-				String questionTitle = questionMap.get(i).getTitle();
-				JLabel tagQuestion = new JLabel("\t- " + questionTitle);
-				tagQuestion.setMaximumSize(new Dimension(500, 20));
-				result.add(tagQuestion);
-			}
-		}
-
-		return result;
-	}
-
-	public JPanel showSortedAnsweredQuestions(Alice alToken,String str) {
-		JPanel result = new JPanel();
-		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		
-		// param : int nbQuestions, int nbHours, boolean
-		// forceUpdate
-		List<Question> listQuestion = alToken.getSortedAnsweredQuestions();
-
-		JLabel title = new JLabel("<html><b />Questions répondues triées : </html>");
-		// title.setFont( title.getFont().deriveFont(title.BOLD) );
-		result.add(title);
-
-		for (int i = 0; i < listQuestion.size(); i++) {
-			JLabel question = new JLabel(Alice.getLinkQuestion((int)listQuestion.get(i).getQuestionId()) + " avec un score de " + listQuestion.get(i).getScore());
-			result.add(question);
-		}
-
-		return result;
-	}
-
-	public JPanel showComparedBadge(Alice alToken,String str) {
-		JPanel result = new JPanel();
+		ArrayList<Integer> list = al.compareBadge();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
 		return result;
 	}
 	
-
 }

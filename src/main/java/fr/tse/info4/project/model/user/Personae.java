@@ -59,5 +59,12 @@ public abstract class Personae {
 	public static String getLinkQuestion(int id) {
 		return ("stackoverflow.com/q/" + id);
 	}
+	
+	/**
+	 * Returns Stack Overflow URL of answer (id) 
+	 */
+	public static String getLinkAnswer(int id) {
+		return ("stackoverflow.com/a/" + id);
+	}
 
 }
