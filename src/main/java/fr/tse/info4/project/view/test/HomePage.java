@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import fr.tse.info4.project.view.ref.PageConnexion;
 import fr.tse.info4.project.view.users.*;
 
 public class HomePage extends JFrame {

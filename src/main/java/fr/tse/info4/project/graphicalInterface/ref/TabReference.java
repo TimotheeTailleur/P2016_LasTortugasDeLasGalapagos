@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import fr.tse.info4.project.model.database.DatabaseManager;
+
 
 /**
  * 

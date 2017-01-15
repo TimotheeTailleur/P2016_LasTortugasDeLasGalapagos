@@ -1,11 +1,11 @@
 package fr.tse.info4.project.view.users;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,15 +15,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.User;
 
 import fr.tse.info4.project.controller.BobMethod;
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.datarecovery.Authenticate;
-import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.model.user.Bob;
 import fr.tse.info4.project.view.ref.TabReference;
 
@@ -160,20 +159,153 @@ public class PageBob extends TabReference {
 		return resultat;
 	}
 	
-	//List<Question> findSimilarQuestions(String questionTitle)
+	
 	private JPanel showQuestion(PageBob bobPage){
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
+		JTextField text = new JTextField(35);
+		text.setMaximumSize(new Dimension(850,20));
+		JButton valid = new JButton("Rechercher");
 		
+		result.add(text);
+		result.add(valid);
+		
+		valid.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(BobMethod.isEmpty(text) == true){
+					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
+					result.add(error);
+				}else{
+					List<Question> questions = bob.findSimilarQuestions(text.getText());
+					String str = "Questions similaires à celle écrite : ";
+					if(BobMethod.hasQuestion(questions) == false){
+						str+="\n Pas de questions semblables trouvées.";
+					}else{
+						for (int i=0;i<questions.size();i++){
+							str+="\n- "+questions.get(i).getTitle()+"   "+Bob.getLinkQuestion((int)questions.get(i).getQuestionId());
+						}
+					}
+					
+					JLabel similarQ = new JLabel(str);
+					result.add(similarQ);
+				}
+			}
+		});
+		
+		/*valid.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				if(BobMethod.isEmpty(text) == true){
+					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
+					result.add(error);
+				}else{
+					List<Question> questions = bob.findSimilarQuestions(text.getText());
+					String str = "Questions similaires à celle écrite : ";
+					if(BobMethod.hasQuestion(questions) == false){
+						str+="\n Pas de questions semblables trouvées.";
+					}else{
+						for (int i=0;i<questions.size();i++){
+							str+="\n- "+questions.get(i).getTitle()+"   "+Bob.getLinkQuestion((int)questions.get(i).getQuestionId());
+						}
+					}
+					
+					JLabel similarQ = new JLabel(str);
+					result.add(similarQ);
+				}
+			}
+		});*/
 		
 		return result;	
 	}
 	
-	//List<String> findKeyWords(String questionTitle)
+	
 	private JPanel showKeyWords(PageBob bobPage){
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
+		JTextField text = new JTextField(35);
+		text.setMaximumSize(new Dimension(850,20));
+		JButton valid = new JButton("Suggérer");
 		
+		result.add(text);
+		result.add(valid);
+		
+		valid.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				if(BobMethod.isEmpty(text) == true){
+					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
+					result.add(error);
+				}else{
+					List<String> keyWords = bob.findKeyWords(text.getText());
+					String str = "Mots-clés pouvant être rajoutés : ";
+					if(BobMethod.hasKeyWords(keyWords) == false){
+						str+="\n Pas de mots-clés trouvés.";
+					}else{
+						for (int i=0;i<keyWords.size();i++){
+							str+="\n- "+keyWords.get(i);
+						}
+					}
+					
+					JLabel similarQ = new JLabel(str);
+					result.add(similarQ);
+				}
+			}
+		});
 		
 		return result;	
 	}
