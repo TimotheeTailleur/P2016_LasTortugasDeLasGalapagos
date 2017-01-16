@@ -14,7 +14,7 @@ public class HomePage extends JFrame {
 
 		onglets.addTab("Alice", new PageAlice());
 		onglets.addTab("Bob", new PageBob());
-		onglets.addTab("Charlie", new PageCharlie());
+		//  onglets.addTab("Charlie", new PageCharlie());
 		onglets.addTab("Dave", new PageDave());
 
 		this.getContentPane().add(onglets);

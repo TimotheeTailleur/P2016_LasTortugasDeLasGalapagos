@@ -1,6 +1,8 @@
-package fr.tse.info4.project.view.ref;
+ package fr.tse.info4.project.view.ref;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,6 +31,8 @@ public class TabReference extends JPanel {
 	 * users story are called.
 	 */
 	 JPanel foot = new JPanel();
+	 
+	 
 
 
 	public TabReference() {
@@ -60,10 +64,12 @@ public class TabReference extends JPanel {
 				 }
 		});
 		
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add(Parametres);
+		panel.setLocation(1700, 0);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		this.add(panel);
+		
 		
 		foot.setLayout(new BoxLayout(foot, BoxLayout.PAGE_AXIS));
 		this.add(foot);

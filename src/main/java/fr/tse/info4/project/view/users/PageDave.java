@@ -3,13 +3,21 @@ package fr.tse.info4.project.view.users;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import fr.tse.info4.project.controller.UserFactory;
+import fr.tse.info4.project.model.schema.TagScore;
+import fr.tse.info4.project.model.schema.TopUser;
 import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
@@ -34,27 +42,114 @@ public class PageDave extends TabReference {
 		tagName.setHorizontalAlignment(JTextField.CENTER);
 
 		JButton option1 = new JButton("Top Tag");
-		option1.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent event){
-					
-				 isListTag(); 
+		option1.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+							
+			
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				isListTag(); 
 				 
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
-					Dave dave=new Dave();
-					dave.getTopTag(tagName.getText());
+					 JPanel results = new JPanel();
+					 Dave dave = (new UserFactory()).newDave().get();
+					 
+					 TagScore topTag = dave.getTopTag(tagName.getText());
+					 
+					 String str = Dave.getLink((int)topTag.getUser().getUserId()) + " avec un score de " + topTag.getScore();
+					 
+					 JLabel user = new JLabel(str);
+					 results.add(user);
+					 panel3.add(results);
+					 
+					 panel3.validate();
+					 
+					 results.setVisible(true);
+					 
+				 }else{
+						JPanel results = new JPanel();
+						 Dave dave = (new UserFactory()).newDave().get();
+						 
+					
+						 String[] resultsTab = tagName.getText().split(" ");
+						 List<String> resultsList = new ArrayList<String>();
+						 
+						 for(int i=0;i<resultsTab.length;i++){
+							 resultsList.add(resultsTab[i]);
+						 }
+						 TopUser topTags = dave.getTopUserMultipleTags(resultsList);
+						 
+						 String str = Dave.getLink((int)topTags.getId());
+						 
+						 JLabel user = new JLabel(str);
+						 results.add(user);
+						 panel3.add(results);
+						 panel3.validate();
+						 
+						 results.setVisible(true);
 				 }
-				 else { // else launch function 3 and display results
-					System.out.println("MULTITAG");		
-				 }
-		}
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+			
 		});
 		
 		JButton option2 = new JButton("Top Contributor");
-		option2.addActionListener(new ActionListener(){
-			 public void actionPerformed(ActionEvent event){
-				 String nomTag = tagName.getText(); // read the tag written by the user,launch function 2  and display results
-				 
-				 }
+		option2.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		
 		
