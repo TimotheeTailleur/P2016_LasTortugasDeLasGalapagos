@@ -1,8 +1,6 @@
 package fr.tse.info4.project.view.users;
 
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.ArrayList;
@@ -10,136 +8,37 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
 import com.google.code.stackexchange.schema.Question;
 
 import fr.tse.info4.project.controller.UserFactory;
-import fr.tse.info4.project.model.datarecovery.Authenticate;
 import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageAlice extends TabReference {
 	
 	Alice al=null;
-
-
-	public PageAlice() throws IOException {
+	
+	public PageAlice(String acessToken) throws IOException {
 
 		super();
-		// this.remove(TabReference.getFoot());
-		this.getPanel().add(panelConnexion(this));
-		// printAliceResults(this));
+		al = new UserFactory(acessToken).newAlice().get();
+		this.getPanel().add(printAliceResults(this));
 
-	}
-
-	public JPanel panelConnexion(PageAlice alice) {
-
-		JPanel connexion = new JPanel();
-
-		JButton ButtonConnexion = new JButton("Connexion");
-		connexion.add(ButtonConnexion);
-
-		final JButton offline = new JButton("Sans compte Stackoverflow");
-		connexion.add(offline);
-
-		ButtonConnexion.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				String accessToken = Authenticate.getAcessToken();
-				al = new UserFactory(accessToken).newAlice().get();
-				
-				ButtonConnexion.setVisible(false);
-				offline.setVisible(false);
-				try {
-					alice.getPanel().add(printAliceResults(alice));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-		});
-
-
-
-		offline.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				al = new UserFactory().newAlice().get();
-				al.setIdUser(1200);
-				
-				ButtonConnexion.setVisible(false);
-				offline.setVisible(false);
-				try {
-					alice.getPanel().add(printAliceResults(alice));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-		});
-
-		return connexion;
 	}
 	
+	public PageAlice(int id) throws IOException {
+
+		super();
+		al = new UserFactory().newAlice().get();
+		al.setIdUser(id);
+		this.getPanel().add(printAliceResults(this));
+
+	}
 
 	public JPanel printAliceResults(PageAlice alice) throws IOException {
 

@@ -1,8 +1,6 @@
 package fr.tse.info4.project.view.users;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -22,7 +20,6 @@ import com.google.code.stackexchange.schema.User;
 
 import fr.tse.info4.project.controller.BobMethod;
 import fr.tse.info4.project.controller.UserFactory;
-import fr.tse.info4.project.model.datarecovery.Authenticate;
 import fr.tse.info4.project.model.user.Bob;
 import fr.tse.info4.project.view.ref.TabReference;
 
@@ -31,112 +28,21 @@ public class PageBob extends TabReference {
 	
 	Bob bob=null;
 	
-	public PageBob() {
+	public PageBob(String acessToken) throws IOException {
 
 		super();
-		this.getPanel().add(panelConnexion(this));
+		bob = new UserFactory(acessToken).newBob().get();
+		this.getPanel().add(printBobResults(this));
+
 	}
 	
-	public JPanel panelConnexion(PageBob bobPage) {
+	public PageBob(int id) throws IOException {
 
-		JPanel connexion = new JPanel();
+		super();
+		bob = new UserFactory().newBob().get();
+		bob.setIdUser(id);
+		this.getPanel().add(printBobResults(this));
 
-		JButton ButtonConnexion = new JButton("Connexion");
-		connexion.add(ButtonConnexion);
-
-		final JButton offline = new JButton("Sans compte Stackoverflow");
-		connexion.add(offline);
-
-		ButtonConnexion.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				String accessToken = Authenticate.getAcessToken();
-				bob = new UserFactory(accessToken).newBob().get();
-				
-				ButtonConnexion.setVisible(false);
-				offline.setVisible(false);
-				try {
-					bobPage.getPanel().add(printBobResults(bobPage));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-		});
-
-
-
-		offline.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				bob = new UserFactory().newBob().get();
-				bob.setIdUser(1200);
-				
-				ButtonConnexion.setVisible(false);
-				offline.setVisible(false);
-				try {
-					bobPage.getPanel().add(printBobResults(bobPage));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-		});
-
-		return connexion;
 	}
 	
 	public JPanel printBobResults(PageBob bobPage) throws IOException {
@@ -159,7 +65,6 @@ public class PageBob extends TabReference {
 		return resultat;
 	}
 	
-	
 	private JPanel showQuestion(PageBob bobPage){
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
@@ -170,14 +75,21 @@ public class PageBob extends TabReference {
 		result.add(text);
 		result.add(valid);
 		
-		valid.addActionListener(new ActionListener() {
+		valid.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
 				if(BobMethod.isEmpty(text) == true){
 					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
 					result.add(error);
+					result.validate();
 				}else{
 					List<Question> questions = bob.findSimilarQuestions(text.getText());
 					String str = "Questions similaires à celle écrite : ";
@@ -191,22 +103,8 @@ public class PageBob extends TabReference {
 					
 					JLabel similarQ = new JLabel(str);
 					result.add(similarQ);
+					result.validate();
 				}
-			}
-		});
-		
-		/*valid.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -223,26 +121,10 @@ public class PageBob extends TabReference {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
 				
-				if(BobMethod.isEmpty(text) == true){
-					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
-					result.add(error);
-				}else{
-					List<Question> questions = bob.findSimilarQuestions(text.getText());
-					String str = "Questions similaires à celle écrite : ";
-					if(BobMethod.hasQuestion(questions) == false){
-						str+="\n Pas de questions semblables trouvées.";
-					}else{
-						for (int i=0;i<questions.size();i++){
-							str+="\n- "+questions.get(i).getTitle()+"   "+Bob.getLinkQuestion((int)questions.get(i).getQuestionId());
-						}
-					}
-					
-					JLabel similarQ = new JLabel(str);
-					result.add(similarQ);
-				}
 			}
-		});*/
+		});
 		
 		return result;	
 	}
@@ -268,8 +150,26 @@ public class PageBob extends TabReference {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
+				if(BobMethod.isEmpty(text) == true){
+					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
+					result.add(error);
+					result.validate();
+				}else{
+					List<String> keyWords = bob.findKeyWords(text.getText());
+					String str = "Mots-clés pouvant être rajoutés : ";
+					if(BobMethod.hasKeyWords(keyWords) == false){
+						str+="\n Pas de mots-clés trouvés.";
+					}else{
+						for (int i=0;i<keyWords.size();i++){
+							str+="\n- "+keyWords.get(i);
+						}
+					}
+					
+					JLabel similarQ = new JLabel(str);
+					result.add(similarQ);
+					result.validate();
+				}
 			}
 			
 			@Override
@@ -286,24 +186,8 @@ public class PageBob extends TabReference {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
 				
-				if(BobMethod.isEmpty(text) == true){
-					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
-					result.add(error);
-				}else{
-					List<String> keyWords = bob.findKeyWords(text.getText());
-					String str = "Mots-clés pouvant être rajoutés : ";
-					if(BobMethod.hasKeyWords(keyWords) == false){
-						str+="\n Pas de mots-clés trouvés.";
-					}else{
-						for (int i=0;i<keyWords.size();i++){
-							str+="\n- "+keyWords.get(i);
-						}
-					}
-					
-					JLabel similarQ = new JLabel(str);
-					result.add(similarQ);
-				}
 			}
 		});
 		
