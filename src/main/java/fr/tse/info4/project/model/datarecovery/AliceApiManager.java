@@ -91,7 +91,7 @@ public class AliceApiManager extends ApiManager {
 			Paging page = new Paging(1, nbAnswers);
 
 			PagedList<Answer> answers = factory.newAnswerApiQuery().withUserIds(idUser).withFilter(filter)
-					.withSort(Answer.SortOrder.MOST_RECENTLY_UPDATED).withPaging(page).listByUsers();
+					.withSort(Answer.SortOrder.MOST_VOTED).withPaging(page).listByUsers();
 
 			return answers;
 		} else {
