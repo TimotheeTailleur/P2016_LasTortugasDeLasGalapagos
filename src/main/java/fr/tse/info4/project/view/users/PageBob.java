@@ -1,11 +1,14 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -123,6 +126,14 @@ public class PageBob extends TabReference {
 						    
 							JButton link = new JButton();
 							link.setText(questions.get(i).getTitle());
+							link.setForeground(Color.BLUE);
+							link.setBorderPainted(false);
+							link.setOpaque(false);
+							link.setBackground(Color.WHITE);
+							Font font = link.getFont();
+							Map attributes = font.getAttributes();
+							attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+							link.setFont(font.deriveFont(attributes));
 							link.setToolTipText(uri.toString());
 							link.addActionListener(new OpenUrlAction());
 							result.add(link);
@@ -246,6 +257,14 @@ public class PageBob extends TabReference {
 			    
 				JButton link = new JButton();
 				link.setText(user.getDisplayName());
+				link.setForeground(Color.BLUE);
+				link.setBorderPainted(false);
+				link.setOpaque(false);
+				link.setBackground(Color.WHITE);
+				Font font = link.getFont();
+				Map attributes = font.getAttributes();
+				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+				link.setFont(font.deriveFont(attributes));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
 				result.add(link);
@@ -281,6 +300,14 @@ public class PageBob extends TabReference {
 			    
 				JButton link = new JButton();
 				link.setText(questionTitle);
+				link.setForeground(Color.BLUE);
+				link.setBorderPainted(false);
+				link.setOpaque(false);
+				link.setBackground(Color.WHITE);
+				Font font = link.getFont();
+				Map attributes = font.getAttributes();
+				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+				link.setFont(font.deriveFont(attributes));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
 				result.add(link);
