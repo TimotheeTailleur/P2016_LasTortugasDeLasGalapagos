@@ -150,5 +150,16 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 
 	}
 	
+	/**
+	 * Returns true if the user exists, false otherwise.
+	 * @param userId the user id.
+	 * @return the boolean checking if a user exists.
+	 */
+	public boolean userExists(int userId){
+		factory = StackExchangeApiQueryFactory.newInstance(APP_KEY, SITE);
+		List<User> users = factory.newUserApiQuery().withUserIds(userId).listUserByIds();
+		return users.size() !=0;		
+	}
+	
 
 }
