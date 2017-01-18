@@ -53,6 +53,7 @@ public class TabReference extends JPanel {
 				panelParam.setLayout(new FlowLayout());
 				parametre.setLocationRelativeTo(null);		
 				parametre.pack();
+				parametre.setSize(950, 500);
 				panelParam.add(Txtparam);
 				
 				parametre.getContentPane().add(panelParam);

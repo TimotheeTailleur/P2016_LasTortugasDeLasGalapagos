@@ -135,8 +135,23 @@ public class PageDave extends TabReference {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
+				JPanel results = new JPanel();
+			    Dave dave = (new UserFactory()).newDave().get();
+			
+				 List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
 				
+				 
+				 for(int i=0;i<topAnswerer.size();i++){
+					 String str=Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()) + " avec " + topAnswerer.get(i).getPostCount() +" posts";
+					 JLabel user = new JLabel(str);
+					 results.add(user);
+					 			 
+				 }
 				
+				 panel3.add(results);	
+				 panel3.validate();
+				 results.setVisible(true);
+				 		
 			}
 
 			@Override
