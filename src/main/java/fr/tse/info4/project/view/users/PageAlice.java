@@ -1,13 +1,18 @@
 package fr.tse.info4.project.view.users;
 
-import java.awt.Dimension;
+import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -23,7 +28,7 @@ public class PageAlice extends TabReference {
 	
 	Alice al=null;
 	
-	public PageAlice(String acessToken) throws IOException {
+	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
 		super();
 		al = new UserFactory(acessToken).newAlice().get();
@@ -31,7 +36,7 @@ public class PageAlice extends TabReference {
 
 	}
 	
-	public PageAlice(int id) throws IOException {
+	public PageAlice(int id) throws IOException, URISyntaxException {
 
 		super();
 		al = new UserFactory().newAlice().get();
@@ -40,7 +45,7 @@ public class PageAlice extends TabReference {
 
 	}
 
-	public JPanel printAliceResults(PageAlice alice) throws IOException {
+	public JPanel printAliceResults(PageAlice alice) throws IOException, URISyntaxException {
 
 		JPanel resultat = new JPanel();
 
@@ -58,7 +63,7 @@ public class PageAlice extends TabReference {
 		return resultat;
 	}
 
-	private JPanel showNewQuestion(PageAlice alice) throws IOException {
+	private JPanel showNewQuestion(PageAlice alice) throws IOException, URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
@@ -68,6 +73,7 @@ public class PageAlice extends TabReference {
 		JLabel title = new JLabel("<html><b />Les nouvelles questions : </html>");
 		// title.setFont( title.getFont().deriveFont(title.BOLD) );
 		result.add(title);
+		
 
 		for (Entry<String[], PagedList<Question>> tagEntry : newQuestion.entrySet()) {
 			String[] tagName = tagEntry.getKey();
@@ -86,29 +92,52 @@ public class PageAlice extends TabReference {
 			PagedList<Question> questionMap = tagEntry.getValue();
 			for (int i = 0; i < questionMap.getPageSize(); i++) {
 				String questionTitle = questionMap.get(i).getTitle();
-				JLabel tagQuestion = new JLabel("\t-- " + questionTitle + "\n "+ (Alice.getLinkQuestion((int)questionMap.get(i).getQuestionId())));
-				tagQuestion.setMaximumSize(new Dimension(500, 20));
-				result.add(tagQuestion);
+				
+				final URI uri = new URI(Alice.getLinkQuestion((int)questionMap.get(i).getQuestionId()));
+				
+			    class OpenUrlAction implements ActionListener {
+			      @Override public void actionPerformed(ActionEvent e) {
+			        open(uri);
+			      }
+			    }
+			    
+				JButton link = new JButton();
+				link.setText(questionTitle);
+				link.setToolTipText(uri.toString());
+				link.addActionListener(new OpenUrlAction());
+				result.add(link);
+				result.validate();
 			}
 		}
 
 		return result;
 	}
 
-	private JPanel showSortedAnsweredQuestions(PageAlice alice) {
+	private JPanel showSortedAnsweredQuestions(PageAlice alice) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
 								
 		List<Answer> listQuestion = al.getSortedAnswers();
 
-		JLabel title = new JLabel("<html><b />Questions répondues triées : </html>");
-		// title.setFont( title.getFont().deriveFont(title.BOLD) );
+		JLabel title = new JLabel("Questions répondues triées : ");
 		result.add(title);
 
 		for (int i = 0; i < listQuestion.size(); i++) {
-			JLabel question = new JLabel(Alice.getLinkQuestion((int)listQuestion.get(i).getQuestionId()) + " avec un score de " + listQuestion.get(i).getScore());
-			result.add(question);
+			final URI uri = new URI(Alice.getLinkQuestion((int)listQuestion.get(i).getQuestionId()));
+			
+		    class OpenUrlAction implements ActionListener {
+		      @Override public void actionPerformed(ActionEvent e) {
+		        open(uri);
+		      }
+		    }
+		    
+			JButton link = new JButton();
+			link.setText("... avec un score de " + listQuestion.get(i).getScore());
+			link.setToolTipText(uri.toString());
+			link.addActionListener(new OpenUrlAction());
+			result.add(link);
+			result.validate();
 		}
 
 		return result;
@@ -121,6 +150,14 @@ public class PageAlice extends TabReference {
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
 		return result;
+	}
+	
+	private static void open(URI uri) {
+	    if (Desktop.isDesktopSupported()) {
+	      try {
+	        Desktop.getDesktop().browse(uri);
+	      } catch (IOException e) { /* TODO: error handling */ }
+	    } else { /* TODO: error handling */ }
 	}
 	
 }

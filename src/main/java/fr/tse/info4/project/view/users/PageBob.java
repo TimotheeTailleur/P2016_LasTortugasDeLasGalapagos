@@ -1,9 +1,14 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +33,7 @@ public class PageBob extends TabReference {
 	
 	Bob bob=null;
 	
-	public PageBob(String acessToken) throws IOException {
+	public PageBob(String acessToken) throws IOException, URISyntaxException {
 
 		super();
 		bob = new UserFactory(acessToken).newBob().get();
@@ -36,7 +41,7 @@ public class PageBob extends TabReference {
 
 	}
 	
-	public PageBob(int id) throws IOException {
+	public PageBob(int id) throws IOException, URISyntaxException {
 
 		super();
 		bob = new UserFactory().newBob().get();
@@ -45,7 +50,7 @@ public class PageBob extends TabReference {
 
 	}
 	
-	public JPanel printBobResults(PageBob bobPage) throws IOException {
+	public JPanel printBobResults(PageBob bobPage) throws IOException, URISyntaxException {
 
 		JPanel resultat = new JPanel();
 
@@ -65,7 +70,7 @@ public class PageBob extends TabReference {
 		return resultat;
 	}
 	
-	private JPanel showQuestion(PageBob bobPage){
+	private JPanel showQuestion(PageBob bobPage) throws URISyntaxException{
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		JTextField text = new JTextField(35);
@@ -95,15 +100,35 @@ public class PageBob extends TabReference {
 					String str = "Questions similaires à celle écrite : ";
 					if(BobMethod.hasQuestion(questions) == false){
 						str+="\n Pas de questions semblables trouvées.";
+						JLabel similarQ = new JLabel(str);
+						result.add(similarQ);
+						result.validate();
 					}else{
+						JLabel similarQ = new JLabel(str);
+						result.add(similarQ);
 						for (int i=0;i<questions.size();i++){
-							str+="\n- "+questions.get(i).getTitle()+"   "+Bob.getLinkQuestion((int)questions.get(i).getQuestionId());
+							URI uri = null;
+							try {
+								uri = new URI(Bob.getLinkQuestion((int)questions.get(i).getQuestionId()));
+							} catch (URISyntaxException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+						    class OpenUrlAction implements ActionListener {
+						      @Override public void actionPerformed(ActionEvent e) {
+						        open(uri);
+						      }
+						    }
+						    
+							JButton link = new JButton();
+							link.setText(questions.get(i).getTitle());
+							link.setToolTipText(uri.toString());
+							link.addActionListener(new OpenUrlAction());
+							result.add(link);
+							result.validate();
 						}
 					}
-					
-					JLabel similarQ = new JLabel(str);
-					result.add(similarQ);
-					result.validate();
 				}
 			}
 			
@@ -125,6 +150,7 @@ public class PageBob extends TabReference {
 				
 			}
 		});
+		result.validate();
 		
 		return result;	
 	}
@@ -194,7 +220,7 @@ public class PageBob extends TabReference {
 		return result;	
 	}
 
-	private JPanel showExperts(PageBob bobPage){
+	private JPanel showExperts(PageBob bobPage) throws URISyntaxException{
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		
@@ -210,15 +236,27 @@ public class PageBob extends TabReference {
 			result.add(title);
 			
 			for(User user : users){
-				JLabel expert = new JLabel("- "+user.getDisplayName() + "    "+ Bob.getLink((int)user.getUserId()));
-				result.add(expert);
+				final URI uri = new URI(Bob.getLink((int)user.getUserId()));
+				
+			    class OpenUrlAction implements ActionListener {
+			      @Override public void actionPerformed(ActionEvent e) {
+			        open(uri);
+			      }
+			    }
+			    
+				JButton link = new JButton();
+				link.setText(user.getDisplayName());
+				link.setToolTipText(uri.toString());
+				link.addActionListener(new OpenUrlAction());
+				result.add(link);
+				result.validate();
 			}
 		}
 		return result;	
 	}
 
 
-	private JPanel showNewQuestionAnswered(PageBob bobPage){
+	private JPanel showNewQuestionAnswered(PageBob bobPage) throws URISyntaxException{
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		
@@ -232,13 +270,33 @@ public class PageBob extends TabReference {
 			List<Question> questions = questionEntry.getValue();
 			for (int i = 0; i < questions.size(); i++) {
 				String questionTitle = questions.get(i).getTitle();
-				JLabel tagQuestion = new JLabel("\t-- " + questionTitle + "\n "+ (Bob.getLinkQuestion((int)questions.get(i).getQuestionId())));
-				tagQuestion.setMaximumSize(new Dimension(500, 20));
-				result.add(tagQuestion);
+				
+				final URI uri = new URI(Bob.getLinkQuestion((int)questions.get(i).getQuestionId()));
+				
+			    class OpenUrlAction implements ActionListener {
+			      @Override public void actionPerformed(ActionEvent e) {
+			        open(uri);
+			      }
+			    }
+			    
+				JButton link = new JButton();
+				link.setText(questionTitle);
+				link.setToolTipText(uri.toString());
+				link.addActionListener(new OpenUrlAction());
+				result.add(link);
+				result.validate();
 			}
 		}
 		
 		return result;	
+	}
+	
+	private static void open(URI uri) {
+	    if (Desktop.isDesktopSupported()) {
+	      try {
+	        Desktop.getDesktop().browse(uri);
+	      } catch (IOException e) { /* TODO: error handling */ }
+	    } else { /* TODO: error handling */ }
 	}
 
 }

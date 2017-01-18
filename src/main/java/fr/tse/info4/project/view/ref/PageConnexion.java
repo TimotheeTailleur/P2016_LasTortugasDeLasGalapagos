@@ -3,6 +3,7 @@ package fr.tse.info4.project.view.ref;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -43,7 +44,12 @@ public class PageConnexion extends TabReference{
 				String acessToken = Authenticate.getAcessToken();
 				co.setVisible(false);
 				try {
-					HomePage page = new HomePage(acessToken);
+					try {
+						HomePage page = new HomePage(acessToken);
+					} catch (URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -162,7 +168,12 @@ public class PageConnexion extends TabReference{
 					userID.setVisible(false);
 					home.setVisible(false);
 					try {
-						HomePage page = new HomePage(Integer.parseInt(idEntry.getText()));
+						try {
+							HomePage page = new HomePage(Integer.parseInt(idEntry.getText()));
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					} catch (NumberFormatException | IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

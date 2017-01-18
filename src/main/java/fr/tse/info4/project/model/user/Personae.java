@@ -50,21 +50,21 @@ public abstract class Personae {
 	 * Returns Stack Overflow profile URL of user (id)
 	 */
 	public static String getLink(int id) {
-		return ("stackoverflow.com/u/" + id);
+		return ("http://stackoverflow.com/u/" + id);
 	}
 	
 	/**
 	 * Returns Stack Overflow URL of question (id) 
 	 */
 	public static String getLinkQuestion(int id) {
-		return ("stackoverflow.com/q/" + id);
+		return ("http://stackoverflow.com/q/" + id);
 	}
 	
 	/**
 	 * Returns Stack Overflow URL of answer (id) 
 	 */
 	public static String getLinkAnswer(int id) {
-		return ("stackoverflow.com/a/" + id);
+		return ("http://stackoverflow.com/a/" + id);
 	}
 
 }

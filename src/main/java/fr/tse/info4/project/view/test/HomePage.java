@@ -1,6 +1,7 @@
 package fr.tse.info4.project.view.test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -22,7 +23,7 @@ public class HomePage extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public HomePage(String acessToken) throws IOException {
+	public HomePage(String acessToken) throws IOException, URISyntaxException {
 		JTabbedPane onglets = new JTabbedPane();
 
 		onglets.addTab("Alice", new PageAlice(acessToken));
@@ -33,11 +34,11 @@ public class HomePage extends JFrame {
 		this.getContentPane().add(onglets);
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
-		this.setSize(1900, 700);
+		this.setSize(1900, 900);
 		this.setVisible(true);
 	}
 	
-	public HomePage(int id) throws IOException {
+	public HomePage(int id) throws IOException, URISyntaxException {
 		JTabbedPane onglets = new JTabbedPane();
 
 		onglets.addTab("Alice", new PageAlice(id));
@@ -48,7 +49,7 @@ public class HomePage extends JFrame {
 		this.getContentPane().add(onglets);
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
-		this.setSize(1900, 700);
+		this.setSize(1900, 900);
 		this.setVisible(true);
 	}
 
