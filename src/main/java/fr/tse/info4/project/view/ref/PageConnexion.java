@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import fr.tse.info4.project.controller.BobMethod;
+import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.datarecovery.Authenticate;
 import fr.tse.info4.project.view.test.HomePage;
 
@@ -164,20 +165,27 @@ public class PageConnexion extends TabReference{
 				if(BobMethod.isEmpty(idEntry)==true){
 					panel.add(new JLabel("Entrer un id"));
 					panel.validate();
-				}else{					
-					userID.setVisible(false);
-					home.setVisible(false);
-					try {
+				}else{
+					ApiManager api= new ApiManager();
+					if (api.userExists(Integer.parseInt(idEntry.getText()))==true){
+						userID.setVisible(false);
+						home.setVisible(false);
 						try {
-							HomePage page = new HomePage(Integer.parseInt(idEntry.getText()));
-						} catch (URISyntaxException e1) {
+							try {
+								HomePage page = new HomePage(Integer.parseInt(idEntry.getText()));
+							} catch (URISyntaxException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						} catch (NumberFormatException | IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-					} catch (NumberFormatException | IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					}else{
+						panel.add(new JLabel("Id entré incorrect."));
+						panel.validate();
 					}
+					
 				}
 				
 			}

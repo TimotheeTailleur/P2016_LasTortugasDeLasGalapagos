@@ -256,15 +256,7 @@ public class PageBob extends TabReference {
 			    }
 			    
 				JButton link = new JButton();
-				link.setText(user.getDisplayName());
-				link.setForeground(Color.BLUE);
-				link.setBorderPainted(false);
-				link.setOpaque(false);
-				link.setBackground(Color.WHITE);
-				Font font = link.getFont();
-				Map attributes = font.getAttributes();
-				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-				link.setFont(font.deriveFont(attributes));
+				link.setText(user.getDisplayName().replace("\"", " "));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
 				result.add(link);
