@@ -1,15 +1,18 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -103,6 +106,14 @@ public class PageAlice extends TabReference {
 			    
 				JButton link = new JButton();
 				link.setText(questionTitle);
+				link.setForeground(Color.BLUE);
+				link.setBorderPainted(false);
+				link.setOpaque(false);
+				link.setBackground(Color.WHITE);
+				Font font = link.getFont();
+				Map attributes = font.getAttributes();
+				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+				link.setFont(font.deriveFont(attributes));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
 				result.add(link);
