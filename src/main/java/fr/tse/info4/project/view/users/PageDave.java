@@ -1,12 +1,20 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,6 +26,7 @@ import javax.swing.JTextField;
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.schema.TagScore;
 import fr.tse.info4.project.model.schema.TopUser;
+import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
@@ -67,15 +76,42 @@ public class PageDave extends TabReference {
 					 
 					 TagScore topTag = dave.getTopTag(tagName.getText());
 					 
-					 String str = Dave.getLink((int)topTag.getUser().getUserId()) + " avec un score de " + topTag.getScore();
+					 String str = topTag.getUser().getDisplayName() + " avec un score de " + topTag.getScore();
 					 
-					 JLabel user = new JLabel(str);
-					 results.add(user);
-					 panel3.add(results);
+					 URI uri = null;
+					 try {
+						 uri = new URI(Dave.getLink((int)topTag.getUser().getUserId()));
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					 
-					 panel3.validate();
+					 class OpenUrlAction implements ActionListener {
+					      @Override public void actionPerformed(ActionEvent e) {
+					        open(uri);
+					      }
+					    }
 					 
-					 results.setVisible(true);
+					    JButton link = new JButton();
+						link.setText(str);
+						link.setForeground(Color.BLUE);
+						link.setBorderPainted(false);
+						link.setOpaque(false);
+						link.setBackground(Color.WHITE);
+						Font font = link.getFont();
+						Map attributes = font.getAttributes();
+						attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+						link.setFont(font.deriveFont(attributes));
+						link.setToolTipText(uri.toString()); // reference du http
+						link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
+						results.add(link);
+						results.validate();
+						
+						panel3.add(results);
+						panel3.validate();
+						 
+						results.setVisible(true);
+						
 					 
 				 }else{
 						JPanel results = new JPanel();
@@ -140,9 +176,12 @@ public class PageDave extends TabReference {
 			
 				 List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
 				
+				//  final URI uri = new URI(Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()) + " avec " + topAnswerer.get(i).getPostCount() +" posts");
 				 
 				 for(int i=0;i<topAnswerer.size();i++){
 					 String str=Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()) + " avec " + topAnswerer.get(i).getPostCount() +" posts";
+					 
+					 
 					 JLabel user = new JLabel(str);
 					 results.add(user);
 					 			 
@@ -188,4 +227,15 @@ public class PageDave extends TabReference {
 		}
 		return isList;
 	}
+	
+	private static void open(URI uri) {
+	    if (Desktop.isDesktopSupported()) {
+	      try {
+	        Desktop.getDesktop().browse(uri);
+	      } catch (IOException e) { /* TODO: error handling */ }
+	    } else { /* TODO: error handling */ }
+	}
+	
 }
+
+
