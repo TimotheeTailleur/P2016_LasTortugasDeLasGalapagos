@@ -114,8 +114,8 @@ public class PageAlice extends TabReference {
 				Map attributes = font.getAttributes();
 				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 				link.setFont(font.deriveFont(attributes));
-				link.setToolTipText(uri.toString()); // reference du http
-				link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
+				link.setToolTipText(uri.toString()); 
+				link.addActionListener(new OpenUrlAction());
 				result.add(link);
 				result.validate();
 			}
