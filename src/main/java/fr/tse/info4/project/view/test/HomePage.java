@@ -1,5 +1,6 @@
 package fr.tse.info4.project.view.test;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -24,7 +25,7 @@ public class HomePage extends JFrame {
 		this.getContentPane().add(onglets);
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
-		this.setSize(1900, 700);
+		this.setSize(700, 350);
 		this.setVisible(true);
 	}
 	
@@ -90,7 +91,11 @@ public class HomePage extends JFrame {
 		this.getContentPane().add(onglets);
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
-		this.setSize(1900, 900);
+		
+		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int hauteur = (int)tailleEcran.getHeight();
+		int largeur = (int)tailleEcran.getWidth();
+		this.setSize(hauteur, largeur);
 		this.setVisible(true);
 	}
 
