@@ -67,53 +67,38 @@ public class PageDave extends TabReference {
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				isListTag(); 
+				JButton link = new JButton();
+				JPanel results = new JPanel();
+				String str=" ";
 				 
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
-					 JPanel results = new JPanel();
 					 Dave dave = (new UserFactory()).newDave().get();
 					 
 					 TagScore topTag = dave.getTopTag(tagName.getText());
 					 
-					 String str = topTag.getUser().getDisplayName().replace("\"", " ") + " avec un score de " + topTag.getScore();
-					 
-					 final URI uri = null;
+					 str = topTag.getUser().getDisplayName().replace("\"", " ") + " avec un score de " + topTag.getScore();
+				
 					 try {
-						  uri = new URI(Dave.getLink((int)topTag.getUser().getUserId()));
+						 final URI uri = new URI(Dave.getLink((int)topTag.getUser().getUserId()));
+						  
+						  class OpenUrlAction implements ActionListener {
+						      @Override public void actionPerformed(ActionEvent e) {
+						        open(uri);
+						      }
+						    }
+						  
+						  link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
+						  link.setToolTipText(uri.toString()); // reference du http
 					} catch (URISyntaxException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					 
-					 class OpenUrlAction implements ActionListener {
-					      @Override public void actionPerformed(ActionEvent e) {
-					        open(uri);
-					      }
-					    }
-					 
-					    JButton link = new JButton();
-						link.setText(str);
-						link.setForeground(Color.BLUE);
-						link.setBorderPainted(false);
-						link.setOpaque(false);
-						link.setBackground(Color.WHITE);
-						Font font = link.getFont();
-						Map attributes = font.getAttributes();
-						attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-						link.setFont(font.deriveFont(attributes));
-						link.setToolTipText(uri.toString()); // reference du http
-						link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
-						results.add(link);
-						results.validate();
-						
-						panel3.add(results);
-						panel3.validate();
-						 
-						results.setVisible(true);
-						
+					link.setText(str);						
 					 
 				 }else{
-						JPanel results = new JPanel();
-						 Dave dave = (new UserFactory()).newDave().get();
+					
+						Dave dave = (new UserFactory()).newDave().get();
 						 
 					
 						 String[] resultsTab = tagName.getText().split(" ");
@@ -124,16 +109,28 @@ public class PageDave extends TabReference {
 						 }
 						 TopUser topTags = dave.getTopUserMultipleTags(resultsList);
 						 
-						 String str = Dave.getLink((int)topTags.getId());
+						 str = Dave.getLink((int)topTags.getId());
 						 
 						 JLabel user = new JLabel(str);
 						 results.add(user);
-						 panel3.add(results);
-						 panel3.validate();
-						 
-						 results.setVisible(true);
 				 }
-				
+					
+					link.setForeground(Color.BLUE);
+					link.setBorderPainted(false);
+					link.setOpaque(false);
+					link.setBackground(Color.WHITE);
+					Font font = link.getFont();
+					Map attributes = font.getAttributes();
+					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					link.setFont(font.deriveFont(attributes));
+					results.add(link);
+					results.validate();
+						
+					results.setVisible(true);
+					panel3.add(results);
+					panel3.validate();
+					 
+					
 			}
 
 			@Override
