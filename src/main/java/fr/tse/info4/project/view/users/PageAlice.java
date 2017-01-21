@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.net.URI;
@@ -35,6 +37,7 @@ public class PageAlice extends TabReference {
 	
 	Alice al=null;
 	JButton Parametres=new JButton();
+	PageAlice page = this;
 	
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
@@ -74,12 +77,12 @@ public class PageAlice extends TabReference {
 				
 				JTextField modifications1 = new JTextField(10);
 				modifications1.setHorizontalAlignment(JTextField.CENTER);
-				JLabel paramAlice1 = new JLabel( "Tags prits en compte : ");
+				JLabel paramAlice1 = new JLabel( "Tags pris en compte : ");
 				modifications1.setText(Integer.toString(al.getNbTags()));
 				
 				JTextField modifications2 = new JTextField(10);
 				modifications2.setHorizontalAlignment(JTextField.CENTER);
-				JLabel paramAlice2 = new JLabel( "Questions par tags : ");
+				JLabel paramAlice2 = new JLabel( "Questions par tag : ");
 				modifications2.setText(Integer.toString(al.getNbQuestionsPerTag()));
 				
 				JTextField modifications3 = new JTextField(10);
@@ -102,7 +105,59 @@ public class PageAlice extends TabReference {
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
 				
-				 }
+				validation.addMouseListener(new MouseListener(){
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+						int nbTags = Integer.parseInt(modifications1.getText()) ;
+						int nbQuestionsPerTag= Integer.parseInt(modifications2.getText());
+						int nbAnswers =Integer.parseInt(modifications3.getText());
+						
+						al.setNbTags(nbTags);
+						al.setNbQuestionsPerTag(nbQuestionsPerTag);
+						al.setNbAnswers(nbAnswers);
+
+						page.remove(1);
+						try {
+							page.add(printAliceResults(page));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+			}
+			 
 		});
 
 	}
