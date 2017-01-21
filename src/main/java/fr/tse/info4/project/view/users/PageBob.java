@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.User;
@@ -104,6 +105,7 @@ public class PageBob extends TabReference {
 					String str = "Questions similaires à celle écrite : ";
 					JLabel title = new JLabel(str);
 					title.setFont(new Font("Tahoma", Font.BOLD, 15));
+					title.setBorder(new EmptyBorder(0, 0, 10, 0));
 					result.add(title);
 					String str2="";
 					if(BobMethod.hasQuestion(questions) == false){
@@ -166,7 +168,7 @@ public class PageBob extends TabReference {
 			}
 		});
 		result.validate();
-		
+		result.setBorder(new EmptyBorder(10, 50, 10, 20));
 		return result;	
 	}
 	
@@ -201,6 +203,7 @@ public class PageBob extends TabReference {
 					String str = "Mots-clés pouvant être rajoutés : ";
 					JLabel title = new JLabel(str);
 					title.setFont(new Font("Tahoma", Font.BOLD, 15));
+					title.setBorder(new EmptyBorder(0, 0, 10, 0));
 					result.add(title);
 					if(BobMethod.hasKeyWords(keyWords) == false){
 						String str2="Pas de mots-clés trouvés.";
@@ -236,7 +239,7 @@ public class PageBob extends TabReference {
 				
 			}
 		});
-		
+		result.setBorder(new EmptyBorder(10, 20, 10, 20));
 		return result;	
 	}
 
@@ -254,6 +257,7 @@ public class PageBob extends TabReference {
 			show+="Liste d'user potentiellement intéressant : ";
 			JLabel title = new JLabel(show);
 			title.setFont(new Font("Tahoma", Font.BOLD, 15));
+			title.setBorder(new EmptyBorder(0, 0, 10, 0));
 			result.add(title);
 			
 			for(User user : users){
@@ -273,6 +277,7 @@ public class PageBob extends TabReference {
 				result.validate();
 			}
 		}
+		result.setBorder(new EmptyBorder(10, 20, 10, 20));
 		return result;	
 	}
 
@@ -284,6 +289,7 @@ public class PageBob extends TabReference {
 		JLabel title = new JLabel("Questions répondues récemment : ");
 		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		result.add(title);
+		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 		Map<String, List<Question>> newQuestions = bob.getNewQuestionsAnswered();
 		for (Entry<String, List<Question>> questionEntry : newQuestions.entrySet()){
 			String tagName = questionEntry.getKey();
@@ -317,7 +323,7 @@ public class PageBob extends TabReference {
 				result.validate();
 			}
 		}
-		
+		result.setBorder(new EmptyBorder(10, 20, 10, 50));
 		return result;	
 	}
 	

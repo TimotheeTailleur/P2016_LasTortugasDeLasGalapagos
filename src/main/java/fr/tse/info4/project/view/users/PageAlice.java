@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
@@ -38,7 +39,8 @@ public class PageAlice extends TabReference {
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
 		super();
-		al = new UserFactory(acessToken).newAlice().get();		
+		al = new UserFactory(acessToken).newAlice().get();	
+		this.getPanel().add(Parametres = getParametre());
 		this.getPanel().add(printAliceResults(this));
 
 	}
@@ -128,6 +130,7 @@ public class PageAlice extends TabReference {
 
 		JLabel title = new JLabel("Les nouvelles questions : ");
 		title.setFont(new Font("Tahoma", Font.BOLD, 15));
+		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 		result.add(title);
 		
 
@@ -173,6 +176,7 @@ public class PageAlice extends TabReference {
 				result.validate();
 			}
 		}
+		result.setBorder(new EmptyBorder(10, 50, 10, 20));
 
 		return result;
 	}
@@ -186,6 +190,7 @@ public class PageAlice extends TabReference {
 
 		JLabel title = new JLabel("Questions répondues triées : ");
 		title.setFont(new Font("Tahoma", Font.BOLD, 15));
+		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 		result.add(title);
 
 		for (int i = 0; i < listQuestion.size(); i++) {
@@ -205,6 +210,7 @@ public class PageAlice extends TabReference {
 			result.validate();
 		}
 
+		result.setBorder(new EmptyBorder(10, 20, 10, 50));
 		return result;
 	}
 
@@ -214,6 +220,7 @@ public class PageAlice extends TabReference {
 		ArrayList<Integer> list = al.compareBadge();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
+		result.setBorder(new EmptyBorder(10, 20, 10, 20));
 		return result;
 	}
 	
