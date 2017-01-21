@@ -36,6 +36,8 @@ import fr.tse.info4.project.view.ref.TabReference;
 public class PageBob extends TabReference {
 	
 	Bob bob=null;
+	int appelRecherche = 0;
+	int appelSuggere = 0;
 	
 	public PageBob(String acessToken) throws IOException, URISyntaxException {
 
@@ -78,9 +80,15 @@ public class PageBob extends TabReference {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		JTextField text = new JTextField(35);
-		text.setMaximumSize(new Dimension(850,20));
+		text.setMaximumSize(new Dimension(600,30));
 		JButton valid = new JButton("Rechercher");
 		
+		String str = "Questions similaires à celle écrite : ";
+		JLabel title = new JLabel(str);
+		title.setFont(new Font("Tahoma", Font.BOLD, 19));
+		title.setBorder(new EmptyBorder(0, 0, 10, 0));
+		
+		result.add(title);		
 		result.add(text);
 		result.add(valid);
 		
@@ -95,18 +103,18 @@ public class PageBob extends TabReference {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				if(appelRecherche==0){
+					appelRecherche+=1;
+				}else{
+					result.remove(3);
+					result.validate();
+				}
 				if(BobMethod.isEmpty(text) == true){
 					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
 					result.add(error);
 					result.validate();
 				}else{
-					List<Question> questions = bob.findSimilarQuestions(text.getText());
-					String str = "Questions similaires à celle écrite : ";
-					JLabel title = new JLabel(str);
-					title.setFont(new Font("Tahoma", Font.BOLD, 19));
-					title.setBorder(new EmptyBorder(0, 0, 10, 0));
-					result.add(title);
+					List<Question> questions = bob.findSimilarQuestions(text.getText());					
 					String str2="";
 					if(BobMethod.hasQuestion(questions) == false){
 						str2+="\n Pas de questions semblables trouvées.";
@@ -142,9 +150,11 @@ public class PageBob extends TabReference {
 							link.setFont(font.deriveFont(attributes));
 							link.setToolTipText(uri.toString());
 							link.addActionListener(new OpenUrlAction());
+							link.setMaximumSize(new Dimension(250,30));
 							result.add(link);
 							result.validate();
 						}
+						result.validate();
 					}
 				}
 			}
@@ -168,7 +178,7 @@ public class PageBob extends TabReference {
 			}
 		});
 		result.validate();
-		result.setBorder(new EmptyBorder(10, 50, 10, 30));
+		result.setBorder(new EmptyBorder(0, 2, 0, 3));
 		return result;	
 	}
 	
@@ -177,9 +187,15 @@ public class PageBob extends TabReference {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		JTextField text = new JTextField(35);
-		text.setMaximumSize(new Dimension(850,20));
+		text.setMaximumSize(new Dimension(600,30));
 		JButton valid = new JButton("Suggérer");
 		
+		String str = "Mots-clés pouvant être rajoutés : ";
+		JLabel title = new JLabel(str);
+		title.setFont(new Font("Tahoma", Font.BOLD, 19));
+		title.setBorder(new EmptyBorder(0, 0, 10, 0));
+		
+		result.add(title);		
 		result.add(text);
 		result.add(valid);
 		
@@ -194,29 +210,42 @@ public class PageBob extends TabReference {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
+				if(appelSuggere==0){
+					appelSuggere+=1;
+				}else{
+					result.remove(3);
+					result.validate();
+				}
+				
 				if(BobMethod.isEmpty(text) == true){
 					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
 					result.add(error);
 					result.validate();
 				}else{
 					List<String> keyWords = bob.findKeyWords(text.getText());
-					String str = "Mots-clés pouvant être rajoutés : ";
-					JLabel title = new JLabel(str);
-					title.setFont(new Font("Tahoma", Font.BOLD, 19));
-					title.setBorder(new EmptyBorder(0, 0, 10, 0));
-					result.add(title);
+					
 					if(BobMethod.hasKeyWords(keyWords) == false){
 						String str2="Pas de mots-clés trouvés.";
 						JLabel similarQ = new JLabel(str2);
 						result.add(similarQ);
 						result.validate();
 					}else{
-						for (int i=0;i<keyWords.size();i++){
-							String str2="- "+keyWords.get(i);
-							JLabel similarQ = new JLabel(str2);
-							result.add(similarQ);
-							result.validate();
+						if(keyWords.size()<=20){
+							for (int i=0;i<keyWords.size();i++){
+								String str2="- "+keyWords.get(i);
+								JLabel similarQ = new JLabel(str2);
+								result.add(similarQ);
+								result.validate();
+							}
+						}else{
+							for (int i=0;i<20;i++){
+								String str2="- "+keyWords.get(i);
+								JLabel similarQ = new JLabel(str2);
+								result.add(similarQ);
+								result.validate();
+							}
 						}
+						result.validate();
 					}
 				}
 			}
@@ -239,7 +268,7 @@ public class PageBob extends TabReference {
 				
 			}
 		});
-		result.setBorder(new EmptyBorder(10, 30, 10, 30));
+		result.setBorder(new EmptyBorder(0, 3, 0, 3));
 		return result;	
 	}
 
@@ -278,7 +307,7 @@ public class PageBob extends TabReference {
 				result.validate();
 			}
 		}
-		result.setBorder(new EmptyBorder(10, 30, 10, 30));
+		result.setBorder(new EmptyBorder(0, 3, 0, 3));
 		return result;	
 	}
 
@@ -321,11 +350,12 @@ public class PageBob extends TabReference {
 				link.setFont(font.deriveFont(attributes));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
+				link.setMaximumSize(new Dimension(400,30));
 				result.add(link);
 				result.validate();
 			}
 		}
-		result.setBorder(new EmptyBorder(10, 30, 10, 50));
+		result.setBorder(new EmptyBorder(0, 3, 0, 2));
 		return result;	
 	}
 	
