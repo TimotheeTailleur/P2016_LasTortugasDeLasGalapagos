@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import fr.tse.info4.project.controller.UserFactory;
+import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.schema.TagScore;
 import fr.tse.info4.project.model.schema.TopUser;
 import fr.tse.info4.project.model.user.Dave;
@@ -78,8 +79,7 @@ public class PageDave extends TabReference {
 					
 					 
 					 TagScore topTag = dave.getTopTag(tagName.getText());
-					 
-					 str = topTag.getUser().getDisplayName().replace("\"", " ") + " avec un score de " + topTag.getScore();
+					 str = (new ApiManager()).getUserNAme((int)topTag.getUser().getUserId()) + " avec un score de " + topTag.getScore();
 				
 					 try {
 						 final URI uri = new URI(Dave.getLink((int)topTag.getUser().getUserId()));
