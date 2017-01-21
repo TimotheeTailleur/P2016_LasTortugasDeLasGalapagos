@@ -80,7 +80,7 @@ public class PageAlice extends TabReference {
 				JTextField modifications3 = new JTextField(25);
 				modifications3.setHorizontalAlignment(JTextField.CENTER);
 				JLabel paramAlice3 = new JLabel( "Nombre de réponses affichées : ");
-				modifications1.setText(Integer.toString(al.getNbAnswers()));
+				modifications3.setText(Integer.toString(al.getNbAnswers()));
 				
 				panelParam.add(paramAlice1);
 				panelParam.add(modifications1);
