@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -26,7 +25,6 @@ import javax.swing.JTextField;
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.schema.TagScore;
 import fr.tse.info4.project.model.schema.TopUser;
-import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 

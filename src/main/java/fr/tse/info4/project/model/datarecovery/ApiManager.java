@@ -161,5 +161,19 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 		return users.size() !=0;		
 	}
 	
+	
+	/**
+	 * Returns the user name identified by an id.
+	 * @param userId the user id
+	 * @return the user name if the user exists, void string otherwise.
+	 */
+	public String getUserNAme(int userId){
+		factory = StackExchangeApiQueryFactory.newInstance(APP_KEY, SITE);
+		List<User> users = factory.newUserApiQuery().withUserIds(userId).listUserByIds();
+		if (users.size() != 0){
+			return users.get(0).getDisplayName();
+		}
+		return "";
+	}
 
 }

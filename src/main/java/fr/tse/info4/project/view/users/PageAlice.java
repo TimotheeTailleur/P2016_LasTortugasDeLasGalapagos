@@ -34,7 +34,7 @@ public class PageAlice extends TabReference {
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
 		super();
-		al = new UserFactory(acessToken).newAlice().get();
+		al = new UserFactory(acessToken).newAlice().get();		
 		this.getPanel().add(printAliceResults(this));
 
 	}
@@ -144,7 +144,7 @@ public class PageAlice extends TabReference {
 		    }
 		    
 			JButton link = new JButton();
-			link.setText("... avec un score de " + listQuestion.get(i).getScore());
+			link.setText("Réponse avec un score de " + listQuestion.get(i).getScore());
 			link.setToolTipText(uri.toString());
 			link.addActionListener(new OpenUrlAction());
 			result.add(link);

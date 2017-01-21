@@ -83,6 +83,7 @@ public class PageBob extends TabReference {
 		result.add(text);
 		result.add(valid);
 		
+		
 		valid.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -117,6 +118,7 @@ public class PageBob extends TabReference {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
+							
 							
 						    class OpenUrlAction implements ActionListener {
 						      @Override public void actionPerformed(ActionEvent e) {
