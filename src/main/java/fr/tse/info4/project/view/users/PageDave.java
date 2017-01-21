@@ -76,11 +76,11 @@ public class PageDave extends TabReference {
 					 
 					 TagScore topTag = dave.getTopTag(tagName.getText());
 					 
-					 String str = topTag.getUser().getDisplayName() + " avec un score de " + topTag.getScore();
+					 String str = topTag.getUser().getDisplayName().replace("\"", " ") + " avec un score de " + topTag.getScore();
 					 
-					 URI uri = null;
+					 final URI uri = null;
 					 try {
-						 uri = new URI(Dave.getLink((int)topTag.getUser().getUserId()));
+						  uri = new URI(Dave.getLink((int)topTag.getUser().getUserId()));
 					} catch (URISyntaxException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
