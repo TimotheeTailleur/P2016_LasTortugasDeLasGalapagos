@@ -10,13 +10,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -25,6 +28,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
@@ -40,10 +46,37 @@ public class PageAlice extends TabReference {
 	JButton Parametres=new JButton();
 	PageAlice page = this;
 	
+	public static final String PARAMETERS_PATH = "parameters.properties";
+	
+	private static Properties prop = new Properties();
+	
+	
+	static{
+		InputStream input = null;
+		try{
+			input = new FileInputStream(PARAMETERS_PATH);
+			prop.load(input);
+		} catch (IOException e){
+			e.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
 		super();
-		al = new UserFactory(acessToken).newAlice().get();	
+		int nbTags = Integer.parseInt(prop.getProperty("nbTags"));
+		int nbQuestionsPerTags = Integer.parseInt(prop.getProperty("nbQuestionsPerTag"));
+		int nbAnswers = Integer.parseInt(prop.getProperty("nbAnswers"));
+		
+		al = new UserFactory(acessToken).newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags).withNbAnwsers(nbAnswers).get();	
 		this.getPanel().add(Parametres = getParametre());
 		this.getPanel().add(printAliceResults(this));
 		
@@ -138,6 +171,15 @@ public class PageAlice extends TabReference {
 						      }
 						
 						parametre.dispose();
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbTags", nbTags);
+							config.setProperty("nbQuestionsPerTag", nbQuestionsPerTag);
+							config.setProperty("nbAnswers", nbAnswers);
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
 					}
 
 					@Override
@@ -164,7 +206,10 @@ public class PageAlice extends TabReference {
 	public PageAlice(int id) throws IOException, URISyntaxException {
 
 		super();
-		al = new UserFactory().newAlice().get();
+		int nbTags = Integer.parseInt(prop.getProperty("nbTags"));
+		int nbQuestionsPerTags = Integer.parseInt(prop.getProperty("nbQuestionsPerTag"));
+		int nbAnswers = Integer.parseInt(prop.getProperty("nbAnswers"));
+		al = new UserFactory().newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags).withNbAnwsers(nbAnswers).get();	
 		this.getPanel().add(Parametres = getParametre());
 		al.setIdUser(id);
 		this.getPanel().add(printAliceResults(this));
@@ -260,6 +305,19 @@ public class PageAlice extends TabReference {
 						      }
 						
 						parametre.dispose();
+
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbTags", nbTags);
+							config.setProperty("nbQuestionsPerTag", nbQuestionsPerTag);
+							config.setProperty("nbAnswers", nbAnswers);
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
+
+						
+						
 					}
 
 					@Override
@@ -410,6 +468,10 @@ public class PageAlice extends TabReference {
 	        Desktop.getDesktop().browse(uri);
 	      } catch (IOException e) { /* TODO: error handling */ }
 	    } else { /* TODO: error handling */ }
+	}
+	
+	public static void main(String[] args) throws IOException, URISyntaxException {
+		new PageAlice(1200);
 	}
 	
 }

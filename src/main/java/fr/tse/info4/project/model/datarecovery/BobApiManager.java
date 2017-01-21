@@ -20,8 +20,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import fr.tse.info4.project.main.Main;
 import fr.tse.info4.project.model.schema.TagScore;
 
 public class BobApiManager extends ApiManager {
