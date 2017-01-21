@@ -2,6 +2,7 @@ package fr.tse.info4.project.view.users;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -127,6 +128,7 @@ public class PageAlice extends TabReference {
 						       page.add(Parametres=getParametre());
 						       page.add(printAliceResults(page));
 						       page.add(getFoot());
+						       page.validate();
 						      } catch (IOException e1) {
 						       // TODO Auto-generated catch block
 						       e1.printStackTrace();
@@ -158,7 +160,6 @@ public class PageAlice extends TabReference {
 	}
 
 
-	}
 	
 	public PageAlice(int id) throws IOException, URISyntaxException {
 
@@ -249,6 +250,7 @@ public class PageAlice extends TabReference {
 						       page.add(Parametres=getParametre());
 						       page.add(printAliceResults(page));
 						       page.add(getFoot());
+						       page.validate();
 						      } catch (IOException e1) {
 						       // TODO Auto-generated catch block
 						       e1.printStackTrace();
@@ -305,8 +307,8 @@ public class PageAlice extends TabReference {
 		Map<String[], PagedList<Question>> newQuestion = al.getNewQuestions();
 
 		JLabel title = new JLabel("Les nouvelles questions : ");
-		title.setFont(new Font("Tahoma", Font.BOLD, 17));
-		title.setBorder(new EmptyBorder(0, 0, 10, 0));
+		title.setFont(new Font("Tahoma", Font.BOLD, 19));
+		title.setBorder(new EmptyBorder(0, 0, 5, 0));
 		result.add(title);
 		
 
@@ -323,7 +325,7 @@ public class PageAlice extends TabReference {
 			}
 			str += " : ";
 			JLabel tag = new JLabel(str);
-			tag.setBorder(new EmptyBorder(10, 0, 10, 0));
+			tag.setBorder(new EmptyBorder(5, 0, 5, 0));
 			result.add(tag);
 			PagedList<Question> questionMap = tagEntry.getValue();
 			for (int i = 0; i < questionMap.getPageSize(); i++) {
@@ -366,7 +368,7 @@ public class PageAlice extends TabReference {
 		List<Answer> listQuestion = al.getSortedAnswers();
 
 		JLabel title = new JLabel("Questions répondues triées : ");
-		title.setFont(new Font("Tahoma", Font.BOLD, 17));
+		title.setFont(new Font("Tahoma", Font.BOLD, 19));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 		result.add(title);
 
@@ -383,6 +385,7 @@ public class PageAlice extends TabReference {
 			link.setText("Réponse avec un score de " + listQuestion.get(i).getScore());
 			link.setToolTipText(uri.toString());
 			link.addActionListener(new OpenUrlAction());
+			link.setMaximumSize(new Dimension(250,30));
 			result.add(link);
 			result.validate();
 		}
