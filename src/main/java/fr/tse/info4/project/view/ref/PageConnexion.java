@@ -24,7 +24,7 @@ public class PageConnexion extends TabReference{
 	public PageConnexion(HomePage h){
 		super();
 		home=h;
-		this.getPanel().remove(0);
+		
 		
 		PageConnexion co = this;
 		
