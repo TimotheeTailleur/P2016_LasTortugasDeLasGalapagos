@@ -40,6 +40,7 @@ public class PageDave extends TabReference {
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
 	
+	
 	 Dave dave = (new UserFactory()).newDave().get();
 /**
  * 
@@ -47,6 +48,7 @@ public class PageDave extends TabReference {
 	public PageDave() {
 		super();
 		
+		JLabel title = new JLabel("Veuillez entrer un ou plusieurs tags séparés par un espace : ");
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new FlowLayout());
 		panel3.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
@@ -109,10 +111,26 @@ public class PageDave extends TabReference {
 						 }
 						 TopUser topTags = dave.getTopUserMultipleTags(resultsList);
 						 
-						 str = Dave.getLink((int)topTags.getId());
+						
+						 str = (new ApiManager()).getUserNAme((int)topTags.getId());
+					
+						 try {
+							 final URI uri = new URI(Dave.getLink((int)topTags.getId()));
+							  
+							  class OpenUrlAction implements ActionListener {
+							      @Override public void actionPerformed(ActionEvent e) {
+							        open(uri);
+							      }
+							    }
+							  
+							  link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
+							  link.setToolTipText(uri.toString()); // reference du http
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						 
-						 JLabel user = new JLabel(str);
-						 results.add(user);
+						link.setText(str);	
 				 }
 					
 					link.setForeground(Color.BLUE);
@@ -125,10 +143,13 @@ public class PageDave extends TabReference {
 					link.setFont(font.deriveFont(attributes));
 					results.add(link);
 					results.validate();
+					
 						
 					results.setVisible(true);
 					panel3.add(results);
 					panel3.validate();
+					
+					
 					 
 					
 			}
@@ -167,24 +188,49 @@ public class PageDave extends TabReference {
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				JPanel results = new JPanel();
+				String str="";
+				JButton link = new JButton();
 			    Dave dave = (new UserFactory()).newDave().get();
 			
 				 List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
-				
-				//  final URI uri = new URI(Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()) + " avec " + topAnswerer.get(i).getPostCount() +" posts");
-				 
+					 
 				 for(int i=0;i<topAnswerer.size();i++){
-					 String str=Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()) + " avec " + topAnswerer.get(i).getPostCount() +" posts";
 					 
+					URI uri;
+					try {
+						uri = new URI(Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()));
+						class OpenUrlAction implements ActionListener {
+						      @Override public void actionPerformed(ActionEvent e) {
+						        open(uri);
+						      }
+						    }
+						  
+						  link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
+						  link.setToolTipText(uri.toString()); // reference du http
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					 str = (new ApiManager()).getUserNAme((int)topAnswerer.get(i).getUser().getUserId()) +  " avec " + topAnswerer.get(i).getPostCount() +" posts"; 
 					 
-					 JLabel user = new JLabel(str);
-					 results.add(user);
-					 			 
-				 }
+					 link.setForeground(Color.BLUE);
+					 link.setBorderPainted(false);
+					 link.setOpaque(false);
+					 link.setBackground(Color.WHITE);
+					 Font font = link.getFont();
+					 Map attributes = font.getAttributes();
+					 attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					 link.setFont(font.deriveFont(attributes));
+					 link.setText(str);
+					 results.add(link);
+					results.validate();	
+					results.setVisible(true);
+					panel3.add(results);
+					panel3.validate();
+					
+					panel3.setVisible(true);
+				 }	
 				
-				 panel3.add(results);	
-				 panel3.validate();
-				 results.setVisible(true);
 				 		
 			}
 
@@ -202,8 +248,9 @@ public class PageDave extends TabReference {
 		});
 		
 		
-
+		panel1.add(title);
 		panel1.add(tagName);
+		panel1.add(getParametre());
 		panel2.add(option1);
 		panel2.add(option2);
 		
@@ -215,21 +262,100 @@ public class PageDave extends TabReference {
 		getParametre().addActionListener(new ActionListener(){
 			 public void actionPerformed(ActionEvent event){
 				JFrame parametre = new JFrame("Parametres");
-				JPanel panelParam = new JPanel();
-				JTextField Txtparam = new JTextField(30);
 				
-				panelParam.setLayout(new FlowLayout());
-				parametre.setLocationRelativeTo(null);		
+				JButton validation = new JButton("Valider");
+				
+				JPanel panelParam = new JPanel();				
+				panelParam.setLayout(new FlowLayout());	
+				
+				JPanel panelParam1 = new JPanel();
+				panelParam1.setLayout(new FlowLayout());
+				
+				JPanel panelParam2 = new JPanel();
+				panelParam2.setLayout(new FlowLayout());
+				
 				parametre.pack();
-				parametre.setSize(950, 500);
-				panelParam.add(Txtparam);
+				parametre.setResizable(true);
+				parametre.setSize(300, 250);
 				
+				JTextField modifications1 = new JTextField(10);
+				modifications1.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramDave1 = new JLabel( "Nombre d'users affichés : ");
+				modifications1.setText(Integer.toString(dave.getNbUsers()));
+				
+				JTextField modifications2 = new JTextField(10);
+				modifications2.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramDave2 = new JLabel( "Mise à jour toute les (heures) : ");
+				modifications2.setText(Integer.toString(dave.getRefreshRateTopAnswerers()));
+				
+				JTextField modifications3 = new JTextField(10);
+				modifications3.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramDave3 = new JLabel( "Réponses affichées : ");
+				modifications3.setText(Integer.toString(dave.getForceUpdateTopAnswerers()));
+				
+				panelParam.add(paramDave1);
+				panelParam.add(modifications1);
+				
+				panelParam1.add(paramDave2);
+				panelParam1.add(modifications2);
+				
+				panelParam2.add(paramDave3);
+				panelParam2.add(modifications3);
+				
+				panelParam.add(panelParam1);
+				panelParam.add(panelParam2);
+				panelParam.add(validation);
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
 				
-				 }
+				validation.addMouseListener(new MouseListener(){
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+						int nbTags = Integer.parseInt(modifications1.getText()) ;
+						int nbQuestionsPerTag= Integer.parseInt(modifications2.getText());
+						int nbAnswers =Integer.parseInt(modifications3.getText());
+						
+						al.setNbTags(nbTags);
+						al.setNbQuestionsPerTag(nbQuestionsPerTag);
+						al.setNbAnswers(nbAnswers);
+						
+						parametre.dispose();
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+			}
+			 
 		});
+
 	}
+
 
 	
 	public boolean isListTag() {
