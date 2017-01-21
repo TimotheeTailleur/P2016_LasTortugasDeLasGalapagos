@@ -45,6 +45,118 @@ public class PageAlice extends TabReference {
 		al = new UserFactory(acessToken).newAlice().get();	
 		this.getPanel().add(Parametres = getParametre());
 		this.getPanel().add(printAliceResults(this));
+		
+		Parametres.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				JFrame parametre = new JFrame("Parametres");
+				
+				JButton validation = new JButton("Valider");
+				
+				JPanel panelParam = new JPanel();				
+				panelParam.setLayout(new FlowLayout());	
+				
+				JPanel panelParam1 = new JPanel();
+				panelParam1.setLayout(new FlowLayout());
+				
+				JPanel panelParam2 = new JPanel();
+				panelParam2.setLayout(new FlowLayout());
+				
+				parametre.pack();
+				parametre.setResizable(true);
+				parametre.setSize(300, 250);
+				
+				JTextField modifications1 = new JTextField(10);
+				modifications1.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramAlice1 = new JLabel( "Tags pris en compte : ");
+				modifications1.setText(Integer.toString(al.getNbTags()));
+				
+				JTextField modifications2 = new JTextField(10);
+				modifications2.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramAlice2 = new JLabel( "Questions par tag : ");
+				modifications2.setText(Integer.toString(al.getNbQuestionsPerTag()));
+				
+				JTextField modifications3 = new JTextField(10);
+				modifications3.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramAlice3 = new JLabel( "Réponses affichées : ");
+				modifications3.setText(Integer.toString(al.getNbAnswers()));
+				
+				panelParam.add(paramAlice1);
+				panelParam.add(modifications1);
+				
+				panelParam1.add(paramAlice2);
+				panelParam1.add(modifications2);
+				
+				panelParam2.add(paramAlice3);
+				panelParam2.add(modifications3);
+				
+				panelParam.add(panelParam1);
+				panelParam.add(panelParam2);
+				panelParam.add(validation);
+				parametre.getContentPane().add(panelParam);
+				parametre.setVisible(true);
+				
+				validation.addMouseListener(new MouseListener(){
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+						int nbTags = Integer.parseInt(modifications1.getText()) ;
+						int nbQuestionsPerTag= Integer.parseInt(modifications2.getText());
+						int nbAnswers =Integer.parseInt(modifications3.getText());
+						
+						al.setNbTags(nbTags);
+						al.setNbQuestionsPerTag(nbQuestionsPerTag);
+						al.setNbAnswers(nbAnswers);
+
+						page.removeAll();
+						 try {
+						       
+						       page.add(Parametres=getParametre());
+						       page.add(printAliceResults(page));
+						       page.add(getFoot());
+						      } catch (IOException e1) {
+						       // TODO Auto-generated catch block
+						       e1.printStackTrace();
+						      } catch (URISyntaxException e1) {
+						       // TODO Auto-generated catch block
+						       e1.printStackTrace();
+						      }
+						
+						parametre.dispose();
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+			}
+			 
+		});
+
+	}
+
 
 	}
 	
@@ -131,16 +243,21 @@ public class PageAlice extends TabReference {
 						al.setNbQuestionsPerTag(nbQuestionsPerTag);
 						al.setNbAnswers(nbAnswers);
 
-						page.remove(1);
-						try {
-							page.add(printAliceResults(page));
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (URISyntaxException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						page.removeAll();
+						 try {
+						       
+						       page.add(Parametres=getParametre());
+						       page.add(printAliceResults(page));
+						       page.add(getFoot());
+						      } catch (IOException e1) {
+						       // TODO Auto-generated catch block
+						       e1.printStackTrace();
+						      } catch (URISyntaxException e1) {
+						       // TODO Auto-generated catch block
+						       e1.printStackTrace();
+						      }
+						
+						parametre.dispose();
 					}
 
 					@Override
