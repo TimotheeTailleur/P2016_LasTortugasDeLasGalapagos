@@ -74,8 +74,8 @@ public class TabReference extends JPanel {
 	}
 
 
-public JPanel getPanel() {
-	return panel;
+public JButton getParametre() {
+	return (JButton) panel.getComponent(0);
 }
 
 

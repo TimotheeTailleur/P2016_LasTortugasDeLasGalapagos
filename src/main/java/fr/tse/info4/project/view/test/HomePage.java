@@ -67,7 +67,7 @@ public class HomePage extends JFrame {
 		JTabbedPane onglets = new JTabbedPane();
 		
 		JPanel wellcome =new JPanel();
-		JLabel hello = new JLabel("Bienvenue "+(new ApiManager()).getUserNAme(id));
+		JLabel hello = new JLabel("Bienvenue, profil de "+(new ApiManager()).getUserNAme(id));
 		wellcome.add(hello);
 		
 		PageAlice alice = new PageAlice(id);
