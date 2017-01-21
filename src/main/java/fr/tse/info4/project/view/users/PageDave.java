@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -37,6 +38,8 @@ public class PageDave extends TabReference {
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
+	
+	 Dave dave = (new UserFactory()).newDave().get();
 /**
  * 
  */
@@ -72,7 +75,7 @@ public class PageDave extends TabReference {
 				String str=" ";
 				 
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
-					 Dave dave = (new UserFactory()).newDave().get();
+					
 					 
 					 TagScore topTag = dave.getTopTag(tagName.getText());
 					 
@@ -96,10 +99,7 @@ public class PageDave extends TabReference {
 					 
 					link.setText(str);						
 					 
-				 }else{
-					
-						Dave dave = (new UserFactory()).newDave().get();
-						 
+				 }else{					 
 					
 						 String[] resultsTab = tagName.getText().split(" ");
 						 List<String> resultsList = new ArrayList<String>();
@@ -211,6 +211,24 @@ public class PageDave extends TabReference {
 		panel3.add(panel2);
 		
 		this.getPanel().add(panel3);
+		
+		getParametre().addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				JFrame parametre = new JFrame("Parametres");
+				JPanel panelParam = new JPanel();
+				JTextField Txtparam = new JTextField(30);
+				
+				panelParam.setLayout(new FlowLayout());
+				parametre.setLocationRelativeTo(null);		
+				parametre.pack();
+				parametre.setSize(950, 500);
+				panelParam.add(Txtparam);
+				
+				parametre.getContentPane().add(panelParam);
+				parametre.setVisible(true);
+				
+				 }
+		});
 	}
 
 	

@@ -44,24 +44,7 @@ public class TabReference extends JPanel {
 		foot.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JButton Parametres = new JButton("Parametres");
-		Parametres.addActionListener(new ActionListener(){
-			 public void actionPerformed(ActionEvent event){
-				JFrame parametre = new JFrame("Parametres");
-				JPanel panelParam = new JPanel();
-				JTextField Txtparam = new JTextField(30);
-				
-				panelParam.setLayout(new FlowLayout());
-				parametre.setLocationRelativeTo(null);		
-				parametre.pack();
-				parametre.setSize(950, 500);
-				panelParam.add(Txtparam);
-				
-				parametre.getContentPane().add(panelParam);
-				parametre.setVisible(true);
-				
-				 }
-		});
-		
+			
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add(Parametres);
 		panel.setLocation(1700, 0);
