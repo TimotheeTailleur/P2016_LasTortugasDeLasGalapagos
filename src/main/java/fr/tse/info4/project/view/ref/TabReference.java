@@ -26,7 +26,7 @@ public class TabReference extends JPanel {
 	 */
 	 JPanel foot = new JPanel();
 	 
-	 
+	 JButton Parametres = new JButton("Parametres");
 
 
 	public TabReference() {
@@ -40,10 +40,9 @@ public class TabReference extends JPanel {
 		foot.add(Quitter);
 		foot.setAlignmentX(CENTER_ALIGNMENT);
 		
-		JButton Parametres = new JButton("Parametres");
+		
 			
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.add(Parametres);
 		panel.setLocation(1700, 0);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(panel);
@@ -55,7 +54,7 @@ public class TabReference extends JPanel {
 
 
 public JButton getParametre() {
-	return (JButton) panel.getComponent(0);
+	return Parametres ;
 }
 
 public JPanel getPanel() {

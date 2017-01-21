@@ -2,6 +2,7 @@ package fr.tse.info4.project.view.users;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,8 +17,10 @@ import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
@@ -30,6 +33,7 @@ import fr.tse.info4.project.view.ref.TabReference;
 public class PageAlice extends TabReference {
 	
 	Alice al=null;
+	JButton Parametres=new JButton();
 	
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
@@ -43,8 +47,31 @@ public class PageAlice extends TabReference {
 
 		super();
 		al = new UserFactory().newAlice().get();
+		this.getPanel().add(Parametres = getParametre());
 		al.setIdUser(id);
 		this.getPanel().add(printAliceResults(this));
+		
+		Parametres.addActionListener(new ActionListener(){
+			 public void actionPerformed(ActionEvent event){
+				JFrame parametre = new JFrame("Parametres");
+				JPanel panelParam = new JPanel();
+				
+								
+				panelParam.setLayout(new FlowLayout());		
+				parametre.pack();
+				parametre.setResizable(true);
+				parametre.setSize(700, 350);
+				
+				JTextField modifications1 = new JTextField();
+				JLabel paramAlice1 = new JLabel( "Nombre de tags renvoyés : ");
+				modifications1.setText(String.valueOf(al.getNbTags()));
+				
+				panelParam.add(paramAlice1);
+				parametre.getContentPane().add(panelParam);
+				parametre.setVisible(true);
+				
+				 }
+		});
 
 	}
 
