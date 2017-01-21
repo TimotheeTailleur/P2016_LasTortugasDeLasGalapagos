@@ -54,6 +54,9 @@ public class PageAlice extends TabReference {
 		Parametres.addActionListener(new ActionListener(){
 			 public void actionPerformed(ActionEvent event){
 				JFrame parametre = new JFrame("Parametres");
+				
+				JButton validation = new JButton("Valider");
+				
 				JPanel panelParam = new JPanel();				
 				panelParam.setLayout(new FlowLayout());	
 				
@@ -65,21 +68,21 @@ public class PageAlice extends TabReference {
 				
 				parametre.pack();
 				parametre.setResizable(true);
-				parametre.setSize(700, 350);
+				parametre.setSize(300, 250);
 				
-				JTextField modifications1 = new JTextField(25);
+				JTextField modifications1 = new JTextField(10);
 				modifications1.setHorizontalAlignment(JTextField.CENTER);
-				JLabel paramAlice1 = new JLabel( "Nombre de tags renvoyés : ");
+				JLabel paramAlice1 = new JLabel( "Tags prits en compte : ");
 				modifications1.setText(Integer.toString(al.getNbTags()));
 				
-				JTextField modifications2 = new JTextField(25);
+				JTextField modifications2 = new JTextField(10);
 				modifications2.setHorizontalAlignment(JTextField.CENTER);
-				JLabel paramAlice2 = new JLabel( "Nombre de questions par tags : ");
+				JLabel paramAlice2 = new JLabel( "Questions par tags : ");
 				modifications2.setText(Integer.toString(al.getNbQuestionsPerTag()));
 				
-				JTextField modifications3 = new JTextField(25);
+				JTextField modifications3 = new JTextField(10);
 				modifications3.setHorizontalAlignment(JTextField.CENTER);
-				JLabel paramAlice3 = new JLabel( "Nombre de réponses affichées : ");
+				JLabel paramAlice3 = new JLabel( "Réponses affichées : ");
 				modifications3.setText(Integer.toString(al.getNbAnswers()));
 				
 				panelParam.add(paramAlice1);
@@ -93,6 +96,7 @@ public class PageAlice extends TabReference {
 				
 				panelParam.add(panelParam1);
 				panelParam.add(panelParam2);
+				panelParam.add(validation);
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
 				
