@@ -78,6 +78,10 @@ public JButton getParametre() {
 	return (JButton) panel.getComponent(0);
 }
 
+public JPanel getPanel() {
+	return panel;
+}
+
 
 public void setPanel(JPanel panel) {
 	this.panel = panel;
