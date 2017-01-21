@@ -305,7 +305,7 @@ public class PageAlice extends TabReference {
 		Map<String[], PagedList<Question>> newQuestion = al.getNewQuestions();
 
 		JLabel title = new JLabel("Les nouvelles questions : ");
-		title.setFont(new Font("Tahoma", Font.BOLD, 15));
+		title.setFont(new Font("Tahoma", Font.BOLD, 17));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 		result.add(title);
 		
@@ -323,6 +323,7 @@ public class PageAlice extends TabReference {
 			}
 			str += " : ";
 			JLabel tag = new JLabel(str);
+			tag.setBorder(new EmptyBorder(10, 0, 10, 0));
 			result.add(tag);
 			PagedList<Question> questionMap = tagEntry.getValue();
 			for (int i = 0; i < questionMap.getPageSize(); i++) {
@@ -352,7 +353,7 @@ public class PageAlice extends TabReference {
 				result.validate();
 			}
 		}
-		result.setBorder(new EmptyBorder(10, 50, 10, 20));
+		result.setBorder(new EmptyBorder(10, 50, 10, 30));
 
 		return result;
 	}
@@ -365,7 +366,7 @@ public class PageAlice extends TabReference {
 		List<Answer> listQuestion = al.getSortedAnswers();
 
 		JLabel title = new JLabel("Questions répondues triées : ");
-		title.setFont(new Font("Tahoma", Font.BOLD, 15));
+		title.setFont(new Font("Tahoma", Font.BOLD, 17));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 		result.add(title);
 
@@ -386,7 +387,7 @@ public class PageAlice extends TabReference {
 			result.validate();
 		}
 
-		result.setBorder(new EmptyBorder(10, 20, 10, 50));
+		result.setBorder(new EmptyBorder(10, 30, 10, 50));
 		return result;
 	}
 
