@@ -102,14 +102,16 @@ public class PageBob extends TabReference {
 				}else{
 					List<Question> questions = bob.findSimilarQuestions(text.getText());
 					String str = "Questions similaires à celle écrite : ";
+					JLabel title = new JLabel(str);
+					title.setFont(new Font("Tahoma", Font.BOLD, 15));
+					result.add(title);
+					String str2="";
 					if(BobMethod.hasQuestion(questions) == false){
-						str+="\n Pas de questions semblables trouvées.";
-						JLabel similarQ = new JLabel(str);
+						str2+="\n Pas de questions semblables trouvées.";
+						JLabel similarQ = new JLabel(str2);
 						result.add(similarQ);
 						result.validate();
 					}else{
-						JLabel similarQ = new JLabel(str);
-						result.add(similarQ);
 						for (int i=0;i<questions.size();i++){
 							URI uri = null;
 							try {
@@ -197,17 +199,22 @@ public class PageBob extends TabReference {
 				}else{
 					List<String> keyWords = bob.findKeyWords(text.getText());
 					String str = "Mots-clés pouvant être rajoutés : ";
+					JLabel title = new JLabel(str);
+					title.setFont(new Font("Tahoma", Font.BOLD, 15));
+					result.add(title);
 					if(BobMethod.hasKeyWords(keyWords) == false){
-						str+="\n Pas de mots-clés trouvés.";
+						String str2="Pas de mots-clés trouvés.";
+						JLabel similarQ = new JLabel(str2);
+						result.add(similarQ);
+						result.validate();
 					}else{
 						for (int i=0;i<keyWords.size();i++){
-							str+="\n- "+keyWords.get(i);
+							String str2="- "+keyWords.get(i);
+							JLabel similarQ = new JLabel(str2);
+							result.add(similarQ);
+							result.validate();
 						}
 					}
-					
-					JLabel similarQ = new JLabel(str);
-					result.add(similarQ);
-					result.validate();
 				}
 			}
 			
@@ -246,6 +253,7 @@ public class PageBob extends TabReference {
 		}else{
 			show+="Liste d'user potentiellement intéressant : ";
 			JLabel title = new JLabel(show);
+			title.setFont(new Font("Tahoma", Font.BOLD, 15));
 			result.add(title);
 			
 			for(User user : users){
@@ -274,6 +282,7 @@ public class PageBob extends TabReference {
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		
 		JLabel title = new JLabel("Questions répondues récemment : ");
+		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		result.add(title);
 		Map<String, List<Question>> newQuestions = bob.getNewQuestionsAnswered();
 		for (Entry<String, List<Question>> questionEntry : newQuestions.entrySet()){

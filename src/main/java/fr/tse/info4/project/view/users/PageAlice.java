@@ -73,8 +73,8 @@ public class PageAlice extends TabReference {
 
 		Map<String[], PagedList<Question>> newQuestion = al.getNewQuestions();
 
-		JLabel title = new JLabel("<html><b />Les nouvelles questions : </html>");
-		// title.setFont( title.getFont().deriveFont(title.BOLD) );
+		JLabel title = new JLabel("Les nouvelles questions : ");
+		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		result.add(title);
 		
 
@@ -132,6 +132,7 @@ public class PageAlice extends TabReference {
 		List<Answer> listQuestion = al.getSortedAnswers();
 
 		JLabel title = new JLabel("Questions répondues triées : ");
+		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		result.add(title);
 
 		for (int i = 0; i < listQuestion.size(); i++) {
