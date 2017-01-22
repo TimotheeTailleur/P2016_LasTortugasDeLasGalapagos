@@ -22,8 +22,10 @@ import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -50,7 +52,10 @@ public class PageBob extends TabReference {
 		int nbExpertsPerTag = Integer.parseInt(prop.getProperty("nbExpertsPerTag"));
 		bob = new UserFactory(acessToken).newBob().withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
-		this.getPanel().add(printBobResults(this));
+		JScrollPane scroll = new JScrollPane(printBobResults(this));
+		this.getPanel().add(scroll);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 	}
 
@@ -63,7 +68,10 @@ public class PageBob extends TabReference {
 		int nbExpertsPerTag = Integer.parseInt(prop.getProperty("nbExpertsPerTag"));
 		bob = new UserFactory().newBob().withId(id).withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
-		this.getPanel().add(printBobResults(this));
+		JScrollPane scroll = new JScrollPane(printBobResults(this));
+		this.getPanel().add(scroll);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 	}
 
@@ -132,22 +140,23 @@ public class PageBob extends TabReference {
 						result.validate();
 					} else {
 						for (int i = 0; i < questions.size(); i++) {
-							URI uri = null;
-							try {
-								uri = new URI(Bob.getLinkQuestion((int) questions.get(i).getQuestionId()));
-							} catch (URISyntaxException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
+							int ind=i;
+							JButton link = new JButton();
 							class OpenUrlAction implements ActionListener {
 								@Override
 								public void actionPerformed(ActionEvent e) {
+									URI uri=null;
+									
+									try {
+										uri = fixeUri(Bob.getLinkQuestion((int) questions.get(ind).getQuestionId()),link);
+									} catch (URISyntaxException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
 									open(uri);
 								}
 							}
-
-							JButton link = new JButton();
+							
 							link.setText(questions.get(i).getTitle());
 							link.setForeground(Color.BLUE);
 							link.setBorderPainted(false);
@@ -157,7 +166,6 @@ public class PageBob extends TabReference {
 							Map attributes = font.getAttributes();
 							attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 							link.setFont(font.deriveFont(attributes));
-							link.setToolTipText(uri.toString());
 							link.addActionListener(new OpenUrlAction());
 							link.setMaximumSize(new Dimension(250, 30));
 							result.add(link);
@@ -187,7 +195,6 @@ public class PageBob extends TabReference {
 			}
 		});
 		result.validate();
-		result.setBorder(new EmptyBorder(0, 2, 0, 3));
 		return result;
 	}
 
@@ -276,7 +283,7 @@ public class PageBob extends TabReference {
 
 			}
 		});
-		result.setBorder(new EmptyBorder(0, 3, 0, 3));
+		result.validate();
 		return result;
 	}
 
@@ -316,7 +323,6 @@ public class PageBob extends TabReference {
 				result.validate();
 			}
 		}
-		result.setBorder(new EmptyBorder(0, 3, 0, 3));
 		return result;
 	}
 
@@ -364,7 +370,6 @@ public class PageBob extends TabReference {
 				result.validate();
 			}
 		}
-		result.setBorder(new EmptyBorder(0, 3, 0, 2));
 		return result;
 	}
 
@@ -376,6 +381,18 @@ public class PageBob extends TabReference {
 				/* TODO: error handling */ }
 		} else {
 			/* TODO: error handling */ }
+	}
+	
+	private static URI fixeUri(String text,JButton link) throws URISyntaxException{
+		final URI uri= new URI(text);
+		class OpenUrlAction implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				open(uri);
+			}
+		}
+		link.setToolTipText(uri.toString());
+		return uri;
 	}
 
 }

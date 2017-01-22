@@ -46,6 +46,8 @@ public class PageDave extends TabReference {
 	JPanel panel3 = new JPanel();
 	JPanel results = new JPanel();
 	Dave dave = null;
+	int appelTag = 0;
+	int appelContributeur = 0;
 /**
  * 
  */
@@ -81,6 +83,22 @@ public class PageDave extends TabReference {
 			public void mouseReleased(MouseEvent e) {
 				
 				// TODO Auto-generated method stub
+				if (appelTag == 0 && appelContributeur==0) {
+					appelTag += 1;
+				} else {
+					if(appelContributeur==1){
+						for(int i=0;i<dave.getNbUsers();i++){
+							results.remove(0);
+							results.validate();
+						}
+						appelContributeur=0;
+					}else{
+						results.remove(0);
+						results.validate();
+						appelTag=0;
+					}
+					
+				}
 				isListTag(); 
 				JButton link = new JButton();
 				
@@ -194,6 +212,22 @@ public class PageDave extends TabReference {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
+				if (appelTag == 0 && appelContributeur==0) {
+					appelContributeur += 1;
+				} else {
+					if(appelContributeur==1){
+						for(int i=0;i<dave.getNbUsers();i++){
+							results.remove(0);
+							results.validate();
+						}
+						appelContributeur=0;
+					}else{
+						results.remove(0);
+						results.validate();
+						appelTag=0;
+					}
+					
+				}
 	
 				String str="";
 				

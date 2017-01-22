@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -55,7 +56,8 @@ public class PageAlice extends TabReference {
 		al = new UserFactory(acessToken).newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags)
 				.withNbAnwsers(nbAnswers).get();
 		this.getPanel().add(Parametres = getParametre());
-		this.getPanel().add(printAliceResults(this));
+		this.getPanel().add(new JScrollPane(printAliceResults(this)));
+		
 
 		Parametres.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -188,7 +190,10 @@ public class PageAlice extends TabReference {
 				.withNbAnwsers(nbAnswers).get();
 		this.getPanel().add(Parametres = getParametre());
 		al.setIdUser(id);
-		this.getPanel().add(printAliceResults(this));
+		JScrollPane scroll = new JScrollPane(printAliceResults(this));
+		this.getPanel().add(scroll);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		Parametres.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {

@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * 
