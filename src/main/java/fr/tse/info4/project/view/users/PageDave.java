@@ -1,9 +1,11 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,10 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import fr.tse.info4.project.controller.UserFactory;
@@ -39,14 +44,16 @@ public class PageDave extends TabReference {
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
-	
-	
-	 Dave dave = (new UserFactory()).newDave().get();
+	JPanel results = new JPanel();
+	Dave dave = null;
 /**
  * 
  */
 	public PageDave() {
 		super();
+		
+		dave= (new UserFactory()).newDave().get();
+		
 		
 		JLabel title = new JLabel("Veuillez entrer un ou plusieurs tags séparés par un espace : ");
 		panel1.setLayout(new FlowLayout());
@@ -54,7 +61,8 @@ public class PageDave extends TabReference {
 		panel3.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
 		tagName.setHorizontalAlignment(JTextField.CENTER);
 
-		JButton option1 = new JButton("Top Tag");
+
+		JButton option1 = new JButton("Meilleur tag");
 		option1.addMouseListener(new MouseListener(){
 
 			@Override
@@ -71,12 +79,13 @@ public class PageDave extends TabReference {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				
 				// TODO Auto-generated method stub
 				isListTag(); 
 				JButton link = new JButton();
-				JPanel results = new JPanel();
+				
 				String str=" ";
-				 
+				
 				 if(isList == false ){ // if one tag was written, launch function 1 and display results
 					
 					 
@@ -102,7 +111,8 @@ public class PageDave extends TabReference {
 					link.setText(str);						
 					 
 				 }else{					 
-					
+					 
+					 
 						 String[] resultsTab = tagName.getText().split(" ");
 						 List<String> resultsList = new ArrayList<String>();
 						 
@@ -130,7 +140,7 @@ public class PageDave extends TabReference {
 							e1.printStackTrace();
 						}
 						 
-						link.setText(str);	
+				
 				 }
 					
 					link.setForeground(Color.BLUE);
@@ -139,19 +149,16 @@ public class PageDave extends TabReference {
 					link.setBackground(Color.WHITE);
 					Font font = link.getFont();
 					Map attributes = font.getAttributes();
-					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-					link.setFont(font.deriveFont(attributes));
+					link.setText(str);
 					results.add(link);
 					results.validate();
-					
-						
 					results.setVisible(true);
 					panel3.add(results);
+					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					link.setFont(font.deriveFont(attributes));			
 					panel3.validate();
-					
-					
-					 
-					
+				
+									
 			}
 
 			@Override
@@ -169,7 +176,7 @@ public class PageDave extends TabReference {
 			
 		});
 		
-		JButton option2 = new JButton("Top Contributor");
+		JButton option2 = new JButton("Meilleurs contributeurs");
 		option2.addMouseListener(new MouseListener(){
 
 			@Override
@@ -187,15 +194,15 @@ public class PageDave extends TabReference {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				JPanel results = new JPanel();
+	
 				String str="";
-				JButton link = new JButton();
-			    Dave dave = (new UserFactory()).newDave().get();
-			
+				
+				
 				 List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
 					 
 				 for(int i=0;i<topAnswerer.size();i++){
-					 
+					
+					JButton link = new JButton();
 					URI uri;
 					try {
 						uri = new URI(Dave.getLink((int)topAnswerer.get(i).getUser().getUserId()));
@@ -211,7 +218,7 @@ public class PageDave extends TabReference {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					 str = (new ApiManager()).getUserNAme((int)topAnswerer.get(i).getUser().getUserId()) +  " avec " + topAnswerer.get(i).getPostCount() +" posts"; 
+					 str = (new ApiManager()).getUserNAme((int)topAnswerer.get(i).getUser().getUserId()) +  " avec " + topAnswerer.get(i).getPostCount() +" messages"; 
 					 
 					 link.setForeground(Color.BLUE);
 					 link.setBorderPainted(false);
@@ -222,13 +229,12 @@ public class PageDave extends TabReference {
 					 attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 					 link.setFont(font.deriveFont(attributes));
 					 link.setText(str);
-					 results.add(link);
+					results.add(link);
 					results.validate();	
 					results.setVisible(true);
 					panel3.add(results);
 					panel3.validate();
 					
-					panel3.setVisible(true);
 				 }	
 				
 				 		
@@ -250,13 +256,18 @@ public class PageDave extends TabReference {
 		
 		panel1.add(title);
 		panel1.add(tagName);
-		panel1.add(getParametre());
+		
 		panel2.add(option1);
 		panel2.add(option2);
+		
+		panel1.add(getParametre());
 		
 		panel3.add(panel1);
 		panel3.add(panel2);
 		
+		panel3.setVisible(true);
+		panel3.revalidate();
+
 		this.getPanel().add(panel3);
 		
 		getParametre().addActionListener(new ActionListener(){
@@ -264,6 +275,9 @@ public class PageDave extends TabReference {
 				JFrame parametre = new JFrame("Parametres");
 				
 				JButton validation = new JButton("Valider");
+				
+				ButtonGroup bg = new ButtonGroup();
+
 				
 				JPanel panelParam = new JPanel();				
 				panelParam.setLayout(new FlowLayout());	
@@ -278,20 +292,27 @@ public class PageDave extends TabReference {
 				parametre.setResizable(true);
 				parametre.setSize(300, 250);
 				
-				JTextField modifications1 = new JTextField(10);
+				JTextField modifications1 = new JTextField(5);
 				modifications1.setHorizontalAlignment(JTextField.CENTER);
 				JLabel paramDave1 = new JLabel( "Nombre d'users affichés : ");
 				modifications1.setText(Integer.toString(dave.getNbUsers()));
 				
-				JTextField modifications2 = new JTextField(10);
+				JTextField modifications2 = new JTextField(5);
 				modifications2.setHorizontalAlignment(JTextField.CENTER);
 				JLabel paramDave2 = new JLabel( "Mise à jour toute les (heures) : ");
 				modifications2.setText(Integer.toString(dave.getRefreshRateTopAnswerers()));
 				
-				JTextField modifications3 = new JTextField(10);
-				modifications3.setHorizontalAlignment(JTextField.CENTER);
-				JLabel paramDave3 = new JLabel( "Réponses affichées : ");
-				modifications3.setText(Integer.toString(dave.getForceUpdateTopAnswerers()));
+				
+				 JRadioButton yes = new JRadioButton("Oui");
+				 JRadioButton no = new JRadioButton("Non");
+  
+				 bg.add(yes);
+				 bg.add(no);
+		 
+				JLabel paramDave3 = new JLabel( "Mise à jour forcée : ");	
+				paramDave3.add(yes);
+				paramDave3.add(no);
+				 
 				
 				panelParam.add(paramDave1);
 				panelParam.add(modifications1);
@@ -300,7 +321,8 @@ public class PageDave extends TabReference {
 				panelParam1.add(modifications2);
 				
 				panelParam2.add(paramDave3);
-				panelParam2.add(modifications3);
+				panelParam2.add(yes);
+				panelParam2.add(no);
 				
 				panelParam.add(panelParam1);
 				panelParam.add(panelParam2);
@@ -326,13 +348,19 @@ public class PageDave extends TabReference {
 					public void mouseReleased(MouseEvent e) {
 						// TODO Auto-generated method stub
 						
-						int nbTags = Integer.parseInt(modifications1.getText()) ;
-						int nbQuestionsPerTag= Integer.parseInt(modifications2.getText());
-						int nbAnswers =Integer.parseInt(modifications3.getText());
+						int nbUsers = Integer.parseInt(modifications1.getText()) ;
+						int refreshRateTopAnswerers= Integer.parseInt(modifications2.getText());
+						 // int nbAnswers =Integer.parseInt(modifications3.getText());
 						
-						al.setNbTags(nbTags);
-						al.setNbQuestionsPerTag(nbQuestionsPerTag);
-						al.setNbAnswers(nbAnswers);
+						dave.setNbUsers(nbUsers);;
+						dave.setRefreshRateTopAnswerers(refreshRateTopAnswerers);;
+						// al.setNbAnswers(nbAnswers);
+						
+						if(yes.isSelected()){
+						dave= (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRateTopAnswerers).withForceUpdate().get();
+						}else{
+							dave= (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRateTopAnswerers).withoutForceUpdate().get();
+						}
 						
 						parametre.dispose();
 					}
