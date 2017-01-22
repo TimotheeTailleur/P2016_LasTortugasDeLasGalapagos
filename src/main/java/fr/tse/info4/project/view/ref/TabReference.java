@@ -10,7 +10,6 @@ import java.util.Properties;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 /**
  * 
@@ -25,11 +24,14 @@ public class TabReference extends JPanel {
 	JPanel panel = new JPanel();
 
 	/**
-	 * This attribute is modified by each tab by settings chosen when method of
-	 * users story are called.
+	 * This attribute contains ths button for quitting the API.
 	 */
 	JPanel foot = new JPanel();
 
+	/**
+	 * The action by this button is modified by each tab
+	 * for showing and modifying their parameters.
+	 */
 	JButton Parametres = new JButton("Parametres");
 
 	public static final String PARAMETERS_PATH = "parameters.properties";
@@ -54,6 +56,10 @@ public class TabReference extends JPanel {
 		}
 	}
 
+	/**
+	 * Constructor of the TabReference class which initializes the foot
+	 * and the JPanel of results for each class.
+	 */
 	public TabReference() {
 
 		JButton Quitter = new JButton("Quitter");
@@ -74,22 +80,42 @@ public class TabReference extends JPanel {
 		this.add(foot);
 	}
 
+	/**
+	 * method for accessing the JButton Parametres.
+	 * @return JButton Parametres
+	 */
 	public JButton getParametre() {
 		return Parametres;
 	}
 
+	/**
+	 * method for accessing the JPanel in which results will be showing.
+	 * @return JPanel panel
+	 */
 	public JPanel getPanel() {
 		return panel;
 	}
 
+	/**
+	 * Change the panel of results by the JPanel in parameter.
+	 * @param panel
+	 */
 	public void setPanel(JPanel panel) {
 		this.panel = panel;
 	}
 
+	/**
+	 * return the foot of reference for each tab.
+	 * @return JPanel foot
+	 */
 	public JPanel getFoot() {
 		return foot;
 	}
 
+	/**
+	 * Change the foot by the JPanel in parameter.
+	 * @param foot
+	 */
 	public void setFoot(JPanel foot) {
 		this.foot = foot;
 	}

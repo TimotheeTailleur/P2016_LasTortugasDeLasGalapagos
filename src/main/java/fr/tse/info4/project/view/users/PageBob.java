@@ -53,10 +53,10 @@ public class PageBob extends TabReference {
 		bob = new UserFactory(acessToken).newBob().withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		JScrollPane scroll = new JScrollPane(printBobResults(this));
+		
 		this.getPanel().add(scroll);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
 	}
 
 	public PageBob(int id) throws IOException, URISyntaxException {
@@ -69,10 +69,11 @@ public class PageBob extends TabReference {
 		bob = new UserFactory().newBob().withId(id).withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		JScrollPane scroll = new JScrollPane(printBobResults(this));
-		this.getPanel().add(scroll);
+		
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+		this.getPanel().add(scroll);		
 	}
 
 	public JPanel printBobResults(PageBob bobPage) throws IOException, URISyntaxException {

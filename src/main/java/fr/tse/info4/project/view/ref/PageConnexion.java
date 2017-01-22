@@ -17,14 +17,25 @@ import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.datarecovery.Authenticate;
 import fr.tse.info4.project.view.test.HomePage;
 
+/**
+ * This class is an tab which is getting us choose how we connect to Stackoverflow.
+ * Either you have an Stackoverflow account, or you use an ID to connect. 
+ *
+ */
 public class PageConnexion extends TabReference{
-	
+	/**
+	 * Attribute which refers to the HomePage which called it.
+	 */
 	HomePage home=null;
 
+	/**
+	 * Constructor of this class which initialize 2 buttons : one for connection with 
+	 * an accont, the other with an ID.
+	 * @param h
+	 */
 	public PageConnexion(HomePage h){
 		super();
-		home=h;
-		
+		home=h;		
 		
 		PageConnexion co = this;
 		
@@ -125,6 +136,12 @@ public class PageConnexion extends TabReference{
 		});
 	}
 	
+	/**
+	 * Method for showing a pop up in which you enter the ID with which
+	 * you want to connect to the API. The parameter is the PageConnexion which
+	 * called it.
+	 * @param co
+	 */
 	public void askID(PageConnexion co){
 		
 		JFrame userID = new JFrame("ID user");

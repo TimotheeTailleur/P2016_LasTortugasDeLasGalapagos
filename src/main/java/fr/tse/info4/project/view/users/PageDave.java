@@ -28,6 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.schema.TagScore;
@@ -87,7 +90,8 @@ public class PageDave extends TabReference {
 					appelTag += 1;
 				} else {
 					if(appelContributeur==1){
-						for(int i=0;i<dave.getNbUsers();i++){
+						int nbComponent = results.getComponentCount();
+						for(int i=0;i<nbComponent;i++){
 							results.remove(0);
 							results.validate();
 						}
@@ -216,7 +220,8 @@ public class PageDave extends TabReference {
 					appelContributeur += 1;
 				} else {
 					if(appelContributeur==1){
-						for(int i=0;i<dave.getNbUsers();i++){
+						int nbComponent = results.getComponentCount();
+						for(int i=0;i<nbComponent;i++){
 							results.remove(0);
 							results.validate();
 						}
@@ -310,6 +315,8 @@ public class PageDave extends TabReference {
 				
 				JButton validation = new JButton("Valider");
 				
+				JButton reinitialiser = new JButton("Réinitialiser");
+				
 				ButtonGroup bg = new ButtonGroup();
 
 				
@@ -361,6 +368,7 @@ public class PageDave extends TabReference {
 				panelParam.add(panelParam1);
 				panelParam.add(panelParam2);
 				panelParam.add(validation);
+				panelParam.add(reinitialiser);
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
 				
@@ -386,8 +394,8 @@ public class PageDave extends TabReference {
 						int refreshRateTopAnswerers= Integer.parseInt(modifications2.getText());
 						 // int nbAnswers =Integer.parseInt(modifications3.getText());
 						
-						dave.setNbUsers(nbUsers);;
-						dave.setRefreshRateTopAnswerers(refreshRateTopAnswerers);;
+						dave.setNbUsers(nbUsers);
+						dave.setRefreshRateTopAnswerers(refreshRateTopAnswerers);
 						// al.setNbAnswers(nbAnswers);
 						
 						if(yes.isSelected()){
@@ -407,6 +415,50 @@ public class PageDave extends TabReference {
 
 					@Override
 					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				reinitialiser.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						modifications1.setText("10");
+						modifications2.setText("24");
+
+						dave.setNbUsers(10);
+						dave.setRefreshRateTopAnswerers(24);
+
+						if(yes.isSelected()){
+							dave= (new UserFactory()).newDave().withNbUsers(10).withRefreshRate(24).withForceUpdate().get();
+						}else{
+							dave= (new UserFactory()).newDave().withNbUsers(10).withRefreshRate(24).withoutForceUpdate().get();
+						}
+						parametre.dispose();
+
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
 						// TODO Auto-generated method stub
 						
 					}

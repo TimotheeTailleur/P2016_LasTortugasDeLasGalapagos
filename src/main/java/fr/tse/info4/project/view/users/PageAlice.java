@@ -64,6 +64,8 @@ public class PageAlice extends TabReference {
 				JFrame parametre = new JFrame("Parametres");
 
 				JButton validation = new JButton("Valider");
+				
+				JButton reinitialiser = new JButton("Réinitialiser");
 
 				JPanel panelParam = new JPanel();
 				panelParam.setLayout(new FlowLayout());
@@ -105,6 +107,7 @@ public class PageAlice extends TabReference {
 				panelParam.add(panelParam1);
 				panelParam.add(panelParam2);
 				panelParam.add(validation);
+				panelParam.add(reinitialiser);
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
 
@@ -173,6 +176,71 @@ public class PageAlice extends TabReference {
 
 					}
 				});
+				reinitialiser.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						modifications1.setText("3");
+						modifications2.setText("3");
+						modifications3.setText("10");
+
+						al.setNbTags(3);
+						al.setNbQuestionsPerTag(3);
+						al.setNbAnswers(10);
+
+						page.removeAll();
+						try {
+
+							page.add(Parametres = getParametre());
+							page.add(printAliceResults(page));
+							page.add(getFoot());
+							page.validate();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						parametre.dispose();
+
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbTags", 3);
+							config.setProperty("nbQuestionsPerTag", 3);
+							config.setProperty("nbAnswers", 10);
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 
 			}
 
@@ -200,6 +268,8 @@ public class PageAlice extends TabReference {
 				JFrame parametre = new JFrame("Parametres");
 
 				JButton validation = new JButton("Valider");
+				
+				JButton reinitialiser = new JButton("Réinitialiser");
 
 				JPanel panelParam = new JPanel();
 				panelParam.setLayout(new FlowLayout());
@@ -241,6 +311,7 @@ public class PageAlice extends TabReference {
 				panelParam.add(panelParam1);
 				panelParam.add(panelParam2);
 				panelParam.add(validation);
+				panelParam.add(reinitialiser);
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
 
@@ -309,6 +380,72 @@ public class PageAlice extends TabReference {
 					public void mouseExited(MouseEvent e) {
 						// TODO Auto-generated method stub
 
+					}
+				});
+				
+				reinitialiser.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						modifications1.setText("3");
+						modifications2.setText("3");
+						modifications3.setText("10");
+
+						al.setNbTags(3);
+						al.setNbQuestionsPerTag(3);
+						al.setNbAnswers(10);
+
+						page.removeAll();
+						try {
+
+							page.add(Parametres = getParametre());
+							page.add(printAliceResults(page));
+							page.add(getFoot());
+							page.validate();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						parametre.dispose();
+
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbTags", 3);
+							config.setProperty("nbQuestionsPerTag", 3);
+							config.setProperty("nbAnswers", 10);
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 
