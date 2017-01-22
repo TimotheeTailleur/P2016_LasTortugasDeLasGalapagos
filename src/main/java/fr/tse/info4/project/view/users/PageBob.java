@@ -56,10 +56,206 @@ public class PageBob extends TabReference {
 		bob = new UserFactory(acessToken).newBob().withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		JScrollPane scroll = new JScrollPane(printBobResults(this));
-		
-		this.getPanel().add(scroll);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		this.getPanel().add(getParametre());
+		this.getPanel().add(scroll);
+		
+		getParametre().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JFrame parametre = new JFrame("Parametres");
+
+				JButton validation = new JButton("Valider");
+				JButton reinitialiser = new JButton("Réinitialiser");
+
+				JPanel panelParam = new JPanel();
+				panelParam.setLayout(new FlowLayout());
+
+				JPanel panelParam1 = new JPanel();
+				panelParam1.setLayout(new FlowLayout());
+ 
+				
+				JPanel panelParam2 = new JPanel();
+				panelParam2.setLayout(new FlowLayout());
+				
+				JPanel panelParam3 = new JPanel();
+				panelParam3.setLayout(new FlowLayout());
+
+				parametre.pack();
+				parametre.setResizable(true);
+				parametre.setSize(300, 250);
+
+				JTextField modifications1 = new JTextField(10);
+				modifications1.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob1 = new JLabel("Meilleurs tags: ");
+				modifications1.setText(Integer.toString(bob.getNbTags()));
+
+				JTextField modifications2 = new JTextField(10);
+				modifications2.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob2 = new JLabel("Questions par tag : ");
+				modifications2.setText(Integer.toString(bob.getNbQuestionsPerTag()));
+
+				JTextField modifications3 = new JTextField(10);
+				modifications3.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob3 = new JLabel("Questions simillaires : ");
+				modifications3.setText(Integer.toString(bob.getNbSimilarQuestions()));
+				
+				JTextField modifications4 = new JTextField(10);
+				modifications4.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob4 = new JLabel("Experts par tag : ");
+				modifications4.setText(Integer.toString(bob.getNbExpertsPerTag()));
+
+
+				panelParam.add(paramBob1);
+				panelParam.add(modifications1);
+
+				panelParam1.add(paramBob2);
+				panelParam1.add(modifications2);
+
+				panelParam2.add(paramBob3);
+				panelParam2.add(modifications3);
+				
+				panelParam3.add(paramBob4);
+				panelParam3.add(modifications4);
+
+				panelParam.add(panelParam1);
+				panelParam.add(panelParam2);
+				panelParam.add(panelParam3);
+				panelParam.add(validation);
+				panelParam.add(reinitialiser);
+				parametre.getContentPane().add(panelParam);
+				parametre.setVisible(true);
+				
+				validation.addMouseListener(new MouseListener() {
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+						int  nbBestTags = Integer.parseInt(modifications1.getText());
+						int nbQuestionsPerTag = Integer.parseInt(modifications2.getText());
+						int nbSimilarQuestions = Integer.parseInt(modifications3.getText());
+						int nbExpertsPerTag = Integer.parseInt(modifications4.getText());
+
+						bob.setNbTags(nbBestTags);
+						bob.setNbQuestionsPerTag(nbQuestionsPerTag);
+						bob.setNbSimilarQuestions(nbSimilarQuestions);
+						bob.setNbExpertsPerTag(nbExpertsPerTag);
+
+						page.removeAll();
+						try {
+
+							page.add(getParametre());
+							JScrollPane scroll = new JScrollPane(printBobResults(page));
+							
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+							page.add(scroll);
+							page.add(getFoot());
+							page.validate();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						parametre.dispose();
+						
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+				reinitialiser.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						modifications1.setText("5");
+						modifications2.setText("3");
+						modifications3.setText("10");
+						modifications4.setText("3");
+
+						bob.setNbTags(5);
+						bob.setNbQuestionsPerTag(3);
+						bob.setNbSimilarQuestions(10);
+						bob.setNbExpertsPerTag(3);
+
+						page.removeAll();
+						try {
+
+							page.add(getParametre());
+							JScrollPane scroll = new JScrollPane(printBobResults(page));
+							
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+							page.add(scroll);
+							page.add(getFoot());
+							page.validate();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						parametre.dispose();
+
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+
+			}
+
+		});
 	}
 
 	public PageBob(int id) throws IOException, URISyntaxException {
@@ -176,7 +372,11 @@ public class PageBob extends TabReference {
 						try {
 
 							page.add(getParametre());
-							page.add(printBobResults(page));
+							JScrollPane scroll = new JScrollPane(printBobResults(page));
+							
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+							page.add(scroll);
 							page.add(getFoot());
 							page.validate();
 						} catch (IOException e1) {
@@ -222,7 +422,11 @@ public class PageBob extends TabReference {
 						try {
 
 							page.add(getParametre());
-							page.add(printBobResults(page));
+							JScrollPane scroll = new JScrollPane(printBobResults(page));
+							
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+							page.add(scroll);
 							page.add(getFoot());
 							page.validate();
 						} catch (IOException e1) {
@@ -570,6 +774,11 @@ public class PageBob extends TabReference {
 		return result;
 	}
 
+	/**
+	 * Method which will open a browser with the URI in parameter
+	 * if it is possible.
+	 * @param uri
+	 */
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
 			try {
