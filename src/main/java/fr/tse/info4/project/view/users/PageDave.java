@@ -427,14 +427,7 @@ public class PageDave extends TabReference {
 						modifications1.setText("10");
 						modifications2.setText("24");
 
-						dave.setNbUsers(10);
-						dave.setRefreshRateTopAnswerers(24);
-
-						if(yes.isSelected()){
-							dave= (new UserFactory()).newDave().withNbUsers(10).withRefreshRate(24).withForceUpdate().get();
-						}else{
-							dave= (new UserFactory()).newDave().withNbUsers(10).withRefreshRate(24).withoutForceUpdate().get();
-						}
+						dave= (new UserFactory()).newDave().withNbUsers(10).withRefreshRate(24).withoutForceUpdate().get();
 						parametre.dispose();
 
 					}

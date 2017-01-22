@@ -35,6 +35,7 @@ import com.google.code.stackexchange.schema.User;
 import fr.tse.info4.project.controller.BobMethod;
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.user.Bob;
+import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageBob extends TabReference {
@@ -105,7 +106,7 @@ public class PageBob extends TabReference {
 		String str = "Questions similaires à celle écrite : ";
 		JLabel title = new JLabel(str);
 		title.setFont(new Font("Tahoma", Font.BOLD, 19));
-		title.setBorder(new EmptyBorder(0, 0, 10, 0));
+		title.setBorder(new EmptyBorder(0, 0, 5, 0));
 
 		result.add(title);
 		result.add(text);
@@ -141,23 +142,22 @@ public class PageBob extends TabReference {
 						result.validate();
 					} else {
 						for (int i = 0; i < questions.size(); i++) {
-							int ind=i;
 							JButton link = new JButton();
-							class OpenUrlAction implements ActionListener {
-								@Override
-								public void actionPerformed(ActionEvent e) {
-									URI uri=null;
-									
-									try {
-										uri = fixeUri(Bob.getLinkQuestion((int) questions.get(ind).getQuestionId()),link);
-									} catch (URISyntaxException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
-									open(uri);
-								}
+							URI uri;
+							try {
+								uri = new URI(Bob.getLinkQuestion((int) questions.get(i).getQuestionId()));
+								class OpenUrlAction implements ActionListener {
+								      @Override public void actionPerformed(ActionEvent e) {
+								        open(uri);
+								      }
+								    }
+								  
+								  link.addActionListener(new OpenUrlAction()); // pour le rendre cliquable 
+								  link.setToolTipText(uri.toString()); // reference du http
+							} catch (URISyntaxException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
-							
 							link.setText(questions.get(i).getTitle());
 							link.setForeground(Color.BLUE);
 							link.setBorderPainted(false);
@@ -167,7 +167,6 @@ public class PageBob extends TabReference {
 							Map attributes = font.getAttributes();
 							attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 							link.setFont(font.deriveFont(attributes));
-							link.addActionListener(new OpenUrlAction());
 							link.setMaximumSize(new Dimension(250, 30));
 							result.add(link);
 							result.validate();
@@ -382,18 +381,6 @@ public class PageBob extends TabReference {
 				/* TODO: error handling */ }
 		} else {
 			/* TODO: error handling */ }
-	}
-	
-	private static URI fixeUri(String text,JButton link) throws URISyntaxException{
-		final URI uri= new URI(text);
-		class OpenUrlAction implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				open(uri);
-			}
-		}
-		link.setToolTipText(uri.toString());
-		return uri;
 	}
 
 }

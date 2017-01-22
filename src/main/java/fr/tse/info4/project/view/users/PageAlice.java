@@ -40,12 +40,33 @@ import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.view.ref.TabReference;
 
+/**
+ * This class handles results for the user Alice
+ */
 public class PageAlice extends TabReference {
 
+	/**
+	 * Attribute refers to an object Alice and initialize to null.
+	 */
 	Alice al = null;
+	/**
+	 * Button Parametres for adding an action when people click on it.
+	 */
 	JButton Parametres = new JButton();
+	/**
+	 * Attribute to refer to the Object when modifications have append
+	 * on the object Alice or with the pop up of Parametres.
+	 */
 	PageAlice page = this;
 
+	/**
+	 * Constructor of the JPanel which handles results for the user Alice
+	 * when connection is from an Stackoverflow account to the API. It handles the change due to
+	 * modify parameters too.
+	 * @param acessToken
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
 		super();
@@ -248,6 +269,14 @@ public class PageAlice extends TabReference {
 
 	}
 
+	/**
+	 * Constructor of the JPanel which handles results for the user Alice
+	 * when connection is with an ID entry to the API. It handles the change due to
+	 * modify parameters too.
+	 * @param id
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public PageAlice(int id) throws IOException, URISyntaxException {
 
 		super();
@@ -455,6 +484,14 @@ public class PageAlice extends TabReference {
 
 	}
 
+	/**
+	 * Create the JPanel in which results from the method of 
+	 * the user Alice are showing.
+	 * @param alice
+	 * @return JPanel resultat
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public JPanel printAliceResults(PageAlice alice) throws IOException, URISyntaxException {
 
 		JPanel resultat = new JPanel();
@@ -472,6 +509,14 @@ public class PageAlice extends TabReference {
 		return resultat;
 	}
 
+	/**
+	 * Create a JPanel for showing results from the method getNewQuestions of
+	 * the user Alice.
+	 * @param alice
+	 * @return JPanel result
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	private JPanel showNewQuestion(PageAlice alice) throws IOException, URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
@@ -532,6 +577,13 @@ public class PageAlice extends TabReference {
 		return result;
 	}
 
+	/**
+	 * Create a JPanel for showing results from the method getSortedAnswers of
+	 * the user Alice.
+	 * @param alice
+	 * @return JPanel result
+	 * @throws URISyntaxException
+	 */
 	private JPanel showSortedAnsweredQuestions(PageAlice alice) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
@@ -565,6 +617,14 @@ public class PageAlice extends TabReference {
 		result.setBorder(new EmptyBorder(10, 30, 10, 50));
 		return result;
 	}
+	/**
+	 * Create a JPanel for showing results from the method compareBadge of
+	 * the user Alice.
+	 * This method is not used since the method from the user Alice doesn't
+	 * return something.
+	 * @param alice
+	 * @return JPanel result
+	 */
 
 	private JPanel showComparedBadge(PageAlice alice) {
 		JPanel result = new JPanel();
@@ -576,6 +636,11 @@ public class PageAlice extends TabReference {
 		return result;
 	}
 
+	/**
+	 * Method which will open a browser with the URI in parameter
+	 * if it is possible.
+	 * @param uri
+	 */
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
 			try {

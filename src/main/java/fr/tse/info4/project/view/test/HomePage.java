@@ -18,8 +18,18 @@ import fr.tse.info4.project.view.users.PageAlice;
 import fr.tse.info4.project.view.users.PageBob;
 import fr.tse.info4.project.view.users.PageDave;
 
+/**
+ * This class is the JFrame which will have all the tab with 
+ * classes extended from JPanel which show results of the different
+ * user.
+ */
 public class HomePage extends JFrame {
 
+	/**
+	 * Constructor of this class. Only the tab Connexion will show with
+	 * this constructor.
+	 * @throws IOException
+	 */
 	public HomePage() throws IOException {
 		JTabbedPane onglets = new JTabbedPane();
 
@@ -31,6 +41,15 @@ public class HomePage extends JFrame {
 		this.setSize(700, 350);
 		this.setVisible(true);
 	}
+	
+	/**
+	 * This constructor will create a JFrame with all the tab corresponding of
+	 * one user. Each user will be initialize with the aceesToken in parameter.
+	 * This constructor is used when people connect by an account to the API.
+	 * @param acessToken
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	
 	public HomePage(String acessToken) throws IOException, URISyntaxException {
 		JTabbedPane onglets = new JTabbedPane();
@@ -68,6 +87,14 @@ public class HomePage extends JFrame {
 		this.setVisible(true);
 	}
 	
+	/**
+	 * This constructor will create a JFrame with all the tab corresponding of
+	 * one user. Each user will be initialize with the id in parameter.
+	 * This constructor is used when people connect to the API by an ID entry.
+	 * @param id
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public HomePage(int id) throws IOException, URISyntaxException {
 		JTabbedPane onglets = new JTabbedPane();
 		
@@ -102,7 +129,12 @@ public class HomePage extends JFrame {
 		this.setVisible(true);
 	}
 
-
+	/**
+	 * This method charge tabs Alice and Bob when people click on their title.
+	 * @param onglets
+	 * @param panelAlice
+	 * @param panelBob
+	 */
 	public void changeTab(JTabbedPane onglets,PageAlice panelAlice,PageBob panelBob){
 		int index = onglets.getSelectedIndex();
 		switch(index){
