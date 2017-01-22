@@ -3,6 +3,7 @@ package fr.tse.info4.project.view.users;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -235,6 +236,7 @@ public class PageDave extends TabReference {
 				}
 	
 				String str="";
+				results.setLayout(new BoxLayout(results,BoxLayout.PAGE_AXIS ));
 				
 				
 				 List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
@@ -294,16 +296,17 @@ public class PageDave extends TabReference {
 		
 		
 		panel1.add(title);
+		panel3.setMaximumSize(new Dimension(800,1000));
+		panel1.add(getParametre());
 		panel1.add(tagName);
-		
 		panel2.add(option1);
 		panel2.add(option2);
-		
-		panel1.add(getParametre());
-		
 		panel3.add(panel1);
 		panel3.add(panel2);
+	
 		
+		
+	    
 		panel3.setVisible(true);
 		panel3.revalidate();
 
@@ -313,6 +316,7 @@ public class PageDave extends TabReference {
 			 public void actionPerformed(ActionEvent event){
 				JFrame parametre = new JFrame("Parametres");
 				
+				results.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
 				JButton validation = new JButton("Valider");
 				
 				JButton reinitialiser = new JButton("Réinitialiser");

@@ -31,6 +31,7 @@ public class Bob extends Personae {
 	 */
 	private int nbQuestionsPerTag = 3;
 
+
 	/**
 	 * Number of similar questions to display when a user's entering a
 	 * questionTitle <br>
@@ -68,6 +69,10 @@ public class Bob extends Personae {
 		return nbBestTags;
 	}
 
+	public int getNbExpertsPerTag() {
+		return nbExpertsPerTag;
+	}
+
 	public void setNbTags(int nbTags) {
 		if (nbTags > 0 && nbTags <= 100)
 			this.nbBestTags = nbTags;
@@ -91,6 +96,11 @@ public class Bob extends Personae {
 		if (nbExperts > 0)
 			this.nbExpertsPerTag = nbExperts;
 	}
+	
+	public int getNbSimilarQuestions() {
+		return nbSimilarQuestions;
+	}
+
 
 	// -------------- Methods ----------------
 

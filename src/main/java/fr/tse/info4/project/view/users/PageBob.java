@@ -3,6 +3,7 @@ package fr.tse.info4.project.view.users;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,8 +74,77 @@ public class PageBob extends TabReference {
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		this.getPanel().add(scroll);		
+		this.getPanel().add(getParametre());
+		this.getPanel().add(scroll);
+		
+		getParametre().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JFrame parametre = new JFrame("Parametres");
+
+				JButton validation = new JButton("Valider");
+				JButton reinitialiser = new JButton("Réinitialiser");
+
+				JPanel panelParam = new JPanel();
+				panelParam.setLayout(new FlowLayout());
+
+				JPanel panelParam1 = new JPanel();
+				panelParam1.setLayout(new FlowLayout());
+
+				JPanel panelParam2 = new JPanel();
+				panelParam2.setLayout(new FlowLayout());
+				
+				JPanel panelParam3 = new JPanel();
+				panelParam3.setLayout(new FlowLayout());
+
+				parametre.pack();
+				parametre.setResizable(true);
+				parametre.setSize(300, 250);
+
+				JTextField modifications1 = new JTextField(10);
+				modifications1.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob1 = new JLabel("Meilleurs tags: ");
+				modifications1.setText(Integer.toString(bob.getNbTags()));
+
+				JTextField modifications2 = new JTextField(10);
+				modifications2.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob2 = new JLabel("Questions par tag : ");
+				modifications2.setText(Integer.toString(bob.getNbQuestionsPerTag()));
+
+				JTextField modifications3 = new JTextField(10);
+				modifications3.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob3 = new JLabel("Questions simillaires : ");
+				modifications3.setText(Integer.toString(bob.getNbSimilarQuestions()));
+				
+				JTextField modifications4 = new JTextField(10);
+				modifications4.setHorizontalAlignment(JTextField.CENTER);
+				JLabel paramBob4 = new JLabel("Experts par tag : ");
+				modifications3.setText(Integer.toString(bob.getNbExpertsPerTag()));
+
+
+				panelParam.add(paramBob1);
+				panelParam.add(modifications1);
+
+				panelParam1.add(paramBob2);
+				panelParam1.add(modifications2);
+
+				panelParam2.add(paramBob3);
+				panelParam2.add(modifications3);
+				
+				panelParam3.add(paramBob4);
+				panelParam3.add(modifications4);
+
+				panelParam.add(panelParam1);
+				panelParam.add(panelParam2);
+				panelParam.add(panelParam3);
+				panelParam.add(validation);
+				panelParam.add(reinitialiser);
+				parametre.getContentPane().add(panelParam);
+				parametre.setVisible(true);
+		
+		 }
+		});
 	}
+		
 
 	public JPanel printBobResults(PageBob bobPage) throws IOException, URISyntaxException {
 

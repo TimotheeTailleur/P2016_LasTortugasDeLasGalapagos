@@ -77,7 +77,7 @@ public class HomePage extends JFrame {
 		welcome.setLayout(new GridBagLayout());
 		welcome.add(hello);
 		
-		PageAlice alice = new PageAlice(id);
+	//	PageAlice alice = new PageAlice(id);
 		PageBob bob = new PageBob(id);
 		
 		onglets.addTab("Accueil", welcome);
