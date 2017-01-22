@@ -9,11 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -32,30 +35,38 @@ import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.user.Bob;
 import fr.tse.info4.project.view.ref.TabReference;
 
-
 public class PageBob extends TabReference {
-	
-	Bob bob=null;
+
+	Bob bob = null;
 	int appelRecherche = 0;
 	int appelSuggere = 0;
-	
+
 	public PageBob(String acessToken) throws IOException, URISyntaxException {
 
 		super();
-		bob = new UserFactory(acessToken).newBob().get();
+		int nbBestTags = Integer.parseInt(prop.getProperty("nbBestTags"));
+		int nbQuestionsPerTag = Integer.parseInt(prop.getProperty("nbQuestionsPerTag"));
+		int nbSimilarQuestions = Integer.parseInt(prop.getProperty("nbSimilarQuestions"));
+		int nbExpertsPerTag = Integer.parseInt(prop.getProperty("nbExpertsPerTag"));
+		bob = new UserFactory(acessToken).newBob().withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
+				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		this.getPanel().add(printBobResults(this));
 
 	}
-	
+
 	public PageBob(int id) throws IOException, URISyntaxException {
 
 		super();
-		bob = new UserFactory().newBob().get();
-		bob.setIdUser(id);
+		int nbBestTags = Integer.parseInt(prop.getProperty("nbBestTags"));
+		int nbQuestionsPerTag = Integer.parseInt(prop.getProperty("nbQuestionsPerTag"));
+		int nbSimilarQuestions = Integer.parseInt(prop.getProperty("nbSimilarQuestions"));
+		int nbExpertsPerTag = Integer.parseInt(prop.getProperty("nbExpertsPerTag"));
+		bob = new UserFactory().newBob().withId(id).withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
+				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		this.getPanel().add(printBobResults(this));
 
 	}
-	
+
 	public JPanel printBobResults(PageBob bobPage) throws IOException, URISyntaxException {
 
 		JPanel resultat = new JPanel();
@@ -64,7 +75,6 @@ public class PageBob extends TabReference {
 		JPanel keyWords = bobPage.showKeyWords(bobPage);
 		JPanel experts = bobPage.showExperts(bobPage);
 		JPanel newQuestionAnswered = bobPage.showNewQuestionAnswered(bobPage);
-
 
 		resultat.setLayout(new BoxLayout(resultat, BoxLayout.LINE_AXIS));
 		resultat.add(similarQuestion);
@@ -75,69 +85,68 @@ public class PageBob extends TabReference {
 
 		return resultat;
 	}
-	
-	private JPanel showQuestion(PageBob bobPage) throws URISyntaxException{
+
+	private JPanel showQuestion(PageBob bobPage) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		JTextField text = new JTextField(35);
-		text.setMaximumSize(new Dimension(600,30));
+		text.setMaximumSize(new Dimension(600, 30));
 		JButton valid = new JButton("Rechercher");
-		
+
 		String str = "Questions similaires à celle écrite : ";
 		JLabel title = new JLabel(str);
 		title.setFont(new Font("Tahoma", Font.BOLD, 19));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
-		
-		result.add(title);		
+
+		result.add(title);
 		result.add(text);
 		result.add(valid);
-		
-		
+
 		valid.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(appelRecherche==0){
-					appelRecherche+=1;
-				}else{
+				if (appelRecherche == 0) {
+					appelRecherche += 1;
+				} else {
 					result.remove(3);
 					result.validate();
 				}
-				if(BobMethod.isEmpty(text) == true){
+				if (BobMethod.isEmpty(text) == true) {
 					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
 					result.add(error);
 					result.validate();
-				}else{
-					List<Question> questions = bob.findSimilarQuestions(text.getText());					
-					String str2="";
-					if(BobMethod.hasQuestion(questions) == false){
-						str2+="\n Pas de questions semblables trouvées.";
+				} else {
+					List<Question> questions = bob.findSimilarQuestions(text.getText());
+					String str2 = "";
+					if (BobMethod.hasQuestion(questions) == false) {
+						str2 += "\n Pas de questions semblables trouvées.";
 						JLabel similarQ = new JLabel(str2);
 						result.add(similarQ);
 						result.validate();
-					}else{
-						for (int i=0;i<questions.size();i++){
+					} else {
+						for (int i = 0; i < questions.size(); i++) {
 							URI uri = null;
 							try {
-								uri = new URI(Bob.getLinkQuestion((int)questions.get(i).getQuestionId()));
+								uri = new URI(Bob.getLinkQuestion((int) questions.get(i).getQuestionId()));
 							} catch (URISyntaxException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							
-							
-						    class OpenUrlAction implements ActionListener {
-						      @Override public void actionPerformed(ActionEvent e) {
-						        open(uri);
-						      }
-						    }
-						    
+
+							class OpenUrlAction implements ActionListener {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									open(uri);
+								}
+							}
+
 							JButton link = new JButton();
 							link.setText(questions.get(i).getTitle());
 							link.setForeground(Color.BLUE);
@@ -150,7 +159,7 @@ public class PageBob extends TabReference {
 							link.setFont(font.deriveFont(attributes));
 							link.setToolTipText(uri.toString());
 							link.addActionListener(new OpenUrlAction());
-							link.setMaximumSize(new Dimension(250,30));
+							link.setMaximumSize(new Dimension(250, 30));
 							result.add(link);
 							result.validate();
 						}
@@ -158,88 +167,87 @@ public class PageBob extends TabReference {
 					}
 				}
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		result.validate();
 		result.setBorder(new EmptyBorder(0, 2, 0, 3));
-		return result;	
+		return result;
 	}
-	
-	
-	private JPanel showKeyWords(PageBob bobPage){
+
+	private JPanel showKeyWords(PageBob bobPage) {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 		JTextField text = new JTextField(35);
-		text.setMaximumSize(new Dimension(600,30));
+		text.setMaximumSize(new Dimension(600, 30));
 		JButton valid = new JButton("Suggérer");
-		
+
 		String str = "Mots-clés pouvant être rajoutés : ";
 		JLabel title = new JLabel(str);
 		title.setFont(new Font("Tahoma", Font.BOLD, 19));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
-		
-		result.add(title);		
+
+		result.add(title);
 		result.add(text);
 		result.add(valid);
-		
+
 		valid.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
-				if(appelSuggere==0){
-					appelSuggere+=1;
-				}else{
+
+				if (appelSuggere == 0) {
+					appelSuggere += 1;
+				} else {
 					result.remove(3);
 					result.validate();
 				}
-				
-				if(BobMethod.isEmpty(text) == true){
+
+				if (BobMethod.isEmpty(text) == true) {
 					JLabel error = new JLabel("Rentrer une question, s'il vous plait.");
 					result.add(error);
 					result.validate();
-				}else{
+				} else {
 					List<String> keyWords = bob.findKeyWords(text.getText());
-					
-					if(BobMethod.hasKeyWords(keyWords) == false){
-						String str2="Pas de mots-clés trouvés.";
+
+					if (BobMethod.hasKeyWords(keyWords) == false) {
+						String str2 = "Pas de mots-clés trouvés.";
 						JLabel similarQ = new JLabel(str2);
 						result.add(similarQ);
 						result.validate();
-					}else{
-						if(keyWords.size()<=20){
-							for (int i=0;i<keyWords.size();i++){
-								String str2="- "+keyWords.get(i);
+					} else {
+						if (keyWords.size() <= 20) {
+							for (int i = 0; i < keyWords.size(); i++) {
+								String str2 = "- " + keyWords.get(i);
 								JLabel similarQ = new JLabel(str2);
 								result.add(similarQ);
 								result.validate();
 							}
-						}else{
-							for (int i=0;i<20;i++){
-								String str2="- "+keyWords.get(i);
+						} else {
+							for (int i = 0; i < 20; i++) {
+								String str2 = "- " + keyWords.get(i);
 								JLabel similarQ = new JLabel(str2);
 								result.add(similarQ);
 								result.validate();
@@ -249,95 +257,96 @@ public class PageBob extends TabReference {
 					}
 				}
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		result.setBorder(new EmptyBorder(0, 3, 0, 3));
-		return result;	
+		return result;
 	}
 
-	private JPanel showExperts(PageBob bobPage) throws URISyntaxException{
+	private JPanel showExperts(PageBob bobPage) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
-		
+
 		String show = "";
 		Set<User> users = bob.getExperts();
-		if(BobMethod.hasExpert(users) == false){
-			show+="Pas d'user satisfaisant trouvé.";
+		if (BobMethod.hasExpert(users) == false) {
+			show += "Pas d'user satisfaisant trouvé.";
 			JLabel title = new JLabel(show);
 			result.add(title);
-		}else{
-			show+="Liste d'user potentiellement intéressant : ";
+		} else {
+			show += "Liste d'user potentiellement intéressant : ";
 			JLabel title = new JLabel(show);
 			title.setFont(new Font("Tahoma", Font.BOLD, 19));
 			title.setBorder(new EmptyBorder(0, 0, 10, 0));
 			result.add(title);
-			
-			for(User user : users){
-				final URI uri = new URI(Bob.getLink((int)user.getUserId()));
-				
-			    class OpenUrlAction implements ActionListener {
-			      @Override public void actionPerformed(ActionEvent e) {
-			        open(uri);
-			      }
-			    }
-			    
+
+			for (User user : users) {
+				final URI uri = new URI(Bob.getLink((int) user.getUserId()));
+
+				class OpenUrlAction implements ActionListener {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						open(uri);
+					}
+				}
+
 				JButton link = new JButton();
 				link.setText(user.getDisplayName().replace("\"", " "));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
-				link.setMaximumSize(new Dimension(200,30));
+				link.setMaximumSize(new Dimension(200, 30));
 				result.add(link);
 				result.validate();
 			}
 		}
 		result.setBorder(new EmptyBorder(0, 3, 0, 3));
-		return result;	
+		return result;
 	}
 
-
-	private JPanel showNewQuestionAnswered(PageBob bobPage) throws URISyntaxException{
+	private JPanel showNewQuestionAnswered(PageBob bobPage) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
-		
+
 		JLabel title = new JLabel("Questions répondues récemment : ");
 		title.setFont(new Font("Tahoma", Font.BOLD, 19));
 		result.add(title);
 		title.setBorder(new EmptyBorder(0, 0, 5, 0));
 		Map<String, List<Question>> newQuestions = bob.getNewQuestionsAnswered();
-		for (Entry<String, List<Question>> questionEntry : newQuestions.entrySet()){
+		for (Entry<String, List<Question>> questionEntry : newQuestions.entrySet()) {
 			String tagName = questionEntry.getKey();
-			JLabel tag = new JLabel("\n- dans le tag "+tagName + " : ");
+			JLabel tag = new JLabel("\n- dans le tag " + tagName + " : ");
 			tag.setBorder(new EmptyBorder(5, 0, 5, 0));
 			result.add(tag);
 			List<Question> questions = questionEntry.getValue();
 			for (int i = 0; i < questions.size(); i++) {
 				String questionTitle = questions.get(i).getTitle();
-				
-				final URI uri = new URI(Bob.getLinkQuestion((int)questions.get(i).getQuestionId()));
-				
-			    class OpenUrlAction implements ActionListener {
-			      @Override public void actionPerformed(ActionEvent e) {
-			        open(uri);
-			      }
-			    }
-			    
+
+				final URI uri = new URI(Bob.getLinkQuestion((int) questions.get(i).getQuestionId()));
+
+				class OpenUrlAction implements ActionListener {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						open(uri);
+					}
+				}
+
 				JButton link = new JButton();
 				link.setText(questionTitle);
 				link.setForeground(Color.BLUE);
@@ -350,21 +359,23 @@ public class PageBob extends TabReference {
 				link.setFont(font.deriveFont(attributes));
 				link.setToolTipText(uri.toString());
 				link.addActionListener(new OpenUrlAction());
-				link.setMaximumSize(new Dimension(400,30));
+				link.setMaximumSize(new Dimension(400, 30));
 				result.add(link);
 				result.validate();
 			}
 		}
 		result.setBorder(new EmptyBorder(0, 3, 0, 2));
-		return result;	
+		return result;
 	}
-	
+
 	private static void open(URI uri) {
-	    if (Desktop.isDesktopSupported()) {
-	      try {
-	        Desktop.getDesktop().browse(uri);
-	      } catch (IOException e) { /* TODO: error handling */ }
-	    } else { /* TODO: error handling */ }
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(uri);
+			} catch (IOException e) {
+				/* TODO: error handling */ }
+		} else {
+			/* TODO: error handling */ }
 	}
 
 }
