@@ -90,7 +90,8 @@ public class PageBob extends TabReference {
 
 				JPanel panelParam1 = new JPanel();
 				panelParam1.setLayout(new FlowLayout());
-
+ 
+				
 				JPanel panelParam2 = new JPanel();
 				panelParam2.setLayout(new FlowLayout());
 				
