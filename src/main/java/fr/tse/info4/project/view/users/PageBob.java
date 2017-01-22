@@ -44,6 +44,7 @@ public class PageBob extends TabReference {
 	Bob bob = null;
 	int appelRecherche = 0;
 	int appelSuggere = 0;
+	PageBob page = this;
 
 	public PageBob(String acessToken) throws IOException, URISyntaxException {
 
@@ -120,7 +121,7 @@ public class PageBob extends TabReference {
 				JTextField modifications4 = new JTextField(10);
 				modifications4.setHorizontalAlignment(JTextField.CENTER);
 				JLabel paramBob4 = new JLabel("Experts par tag : ");
-				modifications3.setText(Integer.toString(bob.getNbExpertsPerTag()));
+				modifications4.setText(Integer.toString(bob.getNbExpertsPerTag()));
 
 
 				panelParam.add(paramBob1);
@@ -142,10 +143,135 @@ public class PageBob extends TabReference {
 				panelParam.add(reinitialiser);
 				parametre.getContentPane().add(panelParam);
 				parametre.setVisible(true);
-		
-		 }
+				
+				validation.addMouseListener(new MouseListener() {
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+						int  nbBestTags = Integer.parseInt(modifications1.getText());
+						int nbQuestionsPerTag = Integer.parseInt(modifications2.getText());
+						int nbSimilarQuestions = Integer.parseInt(modifications3.getText());
+						int nbExpertsPerTag = Integer.parseInt(modifications4.getText());
+
+						bob.setNbTags(nbBestTags);
+						bob.setNbQuestionsPerTag(nbQuestionsPerTag);
+						bob.setNbSimilarQuestions(nbSimilarQuestions);
+						bob.setNbExpertsPerTag(nbExpertsPerTag);
+
+						page.removeAll();
+						try {
+
+							page.add(getParametre());
+							page.add(printBobResults(page));
+							page.add(getFoot());
+							page.validate();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						parametre.dispose();
+						
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+				reinitialiser.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						modifications1.setText("5");
+						modifications2.setText("3");
+						modifications3.setText("10");
+						modifications4.setText("3");
+
+						bob.setNbTags(5);
+						bob.setNbQuestionsPerTag(3);
+						bob.setNbSimilarQuestions(10);
+						bob.setNbExpertsPerTag(3);
+
+						page.removeAll();
+						try {
+
+							page.add(getParametre());
+							page.add(printBobResults(page));
+							page.add(getFoot());
+							page.validate();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						parametre.dispose();
+
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+
+			}
+
 		});
+
 	}
+
+		
+		 
+		
+	
 		
 
 	public JPanel printBobResults(PageBob bobPage) throws IOException, URISyntaxException {
