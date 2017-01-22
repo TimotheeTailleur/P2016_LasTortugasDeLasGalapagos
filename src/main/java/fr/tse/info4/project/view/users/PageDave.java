@@ -1,12 +1,12 @@
 package fr.tse.info4.project.view.users;
 
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -22,7 +22,6 @@ import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,8 +38,6 @@ import fr.tse.info4.project.model.schema.TopUser;
 import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
-
-
 public class PageDave extends TabReference {
 
 	boolean isList;
@@ -52,14 +49,22 @@ public class PageDave extends TabReference {
 	Dave dave = null;
 	int appelTag = 0;
 	int appelContributeur = 0;
+
 /**
  * 
  */
 	public PageDave() {
 		super();
 		
-		dave= (new UserFactory()).newDave().get();
 		
+		int nbUsers = Integer.parseInt(prop.getProperty("nbUsers"));
+		int refreshRate = Integer.parseInt(prop.getProperty("refreshRate"));
+		boolean forceUpdate = Boolean.parseBoolean(prop.getProperty("forceUpdate"));
+		
+		if (forceUpdate)
+			dave= (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRate).withForceUpdate().get();
+		else
+			dave= (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRate).withoutForceUpdate().get();
 		
 		JLabel title = new JLabel("Veuillez entrer un ou plusieurs tags séparés par un espace : ");
 		panel1.setLayout(new FlowLayout());
@@ -409,6 +414,18 @@ public class PageDave extends TabReference {
 						}
 						
 						parametre.dispose();
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbUsers", nbUsers);
+							config.setProperty("refreshRate", refreshRateTopAnswerers);
+							if(yes.isSelected())
+								config.setProperty("forceUpdate", "true");
+							else
+								config.setProperty("forceUpdate", "false");
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
 					}
 
 					@Override
@@ -433,6 +450,18 @@ public class PageDave extends TabReference {
 
 						dave= (new UserFactory()).newDave().withNbUsers(10).withRefreshRate(24).withoutForceUpdate().get();
 						parametre.dispose();
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbUsers", 10);
+							config.setProperty("refreshRate", 24);
+
+							config.setProperty("forceUpdate", "false");
+							config.save();
+
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
+						
 
 					}
 					
@@ -467,8 +496,6 @@ public class PageDave extends TabReference {
 
 	}
 
-
-	
 	public boolean isListTag() {
 		String text = tagName.getText();
 		String[] tagEntered = text.split(" ");
@@ -477,15 +504,15 @@ public class PageDave extends TabReference {
 		}
 		return isList;
 	}
-	
+
 	private static void open(URI uri) {
-	    if (Desktop.isDesktopSupported()) {
-	      try {
-	        Desktop.getDesktop().browse(uri);
-	      } catch (IOException e) { /* TODO: error handling */ }
-	    } else { /* TODO: error handling */ }
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(uri);
+			} catch (IOException e) {
+				/* TODO: error handling */ }
+		} else {
+			/* TODO: error handling */ }
 	}
-	
+
 }
-
-
