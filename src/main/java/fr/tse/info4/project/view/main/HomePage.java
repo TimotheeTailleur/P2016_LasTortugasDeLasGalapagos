@@ -1,5 +1,6 @@
 package fr.tse.info4.project.view.main;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -65,7 +66,7 @@ public class HomePage extends JFrame {
 		welcome.setLayout(new GridBagLayout());
 		JLabel hello = new JLabel("Bienvenue "+(new ApiManager()).getUserNAme((int)ApiManager.getIdUser(acessToken)));
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
-		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.PAGE_AXIS));
+		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.Y_AXIS));
 		panelWelcome.add(hello);
 		panelWelcome.add(Box.createRigidArea(new Dimension(0,5)));
 		welcome.add(hello);
@@ -74,8 +75,8 @@ public class HomePage extends JFrame {
 		panelWelcome.add(changeCo);
 		
 		welcome.add(panelWelcome);
-		panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
-		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
+		panelWelcome.setAlignmentX(Component.CENTER_ALIGNMENT);
+		changeCo.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		changeCo.addMouseListener(new MouseListener() {
 			

@@ -95,11 +95,4 @@ public class DaveApiManager extends ApiManager {
 
 	}
 
-	public static void main(String[] args) {
-
-		DaveApiManager manager = new DaveApiManager(APP_KEY, SITE);
-		manager.getTopAnswerers("java");
-
-	}
-
 }

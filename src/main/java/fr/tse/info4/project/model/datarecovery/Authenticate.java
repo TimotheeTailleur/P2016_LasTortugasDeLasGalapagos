@@ -89,9 +89,6 @@ public class Authenticate extends Application {
 	   
    }
    
-   public static void main(String[] args) {
-	  System.out.println(getAcessToken());
-}
    
 
 }
