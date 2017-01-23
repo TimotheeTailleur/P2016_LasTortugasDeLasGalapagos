@@ -27,6 +27,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.User;
 
@@ -51,7 +54,7 @@ public class PageBob extends TabReference {
 
 		super();
 		int nbBestTags = Integer.parseInt(prop.getProperty("nbBestTags"));
-		int nbQuestionsPerTag = Integer.parseInt(prop.getProperty("nbQuestionsPerTag"));
+		int nbQuestionsPerTag = Integer.parseInt(prop.getProperty("nbQuestionsPerTagBob"));
 		int nbSimilarQuestions = Integer.parseInt(prop.getProperty("nbSimilarQuestions"));
 		int nbExpertsPerTag = Integer.parseInt(prop.getProperty("nbExpertsPerTag"));
 		bob = new UserFactory(acessToken).newBob().withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
@@ -272,7 +275,7 @@ public class PageBob extends TabReference {
 
 		super();
 		int nbBestTags = Integer.parseInt(prop.getProperty("nbBestTags"));
-		int nbQuestionsPerTag = Integer.parseInt(prop.getProperty("nbQuestionsPerTag"));
+		int nbQuestionsPerTag = Integer.parseInt(prop.getProperty("nbQuestionsPerTagBob"));
 		int nbSimilarQuestions = Integer.parseInt(prop.getProperty("nbSimilarQuestions"));
 		int nbExpertsPerTag = Integer.parseInt(prop.getProperty("nbExpertsPerTag"));
 		bob = new UserFactory().newBob().withId(id).withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
@@ -401,6 +404,16 @@ public class PageBob extends TabReference {
 						}
 
 						parametre.dispose();
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbBestTags", nbBestTags);
+							config.setProperty("nbSimilarQuestions", nbSimilarQuestions);
+							config.setProperty("nbExpertsPerTag", nbExpertsPerTag);
+							config.setProperty("nbQuestionsPerTagBob", nbQuestionsPerTag);
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
 						
 					}
 
@@ -451,6 +464,16 @@ public class PageBob extends TabReference {
 						}
 
 						parametre.dispose();
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
+							config.setProperty("nbBestTags", 5);
+							config.setProperty("nbSimilarQuestions", 3);
+							config.setProperty("nbExpertsPerTag", 10);
+							config.setProperty("nbQuestionsPerTagBob", 3);
+							config.save();
+						} catch (ConfigurationException e1) {
+							e1.printStackTrace();
+						}
 
 					}
 					

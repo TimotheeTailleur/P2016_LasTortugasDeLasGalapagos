@@ -71,11 +71,11 @@ public class HomePage extends JFrame {
 		welcome.add(hello);
 		
 		JButton changeCo = new JButton("Choisir une autre connexion");
-		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
 		panelWelcome.add(changeCo);
 		
 		welcome.add(panelWelcome);
 		panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
+		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
 		
 		changeCo.addMouseListener(new MouseListener() {
 			
@@ -159,13 +159,13 @@ public class HomePage extends JFrame {
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
 		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.PAGE_AXIS));
 		panelWelcome.add(hello);
-		panelWelcome.add(Box.createRigidArea(new Dimension(0,5)));
+	//	panelWelcome.add(Box.createRigidArea(new Dimension(0,5)));
 		welcome.setLayout(new GridBagLayout());
 		
 		JButton changeCo = new JButton("Choisir une autre connexion");
-		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
-		panelWelcome.add(changeCo);
 		
+		panelWelcome.add(changeCo);
+		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
 		welcome.add(panelWelcome);
 		panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
 		
