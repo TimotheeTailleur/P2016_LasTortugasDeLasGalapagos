@@ -1,6 +1,5 @@
 package fr.tse.info4.project.view.users;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -74,9 +73,14 @@ public class PageAlice extends TabReference {
 		al = new UserFactory(acessToken).newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags)
 				.withNbAnwsers(nbAnswers).get();
 		this.getPanel().add(Parametres = getParametre());
-		JScrollPane aliceRes = new JScrollPane(printAliceResults(this));
-		aliceRes.setAutoscrolls(true);
-		this.getPanel().add(aliceRes);
+		JScrollPane scroll = new JScrollPane(printAliceResults(page));
+		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+		this.getPanel().add(scroll);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		
 
 		Parametres.addActionListener(new ActionListener() {
@@ -161,7 +165,11 @@ public class PageAlice extends TabReference {
 						try {
 
 							page.add(Parametres = getParametre());
-							page.add(printAliceResults(page));
+							JScrollPane scroll = new JScrollPane(printAliceResults(page));
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							page.add(scroll);
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(getFoot());
 							page.validate();
 						} catch (IOException e1) {
@@ -213,7 +221,11 @@ public class PageAlice extends TabReference {
 						try {
 
 							page.add(Parametres = getParametre());
-							page.add(printAliceResults(page));
+							JScrollPane scroll = new JScrollPane(printAliceResults(page));
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							page.add(scroll);
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(getFoot());
 							page.validate();
 						} catch (IOException e1) {
@@ -284,8 +296,9 @@ public class PageAlice extends TabReference {
 		this.getPanel().add(Parametres = getParametre());
 		al.setIdUser(id);
 		JScrollPane scroll = new JScrollPane(printAliceResults(this));
-		//scroll.setAutoscrolls(true);
-		scroll.setPreferredSize(new Dimension (1300,800));
+		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 		this.getPanel().add(scroll);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -372,7 +385,11 @@ public class PageAlice extends TabReference {
 						try {
 
 							page.add(Parametres = getParametre());
-							page.add(printAliceResults(page));
+							JScrollPane scroll = new JScrollPane(printAliceResults(page));
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							page.add(scroll);
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(getFoot());
 							page.validate();
 						} catch (IOException e1) {
@@ -427,7 +444,11 @@ public class PageAlice extends TabReference {
 						try {
 
 							page.add(Parametres = getParametre());
-							page.add(printAliceResults(page));
+							JScrollPane scroll = new JScrollPane(printAliceResults(page));
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							page.add(scroll);
+							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(getFoot());
 							page.validate();
 						} catch (IOException e1) {

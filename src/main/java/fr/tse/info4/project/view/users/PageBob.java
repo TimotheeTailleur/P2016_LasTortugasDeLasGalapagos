@@ -57,6 +57,9 @@ public class PageBob extends TabReference {
 		bob = new UserFactory(acessToken).newBob().withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		JScrollPane scroll = new JScrollPane(printBobResults(this));
+		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
@@ -161,7 +164,7 @@ public class PageBob extends TabReference {
 
 							page.add(getParametre());
 							JScrollPane scroll = new JScrollPane(printBobResults(page));
-							
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(scroll);
@@ -211,7 +214,7 @@ public class PageBob extends TabReference {
 
 							page.add(getParametre());
 							JScrollPane scroll = new JScrollPane(printBobResults(page));
-							
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(scroll);
@@ -274,7 +277,9 @@ public class PageBob extends TabReference {
 		bob = new UserFactory().newBob().withId(id).withNbBestTags(nbBestTags).withNbQuestions(nbQuestionsPerTag)
 				.withNbSimilarQuestions(nbSimilarQuestions).withNbExperts(nbExpertsPerTag).get();
 		JScrollPane scroll = new JScrollPane(printBobResults(this));
-		
+		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -379,7 +384,7 @@ public class PageBob extends TabReference {
 
 							page.add(getParametre());
 							JScrollPane scroll = new JScrollPane(printBobResults(page));
-							
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(scroll);
@@ -429,7 +434,7 @@ public class PageBob extends TabReference {
 
 							page.add(getParametre());
 							JScrollPane scroll = new JScrollPane(printBobResults(page));
-							
+							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 							page.add(scroll);
