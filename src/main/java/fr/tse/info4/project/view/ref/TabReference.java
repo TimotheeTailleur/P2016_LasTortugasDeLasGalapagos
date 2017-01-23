@@ -12,25 +12,24 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
- * 
- * This class is a reference for tabs of the class HomePage. It fixes the bottom
- * for each tabs.
- *
+ * Superclass for user story tabs. 
+ * <br> Defines a common footer for each tab
+ * <br> Defines a common architecture for use of parameters (Each tab will then individually define 
+ * <br> what its parameters are and their values)
  */
 public class TabReference extends JPanel {
 	/**
-	 * This attribute is modified by each tab for showing results.
+	 * Attribute modified by each tab to display results.
 	 */
 	JPanel panel = new JPanel();
 
 	/**
-	 * This attribute contains ths button for quitting the API.
+	 * Attributes that contains the button for quitting the app ; common to all tabs 
 	 */
 	JPanel foot = new JPanel();
 
 	/**
-	 * The action by this button is modified by each tab
-	 * for showing and modifying their parameters.
+	 * Button modified by each tab and used to show & modify their parameters.
 	 */
 	JButton Parametres = new JButton("Parametres");
 
@@ -57,8 +56,8 @@ public class TabReference extends JPanel {
 	}
 
 	/**
-	 * Constructor of the TabReference class which initializes the foot
-	 * and the JPanel of results for each class.
+	 * Constructor class which initializes the footer
+	 * and the results JPanel of results for each subclass.
 	 */
 	public TabReference() {
 
@@ -81,7 +80,7 @@ public class TabReference extends JPanel {
 	}
 
 	/**
-	 * method for accessing the JButton Parametres.
+	 * JButton Parametres getter
 	 * @return JButton Parametres
 	 */
 	public JButton getParametre() {
@@ -89,7 +88,7 @@ public class TabReference extends JPanel {
 	}
 
 	/**
-	 * method for accessing the JPanel in which results will be showing.
+	 * Results JPanel getter
 	 * @return JPanel panel
 	 */
 	public JPanel getPanel() {
@@ -97,7 +96,7 @@ public class TabReference extends JPanel {
 	}
 
 	/**
-	 * Change the panel of results by the JPanel in parameter.
+	 * Results JPanel setter
 	 * @param panel
 	 */
 	public void setPanel(JPanel panel) {
@@ -105,7 +104,7 @@ public class TabReference extends JPanel {
 	}
 
 	/**
-	 * return the foot of reference for each tab.
+	 * Footer getter
 	 * @return JPanel foot
 	 */
 	public JPanel getFoot() {
@@ -113,7 +112,7 @@ public class TabReference extends JPanel {
 	}
 
 	/**
-	 * Change the foot by the JPanel in parameter.
+	 * Footer setter
 	 * @param foot
 	 */
 	public void setFoot(JPanel foot) {

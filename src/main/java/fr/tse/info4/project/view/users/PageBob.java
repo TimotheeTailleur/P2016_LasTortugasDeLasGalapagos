@@ -45,7 +45,12 @@ public class PageBob extends TabReference {
 	int appelRecherche = 0;
 	int appelSuggere = 0;
 	PageBob page = this;
-
+	
+	/**
+	 * Bob Tab Constructor
+	 * <br> Displays method results for each functionality of the Bob User Story
+	 * Overloaded to worh with both an accessToken & a user's ID
+	 */
 	public PageBob(String acessToken) throws IOException, URISyntaxException {
 
 		super();
@@ -258,6 +263,11 @@ public class PageBob extends TabReference {
 		});
 	}
 
+	/**
+	 * Bob Tab Constructor
+	 * <br> Displays method results for each functionality of the Bob User Story
+	 * Overloaded to worh with both an accessToken & a user's ID
+	 */
 	public PageBob(int id) throws IOException, URISyntaxException {
 
 		super();

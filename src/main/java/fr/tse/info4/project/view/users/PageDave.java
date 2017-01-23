@@ -50,13 +50,13 @@ public class PageDave extends TabReference {
 	int appelTag = 0;
 	int appelContributeur = 0;
 
-/**
- * 
- */
+	/**
+	 * Dave Tab Constructor
+	 * <br> Displays method results for each functionality of the Dave User Story
+	 */
 	public PageDave() {
 		super();
-		
-		
+
 		int nbUsers = Integer.parseInt(prop.getProperty("nbUsers"));
 		int refreshRate = Integer.parseInt(prop.getProperty("refreshRate"));
 		boolean forceUpdate = Boolean.parseBoolean(prop.getProperty("forceUpdate"));
@@ -308,9 +308,6 @@ public class PageDave extends TabReference {
 		panel2.add(option2);
 		panel3.add(panel1);
 		panel3.add(panel2);
-	
-		
-		
 	    
 		panel3.setVisible(true);
 		panel3.revalidate();
@@ -493,9 +490,12 @@ public class PageDave extends TabReference {
 			}
 			 
 		});
-
 	}
 
+	/**
+	 * Checks if the tag list entered by the user isn't empty
+	 * @return true if the list's length is > 1
+	 */
 	public boolean isListTag() {
 		String text = tagName.getText();
 		String[] tagEntered = text.split(" ");
@@ -505,6 +505,10 @@ public class PageDave extends TabReference {
 		return isList;
 	}
 
+	/**
+	 * Method used to make URIs from the GUI clickable by the user
+	 * @param uri The URI the user wishes to access
+	 */
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
 			try {

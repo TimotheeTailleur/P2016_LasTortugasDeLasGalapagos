@@ -18,19 +18,18 @@ import fr.tse.info4.project.model.datarecovery.Authenticate;
 import fr.tse.info4.project.view.test.HomePage;
 
 /**
- * This class is an tab which is getting us choose how we connect to Stackoverflow.
- * Either you have an Stackoverflow account, or you use an ID to connect. 
- *
+ * Class used to display the app log in page and handling both methods of authentication:
+ * <br> With a stackOverflow account
+ * <br> With a stackOverflow user ID
  */
 public class PageConnexion extends TabReference{
 	/**
-	 * Attribute which refers to the HomePage which called it.
+	 * HomePage object that opened the connection page
 	 */
 	HomePage home=null;
 
 	/**
-	 * Constructor of this class which initialize 2 buttons : one for connection with 
-	 * an accont, the other with an ID.
+	 * Constructor ; initializes one button for each authentication method
 	 * @param h
 	 */
 	public PageConnexion(HomePage h){
@@ -137,10 +136,8 @@ public class PageConnexion extends TabReference{
 	}
 	
 	/**
-	 * Method for showing a pop up in which you enter the ID with which
-	 * you want to connect to the API. The parameter is the PageConnexion which
-	 * called it.
-	 * @param co
+	 * Displays a pop-up to ask the user to enter a user ID should he have chosen to log in with just a user ID
+	 * @param co Connection page that called the method
 	 */
 	public void askID(PageConnexion co){
 		

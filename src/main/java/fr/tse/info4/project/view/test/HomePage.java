@@ -19,15 +19,14 @@ import fr.tse.info4.project.view.users.PageBob;
 import fr.tse.info4.project.view.users.PageDave;
 
 /**
- * This class is the JFrame which will have all the tab with 
- * classes extended from JPanel which show results of the different
- * user.
+ * JFrame which contains all user story tabs. 
+ * <br> In each tab the results of the user story methods are displayed
  */
 public class HomePage extends JFrame {
 
 	/**
-	 * Constructor of this class. Only the tab Connexion will show with
-	 * this constructor.
+	 * Default constructor. Displays the app homepage where a user can log in using SO credentials or 
+	 * <br> simply give a SO userId
 	 * @throws IOException
 	 */
 	public HomePage() throws IOException {
@@ -43,9 +42,7 @@ public class HomePage extends JFrame {
 	}
 	
 	/**
-	 * This constructor will create a JFrame with all the tab corresponding of
-	 * one user. Each user will be initialize with the aceesToken in parameter.
-	 * This constructor is used when people connect by an account to the API.
+	 * Constructor with an accessToken ; will display all tabs with logged in user's data
 	 * @param acessToken
 	 * @throws IOException
 	 * @throws URISyntaxException
@@ -88,9 +85,8 @@ public class HomePage extends JFrame {
 	}
 	
 	/**
-	 * This constructor will create a JFrame with all the tab corresponding of
-	 * one user. Each user will be initialize with the id in parameter.
-	 * This constructor is used when people connect to the API by an ID entry.
+	 * Constructor using a userId entered by the app user. All tabs will be initialized with 
+	 * <br> the corresponding user's data
 	 * @param id
 	 * @throws IOException
 	 * @throws URISyntaxException
@@ -130,7 +126,7 @@ public class HomePage extends JFrame {
 	}
 
 	/**
-	 * This method charge tabs Alice and Bob when people click on their title.
+	 * Changes Alice & Bob tabs upon mouseclick
 	 * @param onglets
 	 * @param panelAlice
 	 * @param panelBob

@@ -40,32 +40,28 @@ import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.view.ref.TabReference;
 
-/**
- * This class handles results for the user Alice
- */
+
 public class PageAlice extends TabReference {
 
 	/**
-	 * Attribute refers to an object Alice and initialize to null.
+	 * Alice object used to access user story specific methods
+	 * <br> initialized to null
 	 */
 	Alice al = null;
 	/**
-	 * Button Parametres for adding an action when people click on it.
+	 * JButton attribute to give the user the ability to modify certain parameters
+	 * <br> Namely : the number of questions 
 	 */
 	JButton Parametres = new JButton();
 	/**
-	 * Attribute to refer to the Object when modifications have append
-	 * on the object Alice or with the pop up of Parametres.
+	 * PageAlice object used to update the page after modifications & / or changes in parameters
 	 */
 	PageAlice page = this;
 
 	/**
-	 * Constructor of the JPanel which handles results for the user Alice
-	 * when connection is from an Stackoverflow account to the API. It handles the change due to
-	 * modify parameters too.
-	 * @param acessToken
-	 * @throws IOException
-	 * @throws URISyntaxException
+	 * Alice Tab Constructor
+	 * <br> Displays method results for each functionality of the Alice User Story
+	 * Overloaded to worh with both an accessToken & a user's ID
 	 */
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
 
@@ -270,12 +266,9 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Constructor of the JPanel which handles results for the user Alice
-	 * when connection is with an ID entry to the API. It handles the change due to
-	 * modify parameters too.
-	 * @param id
-	 * @throws IOException
-	 * @throws URISyntaxException
+	 * Alice Tab Constructor
+	 * <br> Displays method results for each functionality of the Alice User Story
+	 * Overloaded to worh with both an accessToken & a user's ID
 	 */
 	public PageAlice(int id) throws IOException, URISyntaxException {
 
@@ -485,12 +478,9 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Create the JPanel in which results from the method of 
-	 * the user Alice are showing.
-	 * @param alice
-	 * @return JPanel resultat
-	 * @throws IOException
-	 * @throws URISyntaxException
+	 * Creates the JPanel in which results from Alice user story methods will be displayed
+	 * @param Page currently being modified
+	 * @return JPanel 
 	 */
 	public JPanel printAliceResults(PageAlice alice) throws IOException, URISyntaxException {
 
@@ -510,12 +500,9 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Create a JPanel for showing results from the method getNewQuestions of
-	 * the user Alice.
+	 * Creates JPanel used to display newest questions in a user's top tags
 	 * @param alice
 	 * @return JPanel result
-	 * @throws IOException
-	 * @throws URISyntaxException
 	 */
 	private JPanel showNewQuestion(PageAlice alice) throws IOException, URISyntaxException {
 		JPanel result = new JPanel();
@@ -578,8 +565,7 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Create a JPanel for showing results from the method getSortedAnswers of
-	 * the user Alice.
+	 * Creates JPanel to display questions a user has given answers to based on answer score
 	 * @param alice
 	 * @return JPanel result
 	 * @throws URISyntaxException
@@ -617,15 +603,13 @@ public class PageAlice extends TabReference {
 		result.setBorder(new EmptyBorder(10, 30, 10, 50));
 		return result;
 	}
+	
 	/**
-	 * Create a JPanel for showing results from the method compareBadge of
-	 * the user Alice.
-	 * This method is not used since the method from the user Alice doesn't
-	 * return something.
+	 * Creates JPanel to display results of the Alice method : compareBadges
+	 * Not used because the method compareBadges isn't implemented yet
 	 * @param alice
 	 * @return JPanel result
 	 */
-
 	private JPanel showComparedBadge(PageAlice alice) {
 		JPanel result = new JPanel();
 
@@ -639,7 +623,7 @@ public class PageAlice extends TabReference {
 	/**
 	 * Method which will open a browser with the URI in parameter
 	 * if it is possible.
-	 * @param uri
+	 * @param uri The URI the user wishes to access
 	 */
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
