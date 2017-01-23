@@ -713,7 +713,7 @@ public class PageBob extends TabReference {
 			JLabel title = new JLabel(show);
 			result.add(title);
 		} else {
-			show += "Liste d'user potentiellement intéressant : ";
+			show += "Liste d'utilisateurs potentiellement intéressants : ";
 			JLabel title = new JLabel(show);
 			title.setFont(new Font("Tahoma", Font.BOLD, 15));
 			title.setBorder(new EmptyBorder(0, 0, 10, 0));

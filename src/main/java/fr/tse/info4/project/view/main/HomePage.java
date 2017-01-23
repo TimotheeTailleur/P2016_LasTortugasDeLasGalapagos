@@ -3,9 +3,14 @@ package fr.tse.info4.project.view.main;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,6 +29,8 @@ import fr.tse.info4.project.view.users.PageDave;
  * <br> In each tab the results of the user story methods are displayed
  */
 public class HomePage extends JFrame {
+	
+	HomePage home = null;
 
 	/**
 	 * Default constructor. Displays the app homepage where a user can log in using SO credentials or 
@@ -50,13 +57,61 @@ public class HomePage extends JFrame {
 	 */
 	
 	public HomePage(String acessToken) throws IOException, URISyntaxException {
+		home = this;
 		JTabbedPane onglets = new JTabbedPane();
 		
 		JPanel welcome =new JPanel();
+		JPanel panelWelcome = new JPanel();
 		welcome.setLayout(new GridBagLayout());
 		JLabel hello = new JLabel("Bienvenue "+(new ApiManager()).getUserNAme((int)ApiManager.getIdUser(acessToken)));
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
+		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.PAGE_AXIS));
+		panelWelcome.add(hello);
+		panelWelcome.add(Box.createRigidArea(new Dimension(0,5)));
 		welcome.add(hello);
+		
+		JButton changeCo = new JButton("Choisir une autre connexion");
+		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
+		panelWelcome.add(changeCo);
+		
+		welcome.add(panelWelcome);
+		panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
+		
+		changeCo.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				panelWelcome.removeAll();
+				panelWelcome.add(new PageConnexion(home));
+				panelWelcome.validate();
+				welcome.validate();
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		PageAlice alice = new PageAlice(acessToken);
 		PageBob bob = new PageBob(acessToken);
@@ -94,13 +149,61 @@ public class HomePage extends JFrame {
 	 * @throws URISyntaxException
 	 */
 	public HomePage(int id) throws IOException, URISyntaxException {
+		home = this;
+		
 		JTabbedPane onglets = new JTabbedPane();
 		
 		JPanel welcome =new JPanel();
+		JPanel panelWelcome = new JPanel();
 		JLabel hello = new JLabel("Bienvenue ! Profil de "+(new ApiManager()).getUserNAme(id));
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
+		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.PAGE_AXIS));
+		panelWelcome.add(hello);
+		panelWelcome.add(Box.createRigidArea(new Dimension(0,5)));
 		welcome.setLayout(new GridBagLayout());
-		welcome.add(hello);
+		
+		JButton changeCo = new JButton("Choisir une autre connexion");
+		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
+		panelWelcome.add(changeCo);
+		
+		welcome.add(panelWelcome);
+		panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
+		
+		changeCo.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				panelWelcome.removeAll();
+				panelWelcome.add(new PageConnexion(home));
+				panelWelcome.validate();
+				welcome.validate();
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		PageAlice alice = new PageAlice(id);
 		PageBob bob = new PageBob(id);
