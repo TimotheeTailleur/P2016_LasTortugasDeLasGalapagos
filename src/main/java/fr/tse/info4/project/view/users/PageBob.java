@@ -64,6 +64,7 @@ public class PageBob extends TabReference {
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		this.getPanel().add(getParametre());
+		getParametre().setAlignmentX(this.getPanel().CENTER_ALIGNMENT);
 		this.getPanel().add(scroll);
 		
 		getParametre().addActionListener(new ActionListener() {
@@ -284,6 +285,7 @@ public class PageBob extends TabReference {
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		this.getPanel().add(getParametre());
+		getParametre().setAlignmentX(this.getPanel().CENTER_ALIGNMENT);
 		this.getPanel().add(scroll);
 		
 		getParametre().addActionListener(new ActionListener() {
@@ -503,6 +505,7 @@ public class PageBob extends TabReference {
 		resultat.add(keyWords);
 		resultat.add(experts);
 		resultat.add(newQuestionAnswered);
+		resultat.setAlignmentX(CENTER_ALIGNMENT);
 		resultat.setVisible(true);
 
 		return resultat;

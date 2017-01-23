@@ -73,6 +73,7 @@ public class PageAlice extends TabReference {
 		al = new UserFactory(acessToken).newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags)
 				.withNbAnwsers(nbAnswers).get();
 		this.getPanel().add(Parametres = getParametre());
+		Parametres.setAlignmentX(this.getPanel().CENTER_ALIGNMENT);
 		JScrollPane scroll = new JScrollPane(printAliceResults(page));
 		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -294,6 +295,7 @@ public class PageAlice extends TabReference {
 		al = new UserFactory().newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags)
 				.withNbAnwsers(nbAnswers).get();
 		this.getPanel().add(Parametres = getParametre());
+		Parametres.setAlignmentX(this.getPanel().CENTER_ALIGNMENT);
 		al.setIdUser(id);
 		JScrollPane scroll = new JScrollPane(printAliceResults(this));
 		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -520,6 +522,7 @@ public class PageAlice extends TabReference {
 		resultat.add(newQestion);
 		// resultat.add(comparedBadges);
 		resultat.add(sortQuestion);
+		resultat.setAlignmentX(CENTER_ALIGNMENT);
 		resultat.setVisible(true);
 
 		return resultat;

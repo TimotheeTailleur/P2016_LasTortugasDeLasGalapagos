@@ -72,7 +72,7 @@ public class TabReference extends JPanel {
 		foot.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.setLocation(1700, 0);
+		panel.setAlignmentX(CENTER_ALIGNMENT);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(panel);
 
