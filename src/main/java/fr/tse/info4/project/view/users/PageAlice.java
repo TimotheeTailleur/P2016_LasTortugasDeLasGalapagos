@@ -1,5 +1,6 @@
 package fr.tse.info4.project.view.users;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -73,7 +74,9 @@ public class PageAlice extends TabReference {
 		al = new UserFactory(acessToken).newAlice().withNbTags(nbTags).withNbQuestions(nbQuestionsPerTags)
 				.withNbAnwsers(nbAnswers).get();
 		this.getPanel().add(Parametres = getParametre());
-		this.getPanel().add(new JScrollPane(printAliceResults(this)));
+		JScrollPane aliceRes = new JScrollPane(printAliceResults(this));
+		aliceRes.setAutoscrolls(true);
+		this.getPanel().add(aliceRes);
 		
 
 		Parametres.addActionListener(new ActionListener() {
@@ -281,6 +284,8 @@ public class PageAlice extends TabReference {
 		this.getPanel().add(Parametres = getParametre());
 		al.setIdUser(id);
 		JScrollPane scroll = new JScrollPane(printAliceResults(this));
+		//scroll.setAutoscrolls(true);
+		scroll.setPreferredSize(new Dimension (1300,800));
 		this.getPanel().add(scroll);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

@@ -1,5 +1,6 @@
 package fr.tse.info4.project.model.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,7 +26,7 @@ public class DatabaseManager {
 	/**
 	 * Relative path to the derby database repository
 	 */
-	protected final String databasePath = "ProjectDatabase";
+	protected final String databasePath = "Data" + File.separator + "ProjectDatabase";
 
 
 	/**

@@ -2,6 +2,7 @@ package fr.tse.info4.project.view.ref;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,7 @@ public class TabReference extends JPanel {
 	 */
 	JButton Parametres = new JButton("Parametres");
 
-	public static final String PARAMETERS_PATH = "parameters.properties";
+	public static final String PARAMETERS_PATH = "Data" + File.separator  + "parameters.properties";
 
 	protected static Properties prop = new Properties();
 
