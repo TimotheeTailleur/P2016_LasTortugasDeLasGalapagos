@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import fr.tse.info4.project.controller.BobMethod;
 import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.datarecovery.Authenticate;
-import fr.tse.info4.project.view.test.HomePage;
+import fr.tse.info4.project.view.main.HomePage;
 
 /**
  * Class used to display the app log in page and handling both methods of authentication:

@@ -635,8 +635,4 @@ public class PageAlice extends TabReference {
 			/* TODO: error handling */ }
 	}
 
-	public static void main(String[] args) throws IOException, URISyntaxException {
-		new PageAlice(1200);
-	}
-
 }

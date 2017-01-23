@@ -1,4 +1,4 @@
-package fr.tse.info4.project.view.test;
+package fr.tse.info4.project.view.main;
 
 import java.awt.Font;
 import java.awt.GridBagLayout;
