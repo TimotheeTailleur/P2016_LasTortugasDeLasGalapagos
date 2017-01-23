@@ -620,8 +620,8 @@ public class PageBob extends TabReference {
 		text.setMaximumSize(new Dimension(600, 30));
 		JButton valid = new JButton("Suggérer");
 
-		String str = "Mots-clés pouvant être rajoutés : ";
-		JLabel title = new JLabel(str);
+		String str = "Mots clés pouvant être rajoutés : ";
+		JLabel title = new JLabel("<html><center>" + str + "</center></html>");
 		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 
@@ -709,12 +709,12 @@ public class PageBob extends TabReference {
 		String show = "";
 		Set<User> users = bob.getExperts();
 		if (BobMethod.hasExpert(users) == false) {
-			show += "Pas d'user satisfaisant trouvé.";
+			show += "Pas utilisateur satisfaisant trouvé.";
 			JLabel title = new JLabel(show);
 			result.add(title);
 		} else {
-			show += "Liste d'utilisateurs potentiellement intéressants : ";
-			JLabel title = new JLabel(show);
+			show += "Liste d'utilisateurs potentiellement <br> intéressants : ";
+			JLabel title = new JLabel("<html>" + show + "</html>");
 			title.setFont(new Font("Tahoma", Font.BOLD, 15));
 			title.setBorder(new EmptyBorder(0, 0, 10, 0));
 			result.add(title);
@@ -745,7 +745,7 @@ public class PageBob extends TabReference {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
-		JLabel title = new JLabel("Questions répondues récemment : ");
+		JLabel title = new JLabel("<html><center>Questions répondues récemment : </center></html>");
 		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		result.add(title);
 		title.setBorder(new EmptyBorder(0, 0, 5, 0));
