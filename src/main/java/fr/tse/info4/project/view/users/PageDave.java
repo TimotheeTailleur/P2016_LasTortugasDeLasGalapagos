@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -49,6 +50,7 @@ public class PageDave extends TabReference {
 	Dave dave = null;
 	int appelTag = 0;
 	int appelContributeur = 0;
+	int premierAppel=0;
 
 	/**
 	 * Dave Tab Constructor
@@ -70,6 +72,7 @@ public class PageDave extends TabReference {
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new FlowLayout());
 		panel3.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
+		results.setLayout(new BoxLayout(results,BoxLayout.PAGE_AXIS ));
 		tagName.setHorizontalAlignment(JTextField.CENTER);
 
 
@@ -93,18 +96,20 @@ public class PageDave extends TabReference {
 				
 				// TODO Auto-generated method stub
 				if (appelTag == 0 && appelContributeur==0) {
+					results.removeAll();
+					results.validate();
+					panel3.validate();
 					appelTag += 1;
 				} else {
 					if(appelContributeur==1){
-						int nbComponent = results.getComponentCount();
-						for(int i=0;i<nbComponent;i++){
-							results.remove(0);
-							results.validate();
-						}
+						results.removeAll();
+						results.validate();
+						panel3.validate();
 						appelContributeur=0;
 					}else{
 						results.remove(0);
 						results.validate();
+						panel3.validate();
 						appelTag=0;
 					}
 					
@@ -179,9 +184,14 @@ public class PageDave extends TabReference {
 					Map attributes = font.getAttributes();
 					link.setText(str);
 					results.add(link);
+					link.setAlignmentX(results.CENTER_ALIGNMENT);
 					results.validate();
 					results.setVisible(true);
-					panel3.add(results);
+					if(premierAppel==0){
+						panel3.add(results);
+						panel3.add(new JPanel());
+						premierAppel+=1;
+					}
 					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 					link.setFont(font.deriveFont(attributes));			
 					panel3.validate();
@@ -223,28 +233,27 @@ public class PageDave extends TabReference {
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				if (appelTag == 0 && appelContributeur==0) {
+					results.removeAll();
+					results.validate();
+					panel3.validate();
 					appelContributeur += 1;
 				} else {
 					if(appelContributeur==1){
-						int nbComponent = results.getComponentCount();
-						for(int i=0;i<nbComponent;i++){
-							results.remove(0);
-							results.validate();
-						}
+						results.removeAll();
+						results.validate();
+						panel3.validate();
 						appelContributeur=0;
 					}else{
 						results.remove(0);
 						results.validate();
+						panel3.validate();
 						appelTag=0;
-					}
-					
+					}					
 				}
 	
 				String str="";
-				results.setLayout(new BoxLayout(results,BoxLayout.PAGE_AXIS ));
 				
-				
-				 List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
+				List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
 					 
 				 for(int i=0;i<topAnswerer.size();i++){
 					
@@ -276,13 +285,19 @@ public class PageDave extends TabReference {
 					 link.setFont(font.deriveFont(attributes));
 					 link.setText(str);
 					results.add(link);
-					results.validate();	
+					link.setAlignmentX(results.CENTER_ALIGNMENT);
+					results.add(Box.createRigidArea(new Dimension(0,5)));
+					results.validate();
 					results.setVisible(true);
-					panel3.add(results);
-					panel3.validate();
 					
-				 }	
-				
+				 }
+				 if(premierAppel==0){
+					panel3.add(results);
+					panel3.add(new JPanel());
+					premierAppel+=1;
+					panel3.validate();
+				}
+				panel3.validate();
 				 		
 			}
 
@@ -318,7 +333,6 @@ public class PageDave extends TabReference {
 			 public void actionPerformed(ActionEvent event){
 				JFrame parametre = new JFrame("Parametres");
 				
-				results.setLayout(new BoxLayout(panel3,BoxLayout.PAGE_AXIS ));
 				JButton validation = new JButton("Valider");
 				
 				JButton reinitialiser = new JButton("Réinitialiser");
@@ -398,11 +412,9 @@ public class PageDave extends TabReference {
 						
 						int nbUsers = Integer.parseInt(modifications1.getText()) ;
 						int refreshRateTopAnswerers= Integer.parseInt(modifications2.getText());
-						 // int nbAnswers =Integer.parseInt(modifications3.getText());
 						
 						dave.setNbUsers(nbUsers);
 						dave.setRefreshRateTopAnswerers(refreshRateTopAnswerers);
-						// al.setNbAnswers(nbAnswers);
 						
 						if(yes.isSelected()){
 						dave= (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRateTopAnswerers).withForceUpdate().get();
