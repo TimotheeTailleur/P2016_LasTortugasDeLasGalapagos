@@ -10,14 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -36,7 +33,6 @@ import com.google.code.stackexchange.schema.User;
 import fr.tse.info4.project.controller.BobMethod;
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.user.Bob;
-import fr.tse.info4.project.model.user.Dave;
 import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageBob extends TabReference {
@@ -516,7 +512,7 @@ public class PageBob extends TabReference {
 
 		String str = "Questions similaires à celle écrite : ";
 		JLabel title = new JLabel(str);
-		title.setFont(new Font("Tahoma", Font.BOLD, 19));
+		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		title.setBorder(new EmptyBorder(0, 0, 5, 0));
 
 		result.add(title);
@@ -618,7 +614,7 @@ public class PageBob extends TabReference {
 
 		String str = "Mots-clés pouvant être rajoutés : ";
 		JLabel title = new JLabel(str);
-		title.setFont(new Font("Tahoma", Font.BOLD, 19));
+		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		title.setBorder(new EmptyBorder(0, 0, 10, 0));
 
 		result.add(title);
@@ -711,7 +707,7 @@ public class PageBob extends TabReference {
 		} else {
 			show += "Liste d'user potentiellement intéressant : ";
 			JLabel title = new JLabel(show);
-			title.setFont(new Font("Tahoma", Font.BOLD, 19));
+			title.setFont(new Font("Tahoma", Font.BOLD, 15));
 			title.setBorder(new EmptyBorder(0, 0, 10, 0));
 			result.add(title);
 
@@ -742,7 +738,7 @@ public class PageBob extends TabReference {
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
 
 		JLabel title = new JLabel("Questions répondues récemment : ");
-		title.setFont(new Font("Tahoma", Font.BOLD, 19));
+		title.setFont(new Font("Tahoma", Font.BOLD, 15));
 		result.add(title);
 		title.setBorder(new EmptyBorder(0, 0, 5, 0));
 		Map<String, List<Question>> newQuestions = bob.getNewQuestionsAnswered();

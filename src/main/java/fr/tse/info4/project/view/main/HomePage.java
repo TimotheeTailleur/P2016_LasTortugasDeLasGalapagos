@@ -1,5 +1,6 @@
 package fr.tse.info4.project.view.main;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.io.IOException;
@@ -81,6 +82,7 @@ public class HomePage extends JFrame {
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); //met en plein écran
+		this.setMinimumSize(new Dimension(1700,900));
 		this.setVisible(true);
 	}
 	
@@ -122,6 +124,7 @@ public class HomePage extends JFrame {
 		this.setTitle("Las Tortugas De Las Galapagos - Projet Informatique - API");
 		this.setResizable(true);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); //met en plein écran
+		this.setMinimumSize(new Dimension(1700,900));
 		this.setVisible(true);
 	}
 
