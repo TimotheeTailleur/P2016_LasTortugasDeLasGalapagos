@@ -63,6 +63,8 @@ public class PageDave extends TabReference {
 		int refreshRate = Integer.parseInt(prop.getProperty("refreshRate"));
 		boolean forceUpdate = Boolean.parseBoolean(prop.getProperty("forceUpdate"));
 
+		isListTag();
+		
 		if (forceUpdate)
 			dave = (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRate).withForceUpdate()
 					.get();
@@ -114,7 +116,7 @@ public class PageDave extends TabReference {
 					}
 
 				}
-				isListTag();
+				
 				JButton link = new JButton();
 
 				String str = " ";
@@ -151,35 +153,7 @@ public class PageDave extends TabReference {
 
 				} else {
 
-					String[] resultsTab = tagName.getText().split(" ");
-					List<String> resultsList = new ArrayList<String>();
-
-					for (int i = 0; i < resultsTab.length; i++) {
-						resultsList.add(resultsTab[i]);
-					}
-					TopUser topTags = dave.getTopUserMultipleTags(resultsList);
-
-					str = (new ApiManager()).getUserNAme((int) topTags.getId());
-
-					try {
-						final URI uri = new URI(Dave.getLink((int) topTags.getId()));
-
-						class OpenUrlAction implements ActionListener {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								open(uri);
-							}
-						}
-
-						link.addActionListener(new OpenUrlAction()); // pour le
-																		// rendre
-																		// cliquable
-						link.setToolTipText(uri.toString()); // reference du
-																// http
-					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+			     str = " Veuillez saisir un unique tag valide ";
 
 				}
 
@@ -255,37 +229,76 @@ public class PageDave extends TabReference {
 						appelTag = 0;
 					}
 				}
-
+				
 				String str = "";
+				JButton link = new JButton();
+				
+				if (isList == false) {
+					
+					List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
 
-				List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
+					for (int i = 0; i < topAnswerer.size(); i++) {
 
-				for (int i = 0; i < topAnswerer.size(); i++) {
-
-					JButton link = new JButton();
-					URI uri;
-					try {
-						uri = new URI(Dave.getLink((int) topAnswerer.get(i).getUser().getUserId()));
-						class OpenUrlAction implements ActionListener {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								open(uri);
+						
+						URI uri;
+						try {
+							uri = new URI(Dave.getLink((int) topAnswerer.get(i).getUser().getUserId()));
+							class OpenUrlAction implements ActionListener {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									open(uri);
+								}
 							}
+
+							link.addActionListener(new OpenUrlAction()); // pour le
+																			// rendre
+																			// cliquable
+							link.setToolTipText(uri.toString()); // reference du
+																	// http
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						str = StringEscapeUtils
+								.unescapeHtml((new ApiManager()).getUserNAme((int) topAnswerer.get(i).getUser().getUserId()))
+								+ " avec " + topAnswerer.get(i).getPostCount() + " messages";
+
+				
+						}
+					
+					}else {
+
+						String[] resultsTab = tagName.getText().split(" ");
+						List<String> resultsList = new ArrayList<String>();
+
+						for (int i = 0; i < resultsTab.length; i++) {
+							resultsList.add(resultsTab[i]);
+						}
+						TopUser topTags = dave.getTopUserMultipleTags(resultsList);
+
+						str = (new ApiManager()).getUserNAme((int) topTags.getId());
+
+						try {
+							final URI uri = new URI(Dave.getLink((int) topTags.getId()));
+
+							class OpenUrlAction implements ActionListener {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									open(uri);
+								}
+							}
+
+							link.addActionListener(new OpenUrlAction()); // pour le
+																			// rendre
+																			// cliquable
+							link.setToolTipText(uri.toString()); // reference du
+																	// http
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 
-						link.addActionListener(new OpenUrlAction()); // pour le
-																		// rendre
-																		// cliquable
-						link.setToolTipText(uri.toString()); // reference du
-																// http
-					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
-					str = StringEscapeUtils
-							.unescapeHtml((new ApiManager()).getUserNAme((int) topAnswerer.get(i).getUser().getUserId()))
-							+ " avec " + topAnswerer.get(i).getPostCount() + " messages";
-
 					link.setForeground(Color.BLUE);
 					link.setBorderPainted(false);
 					link.setOpaque(false);
@@ -301,7 +314,7 @@ public class PageDave extends TabReference {
 					results.validate();
 					results.setVisible(true);
 
-				}
+				
 				if (premierAppel == 0) {
 					panel3.add(results);
 					panel3.add(new JPanel());
@@ -310,7 +323,7 @@ public class PageDave extends TabReference {
 				}
 				panel3.validate();
 
-			}
+				}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
