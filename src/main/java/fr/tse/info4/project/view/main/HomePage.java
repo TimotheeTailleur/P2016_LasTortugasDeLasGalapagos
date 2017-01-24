@@ -19,6 +19,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.view.ref.PageConnexion;
 import fr.tse.info4.project.view.users.PageAlice;
@@ -64,7 +66,7 @@ public class HomePage extends JFrame {
 		JPanel welcome =new JPanel();
 		JPanel panelWelcome = new JPanel();
 		welcome.setLayout(new GridBagLayout());
-		JLabel hello = new JLabel("Bienvenue "+(new ApiManager()).getUserNAme((int)ApiManager.getIdUser(acessToken)));
+		JLabel hello = new JLabel("Bienvenue "+StringEscapeUtils.unescapeHtml((new ApiManager()).getUserNAme((int)ApiManager.getIdUser(acessToken))));
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
 		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.Y_AXIS));
 		panelWelcome.add(hello);
@@ -156,7 +158,7 @@ public class HomePage extends JFrame {
 		
 		JPanel welcome =new JPanel();
 		JPanel panelWelcome = new JPanel();
-		JLabel hello = new JLabel("Bienvenue ! Profil de "+(new ApiManager()).getUserNAme(id));
+		JLabel hello = new JLabel("Bienvenue ! Profil de "+StringEscapeUtils.unescapeHtml((new ApiManager()).getUserNAme(id)));
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
 		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.PAGE_AXIS));
 		panelWelcome.add(hello);

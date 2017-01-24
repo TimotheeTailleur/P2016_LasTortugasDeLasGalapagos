@@ -561,7 +561,7 @@ public class PageAlice extends TabReference {
 			tag.setBorder(new EmptyBorder(5, 0, 5, 0));
 			result.add(tag);
 			PagedList<Question> questionMap = tagEntry.getValue();
-			for (int i = 0; i < questionMap.getPageSize(); i++) {
+			for (int i = 0; i < questionMap.size(); i++) {
 				String questionTitle = StringEscapeUtils.unescapeHtml(questionMap.get(i).getTitle());
 
 				final URI uri = new URI(Alice.getLinkQuestion((int) questionMap.get(i).getQuestionId()));
