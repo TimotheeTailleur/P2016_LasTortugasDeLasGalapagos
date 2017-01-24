@@ -41,27 +41,28 @@ import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.user.Alice;
 import fr.tse.info4.project.view.ref.TabReference;
 
-
 public class PageAlice extends TabReference {
 
 	/**
-	 * Alice object used to access user story specific methods
-	 * <br> initialized to null
+	 * Alice object used to access user story specific methods <br>
+	 * initialized to null
 	 */
 	Alice al = null;
 	/**
-	 * JButton attribute to give the user the ability to modify certain parameters
-	 * <br> Namely : the number of questions 
+	 * JButton attribute to give the user the ability to modify certain
+	 * parameters <br>
+	 * Namely : the number of questions
 	 */
 	JButton Parametres = new JButton();
 	/**
-	 * PageAlice object used to update the page after modifications & / or changes in parameters
+	 * PageAlice object used to update the page after modifications & / or
+	 * changes in parameters
 	 */
 	PageAlice page = this;
 
 	/**
-	 * Alice Tab Constructor
-	 * <br> Displays method results for each functionality of the Alice User Story
+	 * Alice Tab Constructor <br>
+	 * Displays method results for each functionality of the Alice User Story
 	 * Overloaded to worh with both an accessToken & a user's ID
 	 */
 	public PageAlice(String acessToken) throws IOException, URISyntaxException {
@@ -76,21 +77,19 @@ public class PageAlice extends TabReference {
 		this.getPanel().add(Parametres = getParametre());
 		Parametres.setAlignmentX(this.getPanel().CENTER_ALIGNMENT);
 		JScrollPane scroll = new JScrollPane(printAliceResults(page));
-		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+		double hauteur = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		double largeur = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		scroll.setPreferredSize(new Dimension((int) largeur - 100, (int) hauteur - 200));
 		this.getPanel().add(scroll);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		
 
 		Parametres.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				JFrame parametre = new JFrame("Parametres");
 
 				JButton validation = new JButton("Valider");
-				
+
 				JButton reinitialiser = new JButton("Réinitialiser");
 
 				JPanel panelParam = new JPanel();
@@ -168,7 +167,7 @@ public class PageAlice extends TabReference {
 
 							page.add(Parametres = getParametre());
 							JScrollPane scroll = new JScrollPane(printAliceResults(page));
-							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							scroll.setPreferredSize(new Dimension((int) largeur - 100, (int) hauteur - 200));
 							page.add(scroll);
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -207,7 +206,7 @@ public class PageAlice extends TabReference {
 					}
 				});
 				reinitialiser.addMouseListener(new MouseListener() {
-					
+
 					@Override
 					public void mouseReleased(MouseEvent e) {
 						// TODO Auto-generated method stub
@@ -224,7 +223,7 @@ public class PageAlice extends TabReference {
 
 							page.add(Parametres = getParametre());
 							JScrollPane scroll = new JScrollPane(printAliceResults(page));
-							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							scroll.setPreferredSize(new Dimension((int) largeur - 100, (int) hauteur - 200));
 							page.add(scroll);
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -250,29 +249,29 @@ public class PageAlice extends TabReference {
 							e1.printStackTrace();
 						}
 					}
-					
+
 					@Override
 					public void mousePressed(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void mouseExited(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void mouseEntered(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
 				});
 
@@ -283,8 +282,8 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Alice Tab Constructor
-	 * <br> Displays method results for each functionality of the Alice User Story
+	 * Alice Tab Constructor <br>
+	 * Displays method results for each functionality of the Alice User Story
 	 * Overloaded to worh with both an accessToken & a user's ID
 	 */
 	public PageAlice(int id) throws IOException, URISyntaxException {
@@ -299,9 +298,9 @@ public class PageAlice extends TabReference {
 		Parametres.setAlignmentX(this.getPanel().CENTER_ALIGNMENT);
 		al.setIdUser(id);
 		JScrollPane scroll = new JScrollPane(printAliceResults(this));
-		double hauteur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		double largeur=java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+		double hauteur = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		double largeur = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		scroll.setPreferredSize(new Dimension((int) largeur - 100, (int) hauteur - 200));
 		this.getPanel().add(scroll);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -311,7 +310,7 @@ public class PageAlice extends TabReference {
 				JFrame parametre = new JFrame("Parametres");
 
 				JButton validation = new JButton("Valider");
-				
+
 				JButton reinitialiser = new JButton("Réinitialiser");
 
 				JPanel panelParam = new JPanel();
@@ -389,7 +388,7 @@ public class PageAlice extends TabReference {
 
 							page.add(Parametres = getParametre());
 							JScrollPane scroll = new JScrollPane(printAliceResults(page));
-							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							scroll.setPreferredSize(new Dimension((int) largeur - 100, (int) hauteur - 200));
 							page.add(scroll);
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -429,9 +428,9 @@ public class PageAlice extends TabReference {
 
 					}
 				});
-				
+
 				reinitialiser.addMouseListener(new MouseListener() {
-					
+
 					@Override
 					public void mouseReleased(MouseEvent e) {
 						// TODO Auto-generated method stub
@@ -448,7 +447,7 @@ public class PageAlice extends TabReference {
 
 							page.add(Parametres = getParametre());
 							JScrollPane scroll = new JScrollPane(printAliceResults(page));
-							scroll.setPreferredSize(new Dimension ((int)largeur-100,(int)hauteur-200));
+							scroll.setPreferredSize(new Dimension((int) largeur - 100, (int) hauteur - 200));
 							page.add(scroll);
 							scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 							scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -474,29 +473,29 @@ public class PageAlice extends TabReference {
 							e1.printStackTrace();
 						}
 					}
-					
+
 					@Override
 					public void mousePressed(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void mouseExited(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void mouseEntered(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
 				});
 
@@ -507,9 +506,12 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Creates the JPanel in which results from Alice user story methods will be displayed
-	 * @param Page currently being modified
-	 * @return JPanel 
+	 * Creates the JPanel in which results from Alice user story methods will be
+	 * displayed
+	 * 
+	 * @param Page
+	 *            currently being modified
+	 * @return JPanel
 	 */
 	public JPanel printAliceResults(PageAlice alice) throws IOException, URISyntaxException {
 
@@ -531,6 +533,7 @@ public class PageAlice extends TabReference {
 
 	/**
 	 * Creates JPanel used to display newest questions in a user's top tags
+	 * 
 	 * @param alice
 	 * @return JPanel result
 	 */
@@ -547,46 +550,49 @@ public class PageAlice extends TabReference {
 
 		for (Entry<String[], PagedList<Question>> tagEntry : newQuestion.entrySet()) {
 			String[] tagName = tagEntry.getKey();
-			String str = "\n- dans le(s) tag(s) ";
-			int nb = tagName.length;
-			for (int i = 0; i < nb; i++) {
-				if (i != (nb - 1) && nb != 1) {
-					str += tagName[i] + ", ";
-				} else {
-					str += tagName[i];
-				}
-			}
-			str += " : ";
-			JLabel tag = new JLabel(str);
-			tag.setBorder(new EmptyBorder(5, 0, 5, 0));
-			result.add(tag);
-			PagedList<Question> questionMap = tagEntry.getValue();
-			for (int i = 0; i < questionMap.size(); i++) {
-				String questionTitle = StringEscapeUtils.unescapeHtml(questionMap.get(i).getTitle());
+			if (tagName.length != 0) {
 
-				final URI uri = new URI(Alice.getLinkQuestion((int) questionMap.get(i).getQuestionId()));
-
-				class OpenUrlAction implements ActionListener {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						open(uri);
+				String str = "\n- dans le(s) tag(s) ";
+				int nb = tagName.length;
+				for (int i = 0; i < nb; i++) {
+					if (i != (nb - 1) && nb != 1) {
+						str += tagName[i] + ", ";
+					} else {
+						str += tagName[i];
 					}
 				}
+				str += " : ";
+				JLabel tag = new JLabel(str);
+				tag.setBorder(new EmptyBorder(5, 0, 5, 0));
+				result.add(tag);
+				PagedList<Question> questionMap = tagEntry.getValue();
+				for (int i = 0; i < questionMap.size(); i++) {
+					String questionTitle = StringEscapeUtils.unescapeHtml(questionMap.get(i).getTitle());
 
-				JButton link = new JButton();
-				link.setText(questionTitle);
-				link.setForeground(Color.BLUE);
-				link.setBorderPainted(false);
-				link.setOpaque(false);
-				link.setBackground(Color.WHITE);
-				Font font = link.getFont();
-				Map attributes = font.getAttributes();
-				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-				link.setFont(font.deriveFont(attributes));
-				link.setToolTipText(uri.toString());
-				link.addActionListener(new OpenUrlAction());
-				result.add(link);
-				result.validate();
+					final URI uri = new URI(Alice.getLinkQuestion((int) questionMap.get(i).getQuestionId()));
+
+					class OpenUrlAction implements ActionListener {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							open(uri);
+						}
+					}
+
+					JButton link = new JButton();
+					link.setText(questionTitle);
+					link.setForeground(Color.BLUE);
+					link.setBorderPainted(false);
+					link.setOpaque(false);
+					link.setBackground(Color.WHITE);
+					Font font = link.getFont();
+					Map attributes = font.getAttributes();
+					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					link.setFont(font.deriveFont(attributes));
+					link.setToolTipText(uri.toString());
+					link.addActionListener(new OpenUrlAction());
+					result.add(link);
+					result.validate();
+				}
 			}
 		}
 		result.setBorder(new EmptyBorder(10, 50, 10, 30));
@@ -595,7 +601,9 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Creates JPanel to display questions a user has given answers to based on answer score
+	 * Creates JPanel to display questions a user has given answers to based on
+	 * answer score
+	 * 
 	 * @param alice
 	 * @return JPanel result
 	 * @throws URISyntaxException
@@ -633,10 +641,11 @@ public class PageAlice extends TabReference {
 		result.setBorder(new EmptyBorder(10, 30, 10, 50));
 		return result;
 	}
-	
+
 	/**
-	 * Creates JPanel to display results of the Alice method : compareBadges
-	 * Not used because the method compareBadges isn't implemented yet
+	 * Creates JPanel to display results of the Alice method : compareBadges Not
+	 * used because the method compareBadges isn't implemented yet
+	 * 
 	 * @param alice
 	 * @return JPanel result
 	 */
@@ -651,9 +660,11 @@ public class PageAlice extends TabReference {
 	}
 
 	/**
-	 * Method which will open a browser with the URI in parameter
-	 * if it is possible.
-	 * @param uri The URI the user wishes to access
+	 * Method which will open a browser with the URI in parameter if it is
+	 * possible.
+	 * 
+	 * @param uri
+	 *            The URI the user wishes to access
 	 */
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {

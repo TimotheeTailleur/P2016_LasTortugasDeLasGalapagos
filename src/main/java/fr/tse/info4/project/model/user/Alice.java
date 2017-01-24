@@ -106,7 +106,7 @@ public class Alice extends Personae {
 	        newSet.addAll(set);
 	        sets.add(newSet);
 	        sets.add(set);
-	    }       
+	    }    
 	    return sets;
 	}  
 	/**
