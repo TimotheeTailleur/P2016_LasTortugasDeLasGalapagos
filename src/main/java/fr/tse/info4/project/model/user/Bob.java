@@ -65,38 +65,70 @@ public class Bob extends Personae {
 
 	// -------- Getters and Setters ----------
 
+	/**
+	 * Get number of tags in which new questions are searched.
+	 * @return nbBestTags
+	 */
 	public int getNbTags() {
 		return nbBestTags;
 	}
 
+	/**
+	 * Get number of users, who can be interesting, by tag.
+	 * @return nbExpertsPerTag
+	 */
 	public int getNbExpertsPerTag() {
 		return nbExpertsPerTag;
 	}
 
+	/**
+	 * Set number of tags in which new questions are searched.
+	 * @param nbTags
+	 */
 	public void setNbTags(int nbTags) {
 		if (nbTags > 0 && nbTags <= 100)
 			this.nbBestTags = nbTags;
 	}
 
+	/**
+	 * Get number of new questions searched by tag. 
+	 * @return nbQuestionsPerTag
+	 */
 	public int getNbQuestionsPerTag() {
 		return nbQuestionsPerTag;
 	}
 
+	/**
+	 * Set number of new questions searched by tag. 
+	 * @param nbQuestionsPerTag
+	 */
 	public void setNbQuestionsPerTag(int nbQuestionsPerTag) {
 		if (nbQuestionsPerTag > 0 && nbQuestionsPerTag <= 30)
 			this.nbQuestionsPerTag = nbQuestionsPerTag;
 	}
 
+	/**
+	 * Set number of similar questions searched.
+	 * @param nbSimilarQuestions
+	 */
 	public void setNbSimilarQuestions(int nbSimilarQuestions) {
 		if (nbSimilarQuestions > 0)
 			this.nbSimilarQuestions = nbSimilarQuestions;
 	}
 
+	/**
+	 * Set number of users, who can be interesting, by tag.
+	 * @param nbExperts
+	 */
 	public void setNbExpertsPerTag(int nbExperts) {
 		if (nbExperts > 0)
 			this.nbExpertsPerTag = nbExperts;
 	}
 	
+	/**
+	 * Get number of similar questions searched.
+	 * @return nbSimilarQuestions
+	 */
 	public int getNbSimilarQuestions() {
 		return nbSimilarQuestions;
 	}

@@ -27,18 +27,43 @@ import com.google.gson.JsonParser;
 
 public class AliceApiManager extends ApiManager {
 
+	/**
+	 * Get badges for users by Stackexchange library.
+	 */
 	public static final String GET_BADGES_FOR_USERS = "com.google.code.stackexchange.client.getBadgesForUser";
+	/**
+	 * Filter for getting badges of an user.
+	 */
 	public static final String USER_BADGES_FILTER = "!1zSsisCpHXb2m(HIl6*I0";
+	/**
+	 * Get badges by Stackexchange library.
+	 */
 	public static final String GET_SITE_BADGES = "com.google.code.stackexchange.client.getBadges";
+	/**
+	 * Filter for badges.
+	 */
 	public static final String SITE_BADGES_FILTER = "!b8c7G.MYOLLIHp";
-
+	/**
+	 * URL of badges by user in Stackexchange site.
+	 */
 	public static final String BADGES_WITH_IDS_URL = "https://api.stackexchange.com/2.2/badges/";
+	/**
+	 * Constant empty.
+	 */
 	public static final String BADGES_WITH_IDS_FILTER = "";
 	
+	/**
+	 * Default constructor.
+	 */
 	public AliceApiManager(){
 		super(APP_KEY, SITE);
 	}	
 	
+	/**
+	 * Constructor.
+	 * @param applicationKey, key for the site
+	 * @param site, link to the StackExchange site.
+	 */
 	public AliceApiManager(String applicationKey, StackExchangeSite site) {
 		super(applicationKey, site);
 	}

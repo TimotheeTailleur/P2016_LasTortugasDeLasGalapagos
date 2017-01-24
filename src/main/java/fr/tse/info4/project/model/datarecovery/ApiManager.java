@@ -33,8 +33,14 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	/** Site (stack overflow) */
 	public final static StackExchangeSite SITE = StackExchangeSite.STACK_OVERFLOW;
 
+	/**
+	 * Filter to get top answerers.
+	 */
 	private static final String TOP_ANSWERERS_FILTER = "!*Jxe6D.tT0bNxx(Z";
 	
+	/**
+	 *  Get top answerers by Stackexchange library.
+	 */
 	public static final String GET_TOP_ANSWERERS = "com.google.code.stackexchange.client.getTagTopAnswerers";
 	/**
 	 * Factory item used to build the request.

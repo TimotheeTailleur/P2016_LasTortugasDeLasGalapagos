@@ -6,29 +6,63 @@ import java.util.Map;
 
 public class TopUser implements Comparable<TopUser> {
 
+	/**
+	 * ID of the user.
+	 */
 	private long id;
+	/**
+	 * Count of post of this user.
+	 */
 	private int postCount;
+	/**
+	 * Map with a tag as a key and the count of post for this tag as a value.
+	 */
 	private Map<String, Integer> tagPostCount = new HashMap<>();
 
+	/**
+	 * Constructor initializes the ID.
+	 * @param id
+	 */
 	public TopUser(long id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get count of post of this user.
+	 * @return postCount
+	 */
 	public int getPostCount() {
 		return postCount;
 	}
 
+	/**
+	 * Set count of post of this user.
+	 * @param postCount
+	 */
 	public void setPostCount(int postCount) {
 		this.postCount = postCount;
 	}
 
+	/**
+	 * Get ID of this user.
+	 * @return id
+	 */
 	public long getId() {
 		return id;
 	}
 
+	/**
+	 * Get the map of this user.
+	 * @return tagPostCount
+	 */
 	public Map<String, Integer> getTagPostCount(){
 		return tagPostCount;
 	}
+	/**
+	 * Adds (key,value)=(tag,postCount) to the map of this user.
+	 * @param tag
+	 * @param postCount
+	 */
 	public void addTag(String tag, int postCount) {
 		if (!tagPostCount.containsKey(tag)) {
 			tagPostCount.put(tag, postCount);
@@ -52,6 +86,10 @@ public class TopUser implements Comparable<TopUser> {
 		return realPostCount;
 	}
 
+	/**
+	 * Increase count post of this user.
+	 * @param postCount
+	 */
 	public void increasePostCount(int postCount) {
 		this.postCount += postCount;
 	}

@@ -22,16 +22,39 @@ import javafx.stage.Stage;
 @SuppressWarnings("restriction")
 public class Authenticate extends Application {
 
+	/**
+	 * ID of the application.
+	 */
     static final String APP_ID = "8456";
+    /**
+     * URL to redirect if the login succeed.
+     */
     static final String REDIRECT_URL = "https://stackexchange.com/oauth/login_success";
+    /**
+     * Type of the response, initialize in "token".
+     */
     static final String RESPONSE_TYPE = "token";
+    /**
+     * Scope for Stackoverflow accessToken not expired.
+     */
     static final String SCOPE = "no_expiry";
 
+    /**
+     * Scene.
+     */
     private Scene scene;
     
+    /**
+     * accessTocken.
+     */
     public static String accessToken;
-        
-  
+    
+    /**
+     * 
+     * Show a window for asking Stackoverflow account.
+     * Used by launch of JavaFx.
+     * 
+     */
     public void start(final Stage stage) throws Exception {
         final String url = "https://stackexchange.com/oauth/dialog?response_type="+RESPONSE_TYPE+
         		"&client_id="+APP_ID+"&redirect_uri="+REDIRECT_URL+"&scope="+SCOPE;

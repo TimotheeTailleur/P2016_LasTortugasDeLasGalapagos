@@ -34,8 +34,14 @@ public class TabReference extends JPanel {
 	 */
 	JButton Parametres = new JButton("Parametres");
 
+	/**
+	 * Path for file in which parameters are saved.
+	 */
 	public static final String PARAMETERS_PATH = "Data" + File.separator  + "parameters.properties";
 
+	/**
+	 * Object to handle the property file.
+	 */
 	protected static Properties prop = new Properties();
 
 	static {

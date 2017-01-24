@@ -41,15 +41,46 @@ import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageDave extends TabReference {
 
+	/**
+	 * Indicates either JTextField contains one or more tag.
+	 */
 	boolean isList;
+	/**
+	 * JTextField in which tag(s) is/are typed.
+	 */
 	JTextField tagName = new JTextField(35);
+	/**
+	 * Container of JTextField.
+	 */
 	JPanel panel1 = new JPanel();
+	/**
+	 * Container of buttons.
+	 */
 	JPanel panel2 = new JPanel();
+	/**
+	 * Container of the other JPanel.
+	 */
 	JPanel panel3 = new JPanel();
+	/**
+	 * Container of results of method of the user story Dave.
+	 */
 	JPanel results = new JPanel();
+	/**
+	 * Dave object used to access user story specific methods <br>
+	 * initialized to null
+	 */
 	Dave dave = null;
+	/**
+	 * Indicates if there has already been a mouse clicked on the button "Meilleur tag".
+	 */
 	int appelTag = 0;
+	/**
+	 * Indicates if there has already been a mouse clicked on the button "Meileur contributeur".
+	 */
 	int appelContributeur = 0;
+	/**
+	 * Indicates if there has already been a mouse clicked.
+	 */
 	int premierAppel = 0;
 
 	/**

@@ -41,9 +41,23 @@ import fr.tse.info4.project.view.ref.TabReference;
 
 public class PageBob extends TabReference {
 
+	/**
+	 * Bob object used to access user story specific methods <br>
+	 * initialized to null
+	 */
 	Bob bob = null;
+	/**
+	 * Indicates if there has already been a mouse clicked on the button "Rechercher".
+	 */
 	int appelRecherche = 0;
+	/**
+	 * Indicates if there has already been a mouse clicked on the button "Suggérer".
+	 */
 	int appelSuggere = 0;
+	/**
+	 * PageBob object used to update the page after modifications & / or
+	 * changes in parameters
+	 */
 	PageBob page = this;
 	
 	/**
@@ -508,13 +522,16 @@ public class PageBob extends TabReference {
 		});
 
 	}
-
-		
-		 
-		
 	
-		
 
+	/**
+	 * Creates the JPanel in which results from Bob user story methods will be
+	 * displayed
+	 * @param bobPage, currently being modified
+	 * @return JPanel
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public JPanel printBobResults(PageBob bobPage) throws IOException, URISyntaxException {
 
 		JPanel resultat = new JPanel();
@@ -535,6 +552,13 @@ public class PageBob extends TabReference {
 		return resultat;
 	}
 
+	/**
+	 * Creates JPanel used to display similar questions.
+	 * 
+	 * @param bobPage
+	 * @return JPanel result
+	 * @throws URISyntaxException
+	 */
 	private JPanel showQuestion(PageBob bobPage) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
@@ -637,6 +661,12 @@ public class PageBob extends TabReference {
 		return result;
 	}
 
+	/**
+	 * Creates JPanel used to display key words to possibly add.
+	 * 
+	 * @param bobPage
+	 * @return JPanel result
+	 */
 	private JPanel showKeyWords(PageBob bobPage) {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
@@ -726,6 +756,13 @@ public class PageBob extends TabReference {
 		return result;
 	}
 
+	/**
+	 * Creates JPanel used to display interesting users 
+	 * 
+	 * @param bobPage
+	 * @return JPanel result
+	 * @throws URISyntaxException
+	 */
 	private JPanel showExperts(PageBob bobPage) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));
@@ -765,6 +802,13 @@ public class PageBob extends TabReference {
 		return result;
 	}
 
+	/**
+	 * Creates JPanel used to display new questions recently answered. 
+	 * 
+	 * @param bobPage
+	 * @return JPanel result
+	 * @throws URISyntaxException
+	 */
 	private JPanel showNewQuestionAnswered(PageBob bobPage) throws URISyntaxException {
 		JPanel result = new JPanel();
 		result.setLayout(new BoxLayout(result, BoxLayout.PAGE_AXIS));

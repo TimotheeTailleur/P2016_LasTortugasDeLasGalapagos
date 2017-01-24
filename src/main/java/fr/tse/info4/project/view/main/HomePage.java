@@ -33,6 +33,9 @@ import fr.tse.info4.project.view.users.PageDave;
  */
 public class HomePage extends JFrame {
 	
+	/**
+	 * Reference used as a save point in case of changes of window.
+	 */
 	HomePage home = null;
 
 	/**

@@ -58,28 +58,52 @@ public class Alice extends Personae {
 
 	// --------- Getter and setters -------------
 
+	/**
+	 * Get number of questions showing by tag.
+	 * @return nbQuestionsPerTag
+	 */
 	public int getNbQuestionsPerTag() {
 		return nbQuestionsPerTag;
 	}
 
+	/**
+	 * Set number of questions showing by tag.
+	 * @param nbQuestionsPerTag
+	 */
 	public void setNbQuestionsPerTag(int nbQuestionsPerTag) {
 		if (nbQuestionsPerTag <= 100) {
 			this.nbQuestionsPerTag = nbQuestionsPerTag;
 		}
 	}
 
+	/**
+	 * Get number of tags in which new questions are searched.
+	 * @return nbTags
+	 */
 	public int getNbTags() {
 		return nbTags;
 	}
 
+	/**
+	 * Set number of tags in which new questions are searched.
+	 * @param nbTags
+	 */
 	public void setNbTags(int nbTags) {
 		this.nbTags = nbTags;
 	}
 
+	/**
+	 * Get number of answers showing.
+	 * @return nbAnswers
+	 */
 	public int getNbAnswers() {
 		return nbAnswers;
 	}
 
+	/**
+	 * Set number of answers showing.
+	 * @param nbAnswers
+	 */
 	public void setNbAnswers(int nbAnswers) {
 		if (nbAnswers > 0)
 			this.nbAnswers = nbAnswers;
@@ -87,7 +111,7 @@ public class Alice extends Personae {
 
 	// ----------------------- Alice 1 : New Questions ------------------------
 	/**
-	 * 
+	 * Create all combination of elements in the Set parameter.
 	 * @param originalSet
 	 * @return
 	 */

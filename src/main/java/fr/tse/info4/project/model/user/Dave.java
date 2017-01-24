@@ -50,30 +50,53 @@ public class Dave extends Personae {
 
 	// --------- Getters & Setters -------------
 
+	/**
+	 * Get number of users searched.
+	 * @return nbUsers
+	 */
 	public int getNbUsers() {
 		return nbUsers;
 	}
-
+	/**
+	 * Set number of users searched.
+	 * @param nbUsers
+	 */
 	public void setNbUsers(int nbUsers) {
 		if (nbUsers > 0 && nbUsers <= 20) {
 			this.nbUsers = nbUsers;
 		}
 	}
 
+	/**
+	 * Get the refresh rate for method TopAnswerers.
+	 * @return refreshRateTopAnswerers
+	 */
 	public int getRefreshRateTopAnswerers() {
 		return refreshRateTopAnswerers;
 	}
 
+	/**
+	 * Set the refresh rate for method TopAnswerers.
+	 * @param refreshRateTopAnswerers
+	 */
 	public void setRefreshRateTopAnswerers(int refreshRateTopAnswerers) {
 		if (refreshRateTopAnswerers > 0) {
 			this.refreshRateTopAnswerers = refreshRateTopAnswerers;
 		}
 	}
 
+	/**
+	 * Get the boolean for updating the database.
+	 * @return forceUpdateTopAnswerers
+	 */
 	public boolean getForceUpdateTopAnswerers() {
 		return forceUpdateTopAnswerers;
 	}
 
+	/**
+	 * Set the boolean for updating the database.
+	 * @param forceUpdateTopAnswerers
+	 */
 	public void setForceUpdateTopAnswerers(boolean forceUpdateTopAnswerers) {
 		this.forceUpdateTopAnswerers = forceUpdateTopAnswerers;
 	}

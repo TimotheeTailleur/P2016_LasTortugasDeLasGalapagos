@@ -29,19 +29,35 @@ public abstract class Personae {
 	
 	// Getter and setter 
 	
+	/**
+	 * Get the accessToken.
+	 * @return accessToken
+	 */
 	public String getAccesToken() {
 		return accessToken;
 	}
 
+	/**
+	 * Set the accessToken.
+	 * @param accessToken
+	 */
 	public void setAccesToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
 	
+	/**
+	 * Set ID.
+	 * @param idUser
+	 */
 	public void setIdUser(int idUser){
 		if (idUser >1)
 			this.idUser = idUser;
 	}
 	
+	/**
+	 * Get ID.
+	 * @return idUser
+	 */
 	public int getIdUser(){
 		return idUser;
 	}

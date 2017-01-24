@@ -71,10 +71,20 @@ public class DatabaseManager {
 		}
 	}
 
+	/**
+	 * Adds double quotes to the String in parameter.
+	 * @param str
+	 * @return
+	 */
 	protected String addDoubleQuotes(String str) {
 		return '"' + str + '"';
 	}
 
+	/**
+	 * Adds simple quotes to the String in parameter. 
+	 * @param str
+	 * @return
+	 */
 	protected String addSimpleQuotes(String str) {
 		return '\'' + str + '\'';
 	}
