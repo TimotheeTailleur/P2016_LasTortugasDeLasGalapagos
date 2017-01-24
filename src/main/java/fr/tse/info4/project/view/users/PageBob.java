@@ -29,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.code.stackexchange.schema.Question;
 import com.google.code.stackexchange.schema.User;
@@ -596,7 +597,7 @@ public class PageBob extends TabReference {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							link.setText(questions.get(i).getTitle());
+							link.setText(StringEscapeUtils.unescapeHtml(questions.get(i).getTitle()));
 							link.setForeground(Color.BLUE);
 							link.setBorderPainted(false);
 							link.setOpaque(false);
@@ -685,15 +686,15 @@ public class PageBob extends TabReference {
 					} else {
 						if (keyWords.size() <= 20) {
 							for (int i = 0; i < keyWords.size(); i++) {
-								String str2 = "- " + keyWords.get(i);
-								JLabel similarQ = new JLabel(str2);
+								String str2 = "- " + keyWords.get(i).substring(1, keyWords.get(i).length()-1);
+								JLabel similarQ = new JLabel(StringEscapeUtils.unescapeHtml(str2));
 								result.add(similarQ);
 								result.validate();
 							}
 						} else {
 							for (int i = 0; i < 20; i++) {
-								String str2 = "- " + keyWords.get(i);
-								JLabel similarQ = new JLabel(str2);
+								String str2 = "- " + keyWords.get(i).substring(1, keyWords.get(i).length()-1);
+								JLabel similarQ = new JLabel(StringEscapeUtils.unescapeHtml(str2));
 								result.add(similarQ);
 								result.validate();
 							}
@@ -780,7 +781,7 @@ public class PageBob extends TabReference {
 			result.add(tag);
 			List<Question> questions = questionEntry.getValue();
 			for (int i = 0; i < questions.size(); i++) {
-				String questionTitle = questions.get(i).getTitle();
+				String questionTitle = StringEscapeUtils.unescapeHtml(questions.get(i).getTitle());
 
 				final URI uri = new URI(Bob.getLinkQuestion((int) questions.get(i).getQuestionId()));
 

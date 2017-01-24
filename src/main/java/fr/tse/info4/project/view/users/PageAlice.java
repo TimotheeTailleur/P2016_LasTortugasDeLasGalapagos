@@ -31,6 +31,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.code.stackexchange.common.PagedList;
 import com.google.code.stackexchange.schema.Answer;
@@ -561,7 +562,7 @@ public class PageAlice extends TabReference {
 			result.add(tag);
 			PagedList<Question> questionMap = tagEntry.getValue();
 			for (int i = 0; i < questionMap.getPageSize(); i++) {
-				String questionTitle = questionMap.get(i).getTitle();
+				String questionTitle = StringEscapeUtils.unescapeHtml(questionMap.get(i).getTitle());
 
 				final URI uri = new URI(Alice.getLinkQuestion((int) questionMap.get(i).getQuestionId()));
 
