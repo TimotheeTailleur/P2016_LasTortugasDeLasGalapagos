@@ -4,16 +4,15 @@ import com.google.code.stackexchange.schema.User;
 
 /**
  * Class that regroups tag data (tag name, tag score and post count)
- * ALso implements an enum to pass periods of time as parameters in Api Urls
+ * Also implements an enum to pass periods of time as parameters in Api Urls
  *
  */
 public class TagScore {
 
 
 	/**
-	 * Enum representing Period Tag Api Urls parameter
+	 * Enum representing API URL parameter : Period
 	 * 
-	 *
 	 */
 	public static enum Period{
 		ALL_TIME("all_time"),

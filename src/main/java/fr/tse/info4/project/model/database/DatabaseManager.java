@@ -10,10 +10,14 @@ import java.sql.Statement;
 
 /**
  * Class that manages the database (connection and driver setup, updates and
- * insertions, general queries, truncature of tables) Both tables use user id as
- * primary key and have columns named after the tags on Stack Overflow.
- * TagPostCount rows contain a user's id and a user's post count in each tag.
- * TagScore rows contain a user's id and a user's score in each tag.
+ * insertions, general queries, truncature of tables).
+ * 3 tables :
+ * <ul>
+ * <li> tag_post_count : Post Count & userid for each tag
+ * <li> tag : Tag ID and name
+ * <li> tag_score : Score & userid for each tag
+ * <li> users : User data
+ * <li> questions : Questions data
  */
 
 public class DatabaseManager {

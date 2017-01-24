@@ -42,8 +42,7 @@ public class DaveApiManager extends ApiManager {
 
 	/**
 	 * 
-	 * Method use to scan the different paging in the method
-	 * getTagsOnUsers(List<Long> ids, int min)
+	 * Overloads getTagsOnUsers to manage Paging if the querry creates more than one page of results
 	 * 
 	 * @param ids
 	 * @param min
@@ -58,8 +57,8 @@ public class DaveApiManager extends ApiManager {
 	}
 
 	/**
-	 * Return the tags the users identified in ids have been active in. <br>
-	 * The tags have to have a score > min
+	 * Returns tags the users identified in ids have been active in. <br>
+	 * The tags need to have a score > min
 	 * 
 	 * @param ids
 	 * @param min

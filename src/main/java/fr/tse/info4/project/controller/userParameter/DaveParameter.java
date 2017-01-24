@@ -4,7 +4,8 @@ import fr.tse.info4.project.model.user.Dave;
 
 /**
  * 
- * Handles the Dave parameters
+ * Handles the Dave User Story parameters
+ * <br> To be used with controller.UserFactory
  */
 public class DaveParameter {
 	/**
@@ -26,7 +27,7 @@ public class DaveParameter {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with accessToken.
 	 * <ul>
 	 * <li>nbUsers = 10</li>
 	 * <li>refreshRateTopAnswerers = 24 hours</li>
@@ -39,9 +40,9 @@ public class DaveParameter {
 	}
 
 	/**
-	 * Number of top answerer users in a given tag.
+	 * Number of top answerers searched for in a given tag.
 	 * @param nbUsers
-	 * @return the DaveParameter object.
+	 * @return the updated DaveParameter object.
 	 */
 	public DaveParameter withNbUsers(int nbUsers) {
 		dave.setNbUsers(nbUsers);
@@ -50,7 +51,7 @@ public class DaveParameter {
 
 	/**
 	 * Force the database update
-	 * @return the DaveParameter object.
+	 * @return the updated DaveParameter object.
 	 */
 	public DaveParameter withForceUpdate() {
 		dave.setForceUpdateTopAnswerers(true);
@@ -59,7 +60,7 @@ public class DaveParameter {
 
 	/**
 	 * Don't force the database update
-	 * @return the DaveParameter object.
+	 * @return the updated DaveParameter object.
 	 */
 	public DaveParameter withoutForceUpdate() {
 		dave.setForceUpdateTopAnswerers(false);
@@ -69,7 +70,7 @@ public class DaveParameter {
 	/**
 	 * Time between two data update (in hours).
 	 * @param refreshRate
-	 * @return the DaveParameter object.
+	 * @return the updated DaveParameter object.
 	 */
 	public DaveParameter withRefreshRate(int refreshRate) {
 		dave.setRefreshRateTopAnswerers(refreshRate);

@@ -11,11 +11,11 @@ public class TopUser implements Comparable<TopUser> {
 	 */
 	private long id;
 	/**
-	 * Count of post of this user.
+	 * Posts count of the user
 	 */
 	private int postCount;
 	/**
-	 * Map with a tag as a key and the count of post for this tag as a value.
+	 * Map<Tag,PostCount>
 	 */
 	private Map<String, Integer> tagPostCount = new HashMap<>();
 
@@ -28,7 +28,7 @@ public class TopUser implements Comparable<TopUser> {
 	}
 
 	/**
-	 * Get count of post of this user.
+	 * PostCount getter
 	 * @return postCount
 	 */
 	public int getPostCount() {
@@ -36,7 +36,7 @@ public class TopUser implements Comparable<TopUser> {
 	}
 
 	/**
-	 * Set count of post of this user.
+	 * PostCount setter
 	 * @param postCount
 	 */
 	public void setPostCount(int postCount) {
@@ -44,7 +44,7 @@ public class TopUser implements Comparable<TopUser> {
 	}
 
 	/**
-	 * Get ID of this user.
+	 * userID getter
 	 * @return id
 	 */
 	public long getId() {
@@ -52,14 +52,14 @@ public class TopUser implements Comparable<TopUser> {
 	}
 
 	/**
-	 * Get the map of this user.
+	 * Map<Tag,PostCount> getter
 	 * @return tagPostCount
 	 */
 	public Map<String, Integer> getTagPostCount(){
 		return tagPostCount;
 	}
 	/**
-	 * Adds (key,value)=(tag,postCount) to the map of this user.
+	 * Adds (key,value)=(tag,postCount) to user's map
 	 * @param tag
 	 * @param postCount
 	 */

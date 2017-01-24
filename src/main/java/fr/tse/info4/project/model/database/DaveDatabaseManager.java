@@ -50,8 +50,8 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 
 	/**
-	 * Updates the last update date concerning post count and score tables to
-	 * the current date.
+	 * Updates the last time the database was updated to the current date for each row with information regarding tag 
+	 * idTag
 	 * 
 	 * @param idTag
 	 */
@@ -73,10 +73,9 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 
 	/**
-	 * Retrieves the best user (sorted by score) in the chose tag.
+	 * Returns top tag user in given tag
 	 * 
-	 * @param tag
-	 *            : tag id
+	 * @param tag : tag id
 	 * @return Tagscore
 	 */
 	public TagScore getTopTag(int tag) {
@@ -110,7 +109,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 
 	/**
-	 * Retrieves the best answerers int the given tag. *
+	 * Returns top nbUsers answerers in given tag idTag
 	 * 
 	 * @param nbUsers
 	 * @param idTag
@@ -151,7 +150,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 
 	/**
-	 * Retrives the seconds since the last tag update.
+	 * Returns seconds since last update of data in teh given tag
 	 * 
 	 * @param idTag
 	 * @return either the number of the seconds or -1 if the tag date isn't
@@ -185,7 +184,7 @@ public class DaveDatabaseManager extends DatabaseManager {
 	}
 
 	/**
-	 * Updates dave tables with the 20 top answerers ub tge specified tag. <br>
+	 * Updates dave tables with the 20 top answerers in the specified tag. <br>
 	 * If a user's id isn't found, creates new entries in both tables.
 	 * @param idTag
 	 * @throws SQLException

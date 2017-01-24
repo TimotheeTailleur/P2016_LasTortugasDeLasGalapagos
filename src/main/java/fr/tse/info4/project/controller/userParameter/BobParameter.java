@@ -3,7 +3,8 @@ package fr.tse.info4.project.controller.userParameter;
 import fr.tse.info4.project.model.user.Bob;
 
 /**
- * Handles the Bob parameters.
+ * Handles the Bob User Story parameters.
+ * <br> To be used with controller.UserFactory
  */
 public class BobParameter {
 
@@ -27,7 +28,7 @@ public class BobParameter {
 		bob = new Bob();
 	}
 	/**
-	 * Constructor.
+	 * Constructor with accessToken.
 	 *  Default values : 
 	 * <ul>
 	 * <li>nbBestTags = 5</li>
@@ -43,9 +44,9 @@ public class BobParameter {
 	}
 	
 	/**
-	 * Number of question displayed for each tag.
+	 * Number of questions displayed for each tag.
 	 * @param nbQuestions
-	 * @return the BobParameter object.
+	 * @return the updated BobParameter object.
 	 */
 	public BobParameter withNbQuestions(int nbQuestions){
 		bob.setNbQuestionsPerTag(nbQuestions);
@@ -53,9 +54,9 @@ public class BobParameter {
 	}
 	
 	/**
-	 * Number of questions to display for a given question title.
+	 * Number of similar questions to display for a given question title.
 	 * @param nbSimilarQuestions
-	 * @return the BobParameter object.
+	 * @return the updated BobParameter object.
 	 */
 	public BobParameter withNbSimilarQuestions(int nbSimilarQuestions){
 		bob.setNbSimilarQuestions(nbSimilarQuestions);
@@ -63,9 +64,9 @@ public class BobParameter {
 	}
 	
 	/**
-	 * Number of the Bob's most popular tags.
+	 * Number of Bob's top tags in which the experts will be searched.
 	 * @param nbTags
-	 * @return the BobParameter object.
+	 * @return the updated BobParameter object.
 	 */
 	public BobParameter withNbBestTags(int nbTags){
 		bob.setNbTags(nbTags);
@@ -73,9 +74,9 @@ public class BobParameter {
 	}
 	
 	/**
-	 * Id of the user (on stackoverflow site).
+	 * User ID
 	 * @param id
-	 * @return the BobParameter object.
+	 * @return the updated BobParameter object.
 	 */
 	public BobParameter withId(int id){
 		bob.setIdUser(id);
@@ -85,7 +86,7 @@ public class BobParameter {
 	/**
 	 * Number of experts to follow in each tag.
 	 * @param nbExperts
-	 * @return the BobParameter object.
+	 * @return the updated BobParameter object.
 	 */
 	public BobParameter withNbExperts(int nbExperts){
 		bob.setNbExpertsPerTag(nbExperts);

@@ -23,7 +23,7 @@ import com.google.gson.JsonParser;
 public class BobApiManager extends ApiManager {
 
 	/**
-	 * Search for similar questions with Stackexchange library.
+	 * Search for similar questions with Stackexchange API using the SDK.
 	 */
 	public static final String SEARCH_SIMILAR_QUESTIONS = "com.google.code.stackexchange.client.searchSimilarQuestions";
 

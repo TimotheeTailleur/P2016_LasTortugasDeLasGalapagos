@@ -28,7 +28,7 @@ import com.google.gson.JsonParser;
 public class AliceApiManager extends ApiManager {
 
 	/**
-	 * Get badges for users by Stackexchange library.
+	 * Get badges for users with Stackexchange API using the SDK.
 	 */
 	public static final String GET_BADGES_FOR_USERS = "com.google.code.stackexchange.client.getBadgesForUser";
 	/**
@@ -36,7 +36,7 @@ public class AliceApiManager extends ApiManager {
 	 */
 	public static final String USER_BADGES_FILTER = "!1zSsisCpHXb2m(HIl6*I0";
 	/**
-	 * Get badges by Stackexchange library.
+	 * Get badges with Stackexchange API using the SDK.
 	 */
 	public static final String GET_SITE_BADGES = "com.google.code.stackexchange.client.getBadges";
 	/**
@@ -69,7 +69,7 @@ public class AliceApiManager extends ApiManager {
 	}
 
 	/**
-	 * Return the new questions in the tag passed as a parameter.
+	 * Returns newest questions in the tag passed as a parameter.
 	 * 
 	 * @param tag
 	 * @param nbQuestions
@@ -101,7 +101,7 @@ public class AliceApiManager extends ApiManager {
 
 	/**
 	 * 
-	 * Return the anwers of a user, sorted by questions score.
+	 * Return the anwers of a user, sorted by answer score.
 	 * 
 	 * @param idUser
 	 * @param nbAnswers
@@ -223,6 +223,7 @@ public class AliceApiManager extends ApiManager {
 	 * If there is one, find users who have it and return the Badge and it's info
 	 * If there isn't check other badges
 	 * Ex : the bronze badge Nice Question's (Question Score of 10 or more) next level is Good Question (Question Score of 25 or more)
+	 *	NOT WORKING
 	 * @param userId
 	 * @return A 2-list of Alice's badges and their next levels of size 9
 	 */

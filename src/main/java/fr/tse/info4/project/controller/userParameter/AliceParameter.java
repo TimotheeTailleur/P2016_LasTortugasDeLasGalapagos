@@ -3,7 +3,8 @@ package fr.tse.info4.project.controller.userParameter;
 import fr.tse.info4.project.model.user.Alice;
 
 /**
- * Handles the Alice parameters.
+ * Handles the Alice User Story parameters.
+ * <br> To be used with controller.UserFactory
  */
 public class AliceParameter {
 	
@@ -26,7 +27,7 @@ public class AliceParameter {
 	}
 
 	/**
-	 * Constructor. <br>
+	 * Constructor with accessToken. <br>
 	 * Default values :
 	 * <ul>
 	 * <li>nbTags = 3</li>
@@ -43,10 +44,10 @@ public class AliceParameter {
 	}
 
 	/**
-	 * Number of the best user's answers. <br>
+	 * Number of the user's best answers to be displayed<br>
 	 * 
 	 * @param nbAnswers
-	 * @return the AliceParameter object.
+	 * @return the updated AliceParameter object.
 	 */
 	public AliceParameter withNbAnwsers(int nbAnswers) {
 		alice.setNbAnswers(nbAnswers);
@@ -54,9 +55,9 @@ public class AliceParameter {
 	}
 
 	/**
-	 * Number of the newest displayed questions for each tag.
+	 * Number of newest displayed questions for each tag.
 	 * @param nbQuestions
-	 * @return the AliceParameter object.
+	 * @return the updated AliceParameter object.
 	 */
 	public AliceParameter withNbQuestions(int nbQuestions) {
 		alice.setNbQuestionsPerTag(nbQuestions);
@@ -64,9 +65,9 @@ public class AliceParameter {
 	}
 
 	/**
-	 * Number of the best user's tags.
+	 * Number of the user's top tags in which newest questions will be searched
 	 * @param nbTags
-	 * @return the AliceParameter object.
+	 * @return the updated AliceParameter object.
 	 */
 	public AliceParameter withNbTags(int nbTags) {
 		alice.setNbTags(nbTags);
@@ -76,7 +77,7 @@ public class AliceParameter {
 	/**
 	 * User id.
 	 * @param id
-	 * @return the AliceParameter object.
+	 * @return the updated AliceParameter object.
 	 */
 	public AliceParameter withId(int id) {
 		alice.setIdUser(id);

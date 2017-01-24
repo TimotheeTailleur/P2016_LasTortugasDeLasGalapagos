@@ -39,7 +39,7 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	private static final String TOP_ANSWERERS_FILTER = "!*Jxe6D.tT0bNxx(Z";
 	
 	/**
-	 *  Get top answerers by Stackexchange library.
+	 *  Get top answerers with StackExchange API using the SDK
 	 */
 	public static final String GET_TOP_ANSWERERS = "com.google.code.stackexchange.client.getTagTopAnswerers";
 	/**
@@ -49,7 +49,7 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	
 	/**
 	 * Constructor to use application key with every api url execution
-	 * and specify StackExchange website on which execute querries
+	 * and specify StackExchange website on which to execute querries
 	 * @param applicationKey
 	 * @param site
 	 */
@@ -84,8 +84,8 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 	
 	/**
 	 * 
-	 * Retrieves the best tags of the user (sorted by popularity)
-	 * 
+	 * Retrieves the nbTags best tags of the user (sorted by popularity)
+	 * Overloaded to work with both user ID and an accessToken
 	 * @param nbTags
 	 * @param idUser
 	 * @return the best tags of a user.
@@ -105,8 +105,8 @@ public class ApiManager extends StackExchangeApiJsonClient  {
 
 	/**
 	 * 
-	 * Retrieves the best tags of the user (sorted by popularity)
-	 * 
+	 * Retrieves the nbTags best tags of the user (sorted by popularity)
+	 * Overloaded to work with both user ID and an accessToken
 	 * @param nbTags
 	 * @param accessToken
 	 * @return the best tags of the user.

@@ -21,20 +21,20 @@ import fr.tse.info4.project.model.datarecovery.ApiManager;
 public class Alice extends Personae {
 
 	/**
-	 * Number of the best user's tags. <br>
+	 * Number of the user's top tags in which newest questions will be searched. <br>
 	 * Default value : 3.
 	 */
 	protected int nbTags = 3;
 
 	/**
-	 * Number of the newest displayed questions for each tag. <br>
+	 * Number of newest displayed questions for each tag. <br>
 	 * Limited to 100 questions <br>
 	 * Default value : 3
 	 */
 	private int nbQuestionsPerTag = 3;
 
 	/*
-	 * Number of the best user's answers. <br> Default value : 10.
+	 * Number of the user's best answers to be displayed. <br> Default value : 10.
 	 */
 	private int nbAnswers = 10;
 

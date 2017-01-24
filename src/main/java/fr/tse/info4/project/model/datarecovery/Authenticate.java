@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 public class Authenticate extends Application {
 
 	/**
-	 * ID of the application.
+	 * Application ID
 	 */
     static final String APP_ID = "8456";
     /**
@@ -39,9 +39,7 @@ public class Authenticate extends Application {
      */
     static final String SCOPE = "no_expiry";
 
-    /**
-     * Scene.
-     */
+
     private Scene scene;
     
     /**

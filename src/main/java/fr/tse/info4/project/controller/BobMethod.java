@@ -11,7 +11,7 @@ import com.google.code.stackexchange.schema.User;
 public class BobMethod {
 	
 	/**
-	 * Test if the Set of user is empty or not.
+	 * Tests if the Set of users is empty or not.
 	 * @param users
 	 * @return boolean
 	 */
@@ -24,7 +24,7 @@ public class BobMethod {
 	}
 	
 	/**
-	 * Test if list is empty or not.
+	 * Tests if list is empty or not.
 	 * @param questions
 	 * @return boolean
 	 */
@@ -37,7 +37,7 @@ public class BobMethod {
 	}
 	
 	/**
-	 * Test if list empty or not
+	 * Tests if list empty or not
 	 * @param keyWords
 	 * @return boolean
 	 */
@@ -50,7 +50,7 @@ public class BobMethod {
 	}
 	
 	/**
-	 * Test if a JTextField is empty or not.
+	 * Tests if a JTextField is empty or not.
 	 * @param text
 	 * @return boolean object
 	 */
