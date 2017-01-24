@@ -6,11 +6,21 @@ This app provides new ways of looking at StackOverflow data to improve site user
 ## Getting Started
 
 ### Packages
-* project.database : Database managers for each user story
-* project.datarecovery : Handles data recovery from the StackExchangeApi using the Java sdk by SanjivSingh (see credits)
-* project.main : Main package with project entry point
-* project.schema : Classes not in the StackExchangeApi sdk that we needed
-* project.user : Implementations of user Oauth authentication and functionalities
+MVC based App : 
+#### Model : 
+* model.database : Database managers for each user story
+* model.datarecovery : Handles data recovery from the StackExchangeApi using the Java sdk by SanjivSingh (see credits)
+* model.schema : Complementary classes to the StackExchangeApi SDK (for instance: TopUser represents a top Answerer in given tags)
+* model.user : User Classes through which access to the ApiManagers methods should be done
+
+#### View :
+* view.main : Main package with project entry point
+* view.ref : Login page and common elements of GUI windows (ex : footer with the exit button)
+* view.users : GUI for each user stories ; each displayed in a different tab
+
+#### Controller :
+* controller : UserFactory
+* controller.userParameter : Classes handling each user story's parameters
 
 ### User Stories
 * Alice : Get recent unanswered questions in your top tags. Find out which users have more badges than you. Sort the questions you've answered to by their popularity
@@ -32,14 +42,19 @@ pom.xml :
 	</dependency>
 	<dependency>  
 		<groupId>com.googlecode.stackexchange</groupId>  
-		 <artifactId>stackoverflow-java-sdk-release</artifactId>  
-		  <version>2.2.0</version>  
-		</dependency> 
-	<dependency>
-	  <groupId>commons-lang</groupId>
-	  <artifactId>commons-lang</artifactId>
-	  <version>2.6</version>
+		<artifactId>stackoverflow-java-sdk-release</artifactId>  
+		<version>2.2.0</version>  
 	</dependency> 
+	<dependency>
+		<groupId>commons-lang</groupId>
+		<artifactId>commons-lang</artifactId>
+		<version>2.6</version>
+	</dependency> 
+	<dependency>
+		<groupId>commons-configuration</groupId>
+		<artifactId>commons-configuration</artifactId>
+		<version>1.10</version>
+</dependency>
 </dependencies>
 ```
 Apache Derby : Embedded database containing tables of StackOverflowData (i.e : list of the 47k tags on StackOverflow & some user's tagscores & postcounts)
@@ -48,11 +63,13 @@ StackOverflow Java Sdk Release : StackExchange Api Java SDK released by [SanjivS
 
 Commons-lang : Used for different methods of String manipulation
 
+Commons-configuration : Used for saving and loading of parameters
+
 Also google's GSON library is used through our dependency towards the aforementioned stackoverflow Sdk
 
 ## Javadoc
 
-Javadoc located [here](http://lastortugas-javadoc.pagesperso-orange.fr/) (last update : 08/12/2016)
+Javadoc located [here](http://lastortugas-javadoc.pagesperso-orange.fr/) (last update : 01/24/2017)
 
 ## Credits
 Sanjivsingh for his StackExchange Api Java SDK [github repo] (https://github.com/sanjivsingh/stackoverflow-java-sdk)
