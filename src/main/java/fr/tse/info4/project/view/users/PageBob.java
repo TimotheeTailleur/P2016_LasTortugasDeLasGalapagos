@@ -467,8 +467,8 @@ public class PageBob extends TabReference {
 						try {
 							PropertiesConfiguration config = new PropertiesConfiguration(PARAMETERS_PATH);
 							config.setProperty("nbBestTags", 5);
-							config.setProperty("nbSimilarQuestions", 3);
-							config.setProperty("nbExpertsPerTag", 10);
+							config.setProperty("nbSimilarQuestions", 10);
+							config.setProperty("nbExpertsPerTag", 3);
 							config.setProperty("nbQuestionsPerTagBob", 3);
 							config.save();
 						} catch (ConfigurationException e1) {
