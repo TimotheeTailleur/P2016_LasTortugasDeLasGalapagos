@@ -32,6 +32,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
 
+import fr.tse.info4.project.controller.BobMethod;
 import fr.tse.info4.project.controller.UserFactory;
 import fr.tse.info4.project.model.datarecovery.ApiManager;
 import fr.tse.info4.project.model.schema.TagScore;
@@ -71,11 +72,13 @@ public class PageDave extends TabReference {
 	 */
 	Dave dave = null;
 	/**
-	 * Indicates if there has already been a mouse clicked on the button "Meilleur tag".
+	 * Indicates if there has already been a mouse clicked on the button
+	 * "Meilleur tag".
 	 */
 	int appelTag = 0;
 	/**
-	 * Indicates if there has already been a mouse clicked on the button "Meileur contributeur".
+	 * Indicates if there has already been a mouse clicked on the button
+	 * "Meileur contributeur".
 	 */
 	int appelContributeur = 0;
 	/**
@@ -94,8 +97,6 @@ public class PageDave extends TabReference {
 		int refreshRate = Integer.parseInt(prop.getProperty("refreshRate"));
 		boolean forceUpdate = Boolean.parseBoolean(prop.getProperty("forceUpdate"));
 
-		isListTag();
-		
 		if (forceUpdate)
 			dave = (new UserFactory()).newDave().withNbUsers(nbUsers).withRefreshRate(refreshRate).withForceUpdate()
 					.get();
@@ -147,7 +148,7 @@ public class PageDave extends TabReference {
 					}
 
 				}
-				
+
 				JButton link = new JButton();
 
 				String str = " ";
@@ -184,7 +185,7 @@ public class PageDave extends TabReference {
 
 				} else {
 
-			     str = " Veuillez saisir un unique tag valide ";
+					str = " Veuillez saisir un unique tag valide ";
 
 				}
 
@@ -260,55 +261,70 @@ public class PageDave extends TabReference {
 						appelTag = 0;
 					}
 				}
-				
+
 				String str = "";
-				JButton link = new JButton();
-				
-				if (isList == false) {
-					
-					List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
 
-					for (int i = 0; i < topAnswerer.size(); i++) {
 
-						
-						URI uri;
-						try {
-							uri = new URI(Dave.getLink((int) topAnswerer.get(i).getUser().getUserId()));
-							class OpenUrlAction implements ActionListener {
-								@Override
-								public void actionPerformed(ActionEvent e) {
-									open(uri);
+				if (BobMethod.isEmpty(tagName)) {
+					JLabel erreur = new JLabel("Veuillez rentrer au moins un tag");
+					results.add(erreur);
+					results.validate();
+				} else {
+					isList = isListTag();
+					if (isList == false) {
+						List<TagScore> topAnswerer = dave.getTopAnswerers(tagName.getText());
+						for (int i = 0; i < topAnswerer.size(); i++) {
+							URI uri;
+							JButton link = new JButton();
+							try {
+								uri = new URI(Dave.getLink((int) topAnswerer.get(i).getUser().getUserId()));
+								class OpenUrlAction implements ActionListener {
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										open(uri);
+									}
 								}
+
+								link.addActionListener(new OpenUrlAction()); // pour
+																				// le
+																				// rendre
+																				// cliquable
+								link.setToolTipText(uri.toString()); // reference
+																		// du
+																		// http
+							} catch (URISyntaxException e1) {
+								e1.printStackTrace();
 							}
-
-							link.addActionListener(new OpenUrlAction()); // pour le
-																			// rendre
-																			// cliquable
-							link.setToolTipText(uri.toString()); // reference du
-																	// http
-						} catch (URISyntaxException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							str = StringEscapeUtils.unescapeHtml(
+									(new ApiManager()).getUserNAme((int) topAnswerer.get(i).getUser().getUserId()))
+									+ " avec " + topAnswerer.get(i).getPostCount() + " messages";
+							
+							link.setForeground(Color.BLUE);
+							link.setBorderPainted(false);
+							link.setOpaque(false);
+							link.setBackground(Color.WHITE);
+							Font font = link.getFont();
+							Map attributes = font.getAttributes();
+							attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+							link.setFont(font.deriveFont(attributes));
+							link.setText(str);
+							results.add(link);
+							link.setAlignmentX(results.CENTER_ALIGNMENT);
+							results.add(Box.createRigidArea(new Dimension(0, 5)));
+							results.validate();
+							results.setVisible(true);
 						}
-						str = StringEscapeUtils
-								.unescapeHtml((new ApiManager()).getUserNAme((int) topAnswerer.get(i).getUser().getUserId()))
-								+ " avec " + topAnswerer.get(i).getPostCount() + " messages";
 
-				
-						}
-					
-					}else {
-
+					} else {
 						String[] resultsTab = tagName.getText().split(" ");
 						List<String> resultsList = new ArrayList<String>();
-
+						
 						for (int i = 0; i < resultsTab.length; i++) {
 							resultsList.add(resultsTab[i]);
 						}
 						TopUser topTags = dave.getTopUserMultipleTags(resultsList);
-
+						JButton link = new JButton();
 						str = (new ApiManager()).getUserNAme((int) topTags.getId());
-
 						try {
 							final URI uri = new URI(Dave.getLink((int) topTags.getId()));
 
@@ -319,7 +335,8 @@ public class PageDave extends TabReference {
 								}
 							}
 
-							link.addActionListener(new OpenUrlAction()); // pour le
+							link.addActionListener(new OpenUrlAction()); // pour
+																			// le
 																			// rendre
 																			// cliquable
 							link.setToolTipText(uri.toString()); // reference du
@@ -328,24 +345,23 @@ public class PageDave extends TabReference {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-
+						link.setForeground(Color.BLUE);
+						link.setBorderPainted(false);
+						link.setOpaque(false);
+						link.setBackground(Color.WHITE);
+						Font font = link.getFont();
+						Map attributes = font.getAttributes();
+						attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+						link.setFont(font.deriveFont(attributes));
+						link.setText(str);
+						results.add(link);
+						link.setAlignmentX(results.CENTER_ALIGNMENT);
+						results.add(Box.createRigidArea(new Dimension(0, 5)));
+						results.validate();
+						results.setVisible(true);
 					}
-					link.setForeground(Color.BLUE);
-					link.setBorderPainted(false);
-					link.setOpaque(false);
-					link.setBackground(Color.WHITE);
-					Font font = link.getFont();
-					Map attributes = font.getAttributes();
-					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-					link.setFont(font.deriveFont(attributes));
-					link.setText(str);
-					results.add(link);
-					link.setAlignmentX(results.CENTER_ALIGNMENT);
-					results.add(Box.createRigidArea(new Dimension(0, 5)));
-					results.validate();
-					results.setVisible(true);
+				}
 
-				
 				if (premierAppel == 0) {
 					panel3.add(results);
 					panel3.add(new JPanel());
@@ -354,7 +370,7 @@ public class PageDave extends TabReference {
 				}
 				panel3.validate();
 
-				}
+			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
