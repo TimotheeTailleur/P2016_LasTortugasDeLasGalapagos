@@ -1,5 +1,6 @@
 package fr.tse.info4.project.view.main;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -163,17 +165,15 @@ public class HomePage extends JFrame {
 		JPanel panelWelcome = new JPanel();
 		JLabel hello = new JLabel("Bienvenue ! Profil de "+StringEscapeUtils.unescapeHtml((new ApiManager()).getUserNAme(id)));
 		hello.setFont(new Font("Tahoma", Font.BOLD, 25));
-		panelWelcome.setLayout(new BoxLayout(panelWelcome, BoxLayout.PAGE_AXIS));
-		panelWelcome.add(hello);
+		panelWelcome.setLayout(new BorderLayout(0,0));
+		panelWelcome.add(hello, BorderLayout.CENTER);
 	//	panelWelcome.add(Box.createRigidArea(new Dimension(0,5)));
 		welcome.setLayout(new GridBagLayout());
 		
 		JButton changeCo = new JButton("Choisir une autre connexion");
-		
-		panelWelcome.add(changeCo);
-		changeCo.setAlignmentX(panelWelcome.CENTER_ALIGNMENT);
+		panelWelcome.add(changeCo, BorderLayout.SOUTH);
 		welcome.add(panelWelcome);
-		panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
+		//panelWelcome.setAlignmentX(welcome.CENTER_ALIGNMENT);
 		
 		changeCo.addMouseListener(new MouseListener() {
 			
