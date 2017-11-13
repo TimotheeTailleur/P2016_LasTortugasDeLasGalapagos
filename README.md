@@ -67,9 +67,6 @@ Commons-configuration : Used for saving and loading of parameters
 
 Also google's GSON library is used through our dependency towards the aforementioned stackoverflow Sdk
 
-## Javadoc
-
-Javadoc located [here](http://lastortugas-javadoc.pagesperso-orange.fr/) (last update : 01/24/2017)
 
 ## Credits
 Sanjivsingh for his StackExchange Api Java SDK [github repo] (https://github.com/sanjivsingh/stackoverflow-java-sdk)
